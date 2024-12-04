@@ -1,0 +1,1 @@
+UPDATE LND_TBOS_SUPPORT.CDC_Full_Load_Config SET overlap_window_in_secs= 30 WHERE TRUE;

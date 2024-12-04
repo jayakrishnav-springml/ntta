@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS LND_LG_TS.Olr_Olr_Accounts (
+    acct_id BIGNUMERIC(48, 10) NOT NULL,
+    first_name STRING,
+    last_name STRING,
+    email_address STRING,
+    opt_in_date DATETIME,
+    opt_out_date DATETIME,
+    status_value STRING,
+    reported_date DATETIME,
+    verified_date DATETIME,
+    created_date DATETIME,
+    created_by STRING,
+    modified_date DATETIME,
+    modified_by STRING,
+    update_seq BIGNUMERIC(48, 10),
+    status_id STRING,
+    new_enrollment_ind STRING,
+    data_comments STRING,
+    last_update_type STRING,
+    last_update_date DATETIME
+);

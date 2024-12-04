@@ -1,0 +1,1027 @@
+CREATE PROC [dbo].[Fact_CustomerTagDetail_Load] @Start_Month_ID [INT],@End_Month_ID [INT],@Is_Full_Load [BIT] AS
+/*
+#################################################################################################################
+Proc Description: 
+-------------------------------------------------------------------------------------------------------------------
+1. Load daily Account Tag Activity for the current month or given month range.
+
+ Notes: 
+ 1. Daily refresh loads from the current month begin to end of previous day (MTD). This is the normal mode. 
+ 2. The marker to denote change of month is: fact table does not have data for the last day of the previous month. 
+    This is when it switches to load data for the entire previous month.
+ 3. From next day onwards, it reverts back to loading data for the current month as mentioned above in #1. 
+
+-------------------------------------------------------------------------------------------------------------------
+MISSION CLEAN DATA! 
+-------------------------------------------------------------------------------------------------------------------
+The real solution is: TBOS Source data should be cleaned and TRIPS app needs to be fixed to prevent such data ASAP.
+
+Workaround data cleanup logic. Keep in mind that this is no silver bullet!
+
+1. Data Issue: TagStartDate > TagEndDate. How is that possible?!
+   Fix: Reverse these dates. Sometimes it helps, sometimes it does not when the issue spread to more than one row.
+   Examples: See Stage.CustomerTags_Source where DataIntegrityIssue contains 'TagStartDate > TagEndDate'
+
+2. Data Issue: Current Tag Status ended in the past
+   Fix: Extended Current Tag Status End for date range continuity
+   Examples: See Stage.CustomerTags where SRC = 'Current +'
+
+3. Data Issue: Bad Actor rows in Hist that are in Active status with 9999-12-31 date will result in 
+   PERPETUAL ACTIVE STATUS for those Customer Tags even when the Tag Status later became NOT ACTIVE. 
+   Fix: Find the correct Close date after this Bad Actor row and use it end this row. 
+   Examples: See Stage.CustomerTags_BadActiveHist_Fix.
+
+===================================================================================================================
+Change Log:
+-------------------------------------------------------------------------------------------------------------------
+CHG0044405	Shankar 	2023-12-20	New!
+===================================================================================================================
+Example:
+-------------------------------------------------------------------------------------------------------------------
+EXEC dbo.Fact_CustomerTagDetail_Load @Start_Month_ID = 202101, @End_Month_ID = 202401, @Is_Full_Load = 1 -- Full Load
+EXEC dbo.Fact_CustomerTagDetail_Load @Start_Month_ID = NULL, @End_Month_ID = NULL, @Is_Full_Load = 0 --Daily incremental run
+
+SELECT TOP 100 * FROM Utility.ProcessLog WHERE LogSource = 'dbo.Fact_CustomerTagDetail_Load' ORDER BY 1 DESC
+SELECT TOP 100 'dbo.Fact_CustomerTagDetail_Load' Table_Name, * FROM dbo.Fact_CustomerTagDetail ORDER BY 1,2
+===================================================================================================================
+*/
+
+BEGIN
+    BEGIN TRY
+		--:: DEBUG
+		--DECLARE @Start_Month_ID INT = 202101, @End_Month_ID INT = 202401, @Is_Full_Load BIT = 1
+
+		DECLARE @TableName VARCHAR(100) = 'dbo.Fact_CustomerTagDetail', @Log_Source VARCHAR(100) = 'dbo.Fact_CustomerTagDetail_Load' 
+		DECLARE @Log_Start_Date DATETIME2 (3) = SYSDATETIME(), @Log_Message VARCHAR(1000), @Trace_Flag BIT = 1 -- Testing
+		DECLARE @Partition_Ranges VARCHAR(MAX), @FirstPartitionID INT = 202012, @LastPartitionID INT = CAST(CONVERT(VARCHAR(6),DATEADD(DAY,1,EOMONTH(SYSDATETIME(),1)),112) AS INT)
+		DECLARE @sql VARCHAR(MAX), @CreateTableWith VARCHAR(MAX)
+
+		SELECT  @Is_Full_Load = ISNULL(@Is_Full_Load,0) -- Default INCR
+		IF OBJECT_ID(@TableName) IS NULL
+			SET @Is_Full_Load = 1
+
+		DECLARE @Current_Date DATETIME2 (3), @EO_Prev_Date DATETIME2 (3), @EO_Prev_Month DATETIME2 (3), @Current_Month_ID INT, @Prev_Month_ID INT, @Load_Period VARCHAR(30), @Load_Start_Date DATETIME, @Load_End_Date DATETIME
+		SELECT	@Current_Date = ISNULL(MAX(UpdatedDate),SYSDATETIME()) FROM LND_TBOS.TollPlus.TP_Customer_Tags WHERE LND_UpdateType <> 'D' AND UpdatedDate < SYSDATETIME() -- Data current date
+		SELECT	@EO_Prev_Date = DATEADD(MS, -2, CONVERT(VARCHAR, @Current_Date, 101)) -- Prev Day 23:59:59
+		SELECT	@EO_Prev_Month =  CONVERT(DATETIME2(3),DATEADD(MS,-2,CONVERT(DATETIME,DATEADD(DAY,1,EOMONTH(@Current_Date,-1)))))
+		SELECT	@Current_Month_ID = CONVERT(INT,CONVERT(VARCHAR(6),@Current_Date,112)), @Prev_Month_ID = CONVERT(INT,CONVERT(VARCHAR(6),@EO_Prev_Month,112))
+
+		IF	ISDATE(CONVERT(VARCHAR,@Start_Month_ID) + '01') = 1 AND ISDATE(CONVERT(VARCHAR,@End_Month_ID) + '01') = 1
+		BEGIN
+			SELECT	@Load_Period = 'Input Month Range', 
+					@Load_Start_Date = CONVERT(DATETIME,CONVERT(VARCHAR(8),@Start_Month_ID) + '01'),
+					@Load_End_Date = CASE WHEN @End_Month_ID = @Current_Month_ID
+											THEN @EO_Prev_Date
+											ELSE DATEADD(MS,-2,DATEADD(MONTH,1, CONVERT(DATETIME,CONVERT(VARCHAR,@End_Month_ID) + '01')))
+											END 
+		END
+		ELSE
+		BEGIN
+			IF EXISTS (SELECT 1 FROM dbo.Fact_CustomerTagDetail WHERE TagCounterDate = @EO_Prev_Month) -- Full month data found for Prev Month
+				SELECT	@Load_Period = 'Current Month',
+						@Load_Start_Date = DATEADD(DAY,1,EOMONTH(@Current_Date,-1)),
+						@Load_End_Date = @EO_Prev_Date,
+						@Start_Month_ID = @Current_Month_ID,
+						@End_Month_ID = @Current_Month_ID
+			ELSE
+				IF @Current_Date < DATEADD(DAY,1,@EO_Prev_Month)
+					SELECT	@Load_Period = 'Previous Month',
+							@Load_Start_Date = DATEADD(DAY,1,EOMONTH(@Current_Date,-2)),  
+							@Load_End_Date = @EO_Prev_Month,
+							@Start_Month_ID = @Prev_Month_ID,  
+							@End_Month_ID = @Prev_Month_ID 
+				ELSE
+					SELECT	@Load_Period = 'Current Month + Previous Month',
+							@Load_Start_Date = DATEADD(DAY,1,EOMONTH(@Current_Date,-2)),  
+							@Load_End_Date = @EO_Prev_Date,
+							@Start_Month_ID = @Prev_Month_ID,  
+							@End_Month_ID = @Current_Month_ID 
+		END
+
+		IF @Trace_Flag = 1
+		SELECT	@Current_Date [@Current_Date], @EO_Prev_Date [@EO_Prev_Date], @EO_Prev_Month [@EO_Prev_Month],
+				@Load_Period [@Load_Period], @Load_Start_Date [@Load_Start_Date], @Load_End_Date [@Load_End_Date], 
+				@Start_Month_ID [@Start_Month_ID], @End_Month_ID [@End_Month_ID], @Current_Month_ID [@Current_Month_ID],
+				@FirstPartitionID [@FirstPartitionID], @LastPartitionID [@LastPartitionID]
+
+		IF @Is_Full_Load = 1
+		BEGIN
+			IF @Trace_Flag = 1 PRINT 'Calling: Utility.Get_PartitionMonthIDRange_String from ' + CAST(@FirstPartitionID AS VARCHAR(10))+ ' till ' + CAST(@LastPartitionID AS VARCHAR(10))
+			EXEC Utility.Get_PartitionMonthIDRange_String @FirstPartitionID, @LastPartitionID, @Partition_Ranges OUTPUT
+			SET @CreateTableWith = '(CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH(CustomerID), PARTITION (MonthID RANGE RIGHT FOR VALUES (' + @Partition_Ranges + ')))'
+			SELECT  @Log_Message = 'Started full load with parameters for ' + ISNULL(@Load_Period,'') +  ' - @Current_Date: ' + CONVERT(VARCHAR(19), @Current_Date,121) + 
+									', @Load_Start_Date: ' + CONVERT(VARCHAR(19), @Load_Start_Date,121) + ', @Load_End_Date: ' + CONVERT(VARCHAR(23), @Load_End_Date,121) + 
+									', @Start_Month_ID: ' + ISNULL(CONVERT(VARCHAR,@Start_Month_ID),'NULL') + ', @End_Month_ID: ' + ISNULL(CONVERT(VARCHAR,@End_Month_ID),'NULL') 
+			IF @Trace_Flag = 1 PRINT @Log_Message
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', NULL, NULL
+		END
+		ELSE
+		BEGIN
+			SET @CreateTableWith = '(CLUSTERED INDEX (CustomerID), DISTRIBUTION = HASH(CustomerID))'
+			SELECT  @Log_Message = 'Started incremental load with parameters for ' + ISNULL(@Load_Period,'') +  ' - @Current_Date: ' + CONVERT(VARCHAR(19), @Current_Date,121) + 
+									', @Load_Start_Date: ' + CONVERT(VARCHAR(19), @Load_Start_Date,121) + ', @Load_End_Date: ' + CONVERT(VARCHAR(23), @Load_End_Date,121) + 
+									', @Start_Month_ID: ' + ISNULL(CONVERT(VARCHAR,@Start_Month_ID),'NULL') + ', @End_Month_ID: ' + ISNULL(CONVERT(VARCHAR,@End_Month_ID),'NULL') 
+			IF @Trace_Flag = 1 PRINT @Log_Message
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', NULL, NULL
+		END
+
+		--:: Get load date ranges for this run
+		IF OBJECT_ID('TEMPDB.dbo.#Load_Months') IS NOT NULL DROP TABLE #Load_Months
+		SELECT	YearID, 
+				MonthID, 
+				CASE WHEN MonthID = @Current_Month_ID THEN 1 ELSE 0 END CurrentMonthIDFlag,
+				CONVERT(DATETIME2(0),MonthBeginDate) MonthBeginDate, 
+				CONVERT(DATETIME2(3),CASE WHEN MonthID = CONVERT(INT,CONVERT(VARCHAR(6),@Current_Date,112)) THEN @EO_Prev_Date ELSE DATEADD(MS,-2,CONVERT(DATETIME,DATEADD(M,1,MonthBeginDate))) END) MonthEndDate  
+		INTO	#Load_Months
+		FROM	dbo.Dim_Month
+		WHERE	MonthID BETWEEN @Start_Month_ID AND @End_Month_ID
+	
+		IF @Trace_Flag = 1 SELECT '#Load_Months' SRC, * FROM #Load_Months ORDER BY MonthID
+
+		--::======================================================================================================================================
+		--:: Get Customer Tag History for load
+		--::======================================================================================================================================
+
+		--:: Get Customer Tag data for TollTag accounts active as of TRIPS Go Live date 1/1/2021, that is, ignore TT Customer accounts closed before 1/1/2021.
+		IF OBJECT_ID('Stage.CustomerTags_Source') IS NOT NULL DROP TABLE Stage.CustomerTags_Source
+		CREATE TABLE Stage.CustomerTags_Source WITH (CLUSTERED INDEX (CustomerID), DISTRIBUTION = HASH(CustomerID)) AS
+		--> Source: TRIPS Current Table
+		SELECT	'Current' SRC, 99999999 HistID /*current*/, CustTagID, CT.CustomerID, C.AccountStatusDesc, TagAgency, SerialNo AS TagID, TagStatus, 
+				TagStartDate, 
+				TagEndDate,
+				CAST(NULL AS VARCHAR(100)) DataIntegrityIssue,
+				TagAssignedDate, TagAssignedEndDate, 
+				TagStatusDate, CT.UpdatedDate, CT.UpdatedUser, CT.CreatedDate, CT.CreatedUser, 
+				CT.TagType, CT.TagAlias, CT.ReturnedOrAssignedType, CT.ItemCode, CT.IsNonRevenue, CT.SpecialityTag, CT.Mounting, CT.ChannelID, 
+				C.AccountOpenDate, C.AccountLastActiveDate, C.AccountLastCloseDate,
+				CAST(SYSDATETIME() AS DATETIME2(0)) AS EDW_UpdateDate
+		FROM	LND_TBOS.TollPlus.TP_Customer_Tags CT
+		JOIN	dbo.dim_Customer C ON C.CustomerID = CT.CustomerID
+		WHERE	CT.CustomerID NOT IN (SELECT CustomerID FROM dbo.dim_Customer WHERE AccountCategoryDesc = 'Tagstore' AND AccountLastCloseDate < '1/1/2021')
+				AND CT.LND_UpdateType <> 'D'
+		UNION
+		--> Source: TRIPS History Table
+		SELECT	'Hist' SRC, CONVERT(VARCHAR,HistID) HistID, CustTagID, CT.CustomerID, C.AccountStatusDesc, TagAgency, SerialNo AS TagID, TagStatus, 
+				TagStartDate, 
+				TagEndDate,
+				CAST(NULL AS VARCHAR(100)) DataIntegrityIssue,
+				TagAssignedDate, TagAssignedEndDate, 
+				TagStatusDate, CT.UpdatedDate, CT.UpdatedUser, CT.CreatedDate, CT.CreatedUser, 
+				CT.TagType, CT.TagAlias, CT.ReturnedOrAssignedType, CT.ItemCode, CT.IsNonRevenue, CT.SpecialityTag, CT.Mounting, CT.ChannelID, 
+				C.AccountOpenDate, C.AccountLastActiveDate, C.AccountLastCloseDate,
+				CAST(SYSDATETIME() AS DATETIME2(0)) AS EDW_UpdateDate
+		FROM	LND_TBOS.TollPlus.TP_Customer_Tags_History CT
+		JOIN	dbo.dim_Customer C ON C.CustomerID = CT.CustomerID
+		WHERE	CT.CustomerID NOT IN (SELECT CustomerID FROM dbo.dim_Customer WHERE AccountCategoryDesc = 'Tagstore' AND AccountLastCloseDate < '1/1/2021')
+				AND CT.LND_UpdateType <> 'D'
+ 
+ 		--:: Create Statistics
+ 		CREATE STATISTICS Stats_CustomerTags_Source_001 ON Stage.CustomerTags_Source (SRC)
+  		CREATE STATISTICS Stats_CustomerTags_Source_002 ON Stage.CustomerTags_Source (HistID)
+		CREATE STATISTICS Stats_CustomerTags_Source_003 ON Stage.CustomerTags_Source (CustTagID)
+ 		CREATE STATISTICS Stats_CustomerTags_Source_004 ON Stage.CustomerTags_Source (CustomerID)
+ 		CREATE STATISTICS Stats_CustomerTags_Source_005 ON Stage.CustomerTags_Source (TagAgency)
+ 		CREATE STATISTICS Stats_CustomerTags_Source_006 ON Stage.CustomerTags_Source (TagID)
+ 		CREATE STATISTICS Stats_CustomerTags_Source_007 ON Stage.CustomerTags_Source (TagStatus)
+ 		CREATE STATISTICS Stats_CustomerTags_Source_008 ON Stage.CustomerTags_Source (TagStartDate)
+ 		CREATE STATISTICS Stats_CustomerTags_Source_009 ON Stage.CustomerTags_Source (TagEndDate)
+
+	    SET  @Log_Message = 'Loaded Stage.CustomerTags_Source as is before applying any data cleanup updates'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		IF OBJECT_ID('Stage.CustomerTags') IS NOT NULL DROP TABLE Stage.CustomerTags
+		CREATE TABLE Stage.CustomerTags WITH (CLUSTERED INDEX (CustomerID), DISTRIBUTION = HASH(CustomerID)) AS
+		--> Source: TRIPS. Data clean up #1. Fix TagStartDate > TagEndDate.
+		SELECT	SRC, HistID, CustTagID, CustomerID, AccountStatusDesc, TagAgency, TagID, TagStatus, 
+				CONVERT(DATETIME2(0),CASE WHEN TagStartDate > TagEndDate THEN TagEndDate ELSE TagStartDate END) TagStartDate, -- Fix TagStartDate, TagEndDate, if they are in reverse order. Or else, massive data disorder and confusion! 
+				CONVERT(DATETIME2(0),CASE WHEN TagStartDate > TagEndDate THEN TagStartDate ELSE TagEndDate END) TagEndDate,
+				CONVERT(VARCHAR(100),
+						NULLIF(
+							ISNULL(CASE WHEN TagStartDate > TagEndDate THEN 'TagStartDate > TagEndDate' END + '; ','') +  
+							ISNULL(CASE WHEN SRC = 'Current' AND CASE WHEN TagStartDate > TagEndDate THEN TagStartDate ELSE TagEndDate END < GETDATE() THEN 'Current Tag Status ended in the past' END,'')
+							,'')) DataIntegrityIssue,
+				TagAssignedDate, TagAssignedEndDate, TagStatusDate, UpdatedDate, UpdatedUser, CreatedDate, CreatedUser, 
+				TagType, TagAlias, ReturnedOrAssignedType, ItemCode, IsNonRevenue, SpecialityTag, Mounting, ChannelID, 
+				AccountOpenDate, AccountLastActiveDate, AccountLastCloseDate, EDW_UpdateDate
+		FROM	Stage.CustomerTags_Source
+		UNION
+		--> Source: BI. Data clean up #2. Add row to compensate for the missing Current Tag Status continuity
+		SELECT	'Current +' SRC, 100000000 HistID /*current Tag Status continuity correction row at the end*/, CustTagID, CustomerID, AccountStatusDesc, TagAgency, TagID, TagStatus, 
+				CONVERT(DATETIME2(0),CASE WHEN TagStartDate > TagEndDate THEN TagStartDate ELSE TagEndDate END) TagStartDate, 
+				'9999-12-31 23:59:59' TagEndDate,
+				CAST(CASE WHEN TagStartDate > TagEndDate THEN 'TagStartDate > TagEndDate; ' ELSE '' END + 'Extended Current Tag Status End for date range continuity' AS VARCHAR(100)) DataIntegrityIssue,
+				TagAssignedDate, TagAssignedEndDate, 
+				TagStatusDate, UpdatedDate, UpdatedUser, CreatedDate, CreatedUser, 
+				TagType, TagAlias, ReturnedOrAssignedType, ItemCode, IsNonRevenue, SpecialityTag, Mounting, ChannelID, 
+				AccountOpenDate, AccountLastActiveDate, AccountLastCloseDate,	CAST(SYSDATETIME() AS DATETIME2(0)) AS EDW_UpdateDate
+		FROM	Stage.CustomerTags_Source 
+		WHERE	SRC = 'Current'
+				AND CASE WHEN TagStartDate > TagEndDate THEN TagStartDate ELSE TagEndDate END < GETDATE() -- Extend the last Tag Status till N/A date, if it already ended. This is important for tracking Open/Close/MonthEnd Tag Counts properly.
+
+ 		--:: Create Statistics
+ 		CREATE STATISTICS Stats_CustomerTags_001 ON Stage.CustomerTags (SRC)
+  		CREATE STATISTICS Stats_CustomerTags_002 ON Stage.CustomerTags (HistID)
+		CREATE STATISTICS Stats_CustomerTags_003 ON Stage.CustomerTags (CustTagID)
+ 		CREATE STATISTICS Stats_CustomerTags_004 ON Stage.CustomerTags (CustomerID)
+ 		CREATE STATISTICS Stats_CustomerTags_005 ON Stage.CustomerTags (TagAgency)
+ 		CREATE STATISTICS Stats_CustomerTags_006 ON Stage.CustomerTags (TagID)
+ 		CREATE STATISTICS Stats_CustomerTags_007 ON Stage.CustomerTags (TagStatus)
+ 		CREATE STATISTICS Stats_CustomerTags_008 ON Stage.CustomerTags (TagStartDate)
+ 		CREATE STATISTICS Stats_CustomerTags_009 ON Stage.CustomerTags (TagEndDate)
+
+	    SET  @Log_Message = 'Loaded Stage.CustomerTags'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Check
+		SELECT TOP 10000 * FROM Stage.CustomerTags ORDER BY CustomerID, TagID, HistID
+		SELECT TagAgency,TagID,COUNT(1) RC FROM Stage.CustomerTags WHERE AccountOpenDate > '1/1/2023'  GROUP BY TagAgency,TagID HAVING COUNT(1) > 3
+		*/
+
+		--::======================================================================================================================================
+		--:: Load Month Begin Tags, Opened/Closed Tags during the month and Month End Tags
+		--::======================================================================================================================================
+
+		--:: Open/Closed Tags decision data source. Must take complete view of Customer Tag History to track Tag Status changes correctly. Separate table helps with understanding Open/Closed Tags determination.
+		IF OBJECT_ID('Stage.OpenedClosedTags_Source') IS NOT NULL DROP TABLE Stage.OpenedClosedTags_Source
+		CREATE TABLE Stage.OpenedClosedTags_Source WITH (DISTRIBUTION = HASH(CustomerID)) AS -- All rows change tracking can be seen in _Source table
+		SELECT	MonthID, SRC, HistID, CustTagID, CustomerID, TagAgency, TagID, TagStatus, TagStartDate, TagEndDate, TAGSTATUS_LAG, CHANGE_NUM, 
+				ROW_NUMBER() OVER (PARTITION BY CustTagID, CHANGE_NUM ORDER BY TagStartDate) CHANGE_NUM_SEQ, DataIntegrityIssue, EDW_UpdateDate
+		FROM
+		(
+			SELECT *, SUM(CASE WHEN TagStatus = TAGSTATUS_LAG THEN 0 ELSE 1 END) OVER (PARTITION BY CustTagID ORDER BY TagStartDate ROWS UNBOUNDED PRECEDING) AS CHANGE_NUM
+				FROM 
+				(
+				SELECT  SRC, HistID, CustTagID, CustomerID, TagAgency, TagID, CASE WHEN TagStatus = 'Assigned' THEN 'Active' ELSE 'Other' END TagStatus, TagStartDate, TagEndDate, 
+						LAG(CASE WHEN TagStatus = 'Assigned' THEN 'Active' ELSE 'Other' END,1,'Other') OVER (PARTITION BY  CustTagID ORDER BY HistID) TAGSTATUS_LAG,
+						CONVERT(INT,CONVERT(VARCHAR(6),TagStartDate,112)) MonthID, DataIntegrityIssue, EDW_UpdateDate 
+					FROM  Stage.CustomerTags
+				--WHERE TagID = '01234713' 
+				--WHERE CustomerID = 4820583
+				) T1 --ORDER BY CustomerID, TagID, TagAgency, CHANGE_NUM, TagStartDate
+		) T2 --ORDER BY CustomerID, TagID, TagAgency, CHANGE_NUM, CHANGE_NUM_SEQ 
+		 
+ 		--:: Create Statistics
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_001 ON Stage.OpenedClosedTags_Source (MonthID)
+  		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_002 ON Stage.OpenedClosedTags_Source (SRC)
+		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_003 ON Stage.OpenedClosedTags_Source (HistID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_004 ON Stage.OpenedClosedTags_Source (CustTagID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_005 ON Stage.OpenedClosedTags_Source (CustomerID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_006 ON Stage.OpenedClosedTags_Source (TagAgency)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_007 ON Stage.OpenedClosedTags_Source (TagID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_008 ON Stage.OpenedClosedTags_Source (TagStatus)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_009 ON Stage.OpenedClosedTags_Source (TagStartDate)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_Source_010 ON Stage.OpenedClosedTags_Source (TagEndDate)
+
+	    SET  @Log_Message = 'Loaded Stage.OpenedClosedTags_Source'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL		 
+
+		------------------------------------------------------------------------------------------------------------------------------------------
+		--:: Bad Actor rows in Hist that are in Active status with 9999-12-31 date will result in PERPETUAL ACTIVE STATUS for those Customer Tags 
+		--:: even when the Tag Status later became NOT ACTIVE.  Fixing them and doing it in the right way is not that simple!
+		------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('Stage.CustomerTags_BadActiveHist') IS NOT NULL DROP TABLE Stage.CustomerTags_BadActiveHist
+		CREATE TABLE Stage.CustomerTags_BadActiveHist WITH (DISTRIBUTION = HASH(CustomerID)) AS
+		SELECT SRC, HistID,CustomerID, TagAgency, TagID, TagStatus, TagStartDate, TagEndDate, CHANGE_NUM 
+		FROM Stage.OpenedClosedTags_Source T
+		WHERE SRC = 'Hist' AND TagStatus = 'Active' AND TagEndDate > GETDATE() 
+		AND EXISTS (SELECT 1 FROM Stage.OpenedClosedTags_Source T1 WHERE T1.CustomerID = T.CustomerID AND T1.TagAgency = T.TagAgency AND T1.TagID = T.TagID AND T1.SRC = 'Current' AND T1.TagStatus <> 'Active')
+
+	    SET  @Log_Message = 'Loaded Stage.CustomerTags_BadActiveHist with Hist rows in NEVER ENDING ACTIVE Tag Status!'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL		 
+
+		IF OBJECT_ID('Stage.CustomerTags_BadActiveHist_Fix') IS NOT NULL DROP TABLE Stage.CustomerTags_BadActiveHist_Fix
+		CREATE TABLE Stage.CustomerTags_BadActiveHist_Fix WITH (DISTRIBUTION = HASH(CustomerID)) AS
+		WITH CTE_CustomerTags_BadActiveHist_Fix AS
+		(
+			SELECT BH.SRC, BH.HistID, BH.CustomerID, BH.TagAgency, BH.TagID, BH.TagStatus, BH.TagStartDate, BH.TagEndDate, MIN(OC.TagStartDate) TagEndDate_Fixed, CAST(SYSDATETIME() AS DATETIME2(3)) EDW_UpdateDate 
+			FROM Stage.CustomerTags_BadActiveHist BH
+			JOIN Stage.OpenedClosedTags_Source OC
+			ON BH.CustomerID = OC.CustomerID AND BH.TagID = OC.TagID
+			WHERE OC.TagStatus = 'Other' 
+			AND (OC.TagEndDate < GETDATE() OR OC.SRC = 'Current' /* Example: TagID 12401706. Current "Other" status end date is 9999-12-31. This is okay, if it is current row. */)
+			AND (OC.CHANGE_NUM > BH.CHANGE_NUM /* Try finding the first next "Other" row, if possible, to pick it's TagStartDate as the new TagEndDate for the Bad Actor row */ 
+				 OR BH.TagStartDate < '1/1/2021'/*Example: TagID 10926620. Bad Hist Active row TagStartDate is before 1/1/2021. No worries, end it with same date.*/
+				 -- OR Example: TagID 13855047 Bad Hist Active row TagStartDate is AFTER any later rows, choosing them will put TagEndDate which is before TagStartDate on the Bad Hist Active row. End it with Same date?
+				 )
+			GROUP BY BH.SRC, BH.HistID, BH.CustomerID, BH.TagAgency, BH.TagID, BH.TagStatus, BH.TagStartDate, BH.TagEndDate
+		)
+		SELECT	BH.SRC, BH.HistID, BH.CustomerID, BH.TagAgency, BH.TagID, BH.TagStatus, 
+				BH.TagStartDate, 
+				BH.TagEndDate, 
+				ISNULL(BHF.TagEndDate_Fixed, BH.TagStartDate) AS TagEndDate_Fixed,
+				CAST ('Bad Active Row in History ' + CASE WHEN BHF.TagEndDate_Fixed IS NULL THEN '- Not fixable, void it!' ELSE '' END AS VARCHAR(100)) AS DataIntegrityIssue,  /*Example: 02144965 . Few rare cases, 33 in total, no way to fix, make it harmless, end it immediately*/
+				ISNULL(BHF.EDW_UpdateDate,SYSDATETIME()) EDW_UpdateDate
+		FROM	Stage.CustomerTags_BadActiveHist BH
+		LEFT JOIN CTE_CustomerTags_BadActiveHist_Fix BHF 
+		ON		BHF.CustomerID = BH.CustomerID
+		AND		BHF.TagAgency = BH.TagAgency
+		AND		BHF.TagID = BH.TagID
+		AND		BHF.HistID = BH.HistID
+
+	    SET  @Log_Message = 'Loaded Stage.CustomerTags_BadActiveHist_Fix with a new TagEndDate for Hist rows in NEVER ENDING ACTIVE Tag Status!'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL		 
+
+		IF EXISTS (SELECT 1 FROM Stage.CustomerTags_BadActiveHist_Fix)
+		BEGIN
+		
+			UPDATE	Stage.OpenedClosedTags_Source
+			SET		TagEndDate = CustomerTags_BadActiveHist_Fix.TagEndDate_Fixed, 
+					DataIntegrityIssue = CustomerTags_BadActiveHist_Fix.DataIntegrityIssue,
+					EDW_UpdateDate = CustomerTags_BadActiveHist_Fix.EDW_UpdateDate 
+			FROM	Stage.CustomerTags_BadActiveHist_Fix 
+			WHERE	CustomerTags_BadActiveHist_Fix.CustomerID = OpenedClosedTags_Source.CustomerID
+			AND		CustomerTags_BadActiveHist_Fix.TagAgency = OpenedClosedTags_Source.TagAgency
+			AND		CustomerTags_BadActiveHist_Fix.TagID = OpenedClosedTags_Source.TagID
+			AND		CustomerTags_BadActiveHist_Fix.HistID = OpenedClosedTags_Source.HistID
+
+			UPDATE STATISTICS Stage.OpenedClosedTags_Source
+
+			SET  @Log_Message = 'Fixed Stage.OpenedClosedTags_Source with a new TagEndDate for Hist rows in NEVER ENDING ACTIVE Tag Status!'
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL		 
+
+			UPDATE	Stage.CustomerTags
+			SET		TagEndDate = CustomerTags_BadActiveHist_Fix.TagEndDate_Fixed, 
+					DataIntegrityIssue = CustomerTags_BadActiveHist_Fix.DataIntegrityIssue,
+					EDW_UpdateDate = CustomerTags_BadActiveHist_Fix.EDW_UpdateDate 
+			FROM	Stage.CustomerTags_BadActiveHist_Fix 
+			WHERE	CustomerTags_BadActiveHist_Fix.CustomerID = CustomerTags.CustomerID
+			AND		CustomerTags_BadActiveHist_Fix.TagAgency = CustomerTags.TagAgency
+			AND		CustomerTags_BadActiveHist_Fix.TagID = CustomerTags.TagID
+			AND		CustomerTags_BadActiveHist_Fix.HistID = CustomerTags.HistID
+
+			UPDATE STATISTICS Stage.CustomerTags
+
+			SET  @Log_Message = 'Fixed Stage.CustomerTags with a new TagEndDate for Hist rows in NEVER ENDING ACTIVE Tag Status!'
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL		 
+		END 
+		
+		UPDATE	Stage.CustomerTags_Source
+		SET		DataIntegrityIssue = CustomerTags.DataIntegrityIssue
+		FROM	Stage.CustomerTags 
+		WHERE	CustomerTags.CustomerID = CustomerTags_Source.CustomerID
+		AND		CustomerTags.TagAgency = CustomerTags_Source.TagAgency
+		AND		CustomerTags.TagID = CustomerTags_Source.TagID
+		AND		CustomerTags.HistID = CustomerTags_Source.HistID
+		AND		ISNULL(CustomerTags_Source.DataIntegrityIssue,'') <> ISNULL(CustomerTags.DataIntegrityIssue,'')	
+		AND		CustomerTags.DataIntegrityIssue <> 'Current Tag Status ended in the past' -- too many. ignore clutter.
+
+		UPDATE STATISTICS Stage.CustomerTags_Source
+
+		SET  @Log_Message = 'Fixed Stage.CustomerTags_Source with DataIntegrityIssue info'
+		EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL		 
+
+		--:: Open/Closed Tags. 
+		IF OBJECT_ID('Stage.OpenedClosedTags') IS NOT NULL DROP TABLE Stage.OpenedClosedTags
+		CREATE TABLE Stage.OpenedClosedTags WITH (DISTRIBUTION = HASH(CustomerID)) AS
+		SELECT * FROM Stage.OpenedClosedTags_Source WHERE CHANGE_NUM_SEQ = 1 --> Only TagStatus change activity rows
+
+ 		--:: Create Statistics
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_001 ON Stage.OpenedClosedTags (MonthID)
+  		CREATE STATISTICS Stats_Stage_OpenedClosedTags_002 ON Stage.OpenedClosedTags (SRC)
+		CREATE STATISTICS Stats_Stage_OpenedClosedTags_003 ON Stage.OpenedClosedTags (HistID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_004 ON Stage.OpenedClosedTags (CustTagID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_005 ON Stage.OpenedClosedTags (CustomerID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_006 ON Stage.OpenedClosedTags (TagAgency)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_007 ON Stage.OpenedClosedTags (TagID)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_008 ON Stage.OpenedClosedTags (TagStatus)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_009 ON Stage.OpenedClosedTags (TagStartDate)
+ 		CREATE STATISTICS Stats_Stage_OpenedClosedTags_010 ON Stage.OpenedClosedTags (TagEndDate)
+
+	    SET  @Log_Message = 'Loaded Stage.OpenedClosedTags'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Check
+		SELECT * FROM Stage.OpenedClosedTags_Source WHERE CustomerID = 4820583 ORDER BY CustomerID, TagAgency, TagID, HistID
+		SELECT * FROM Stage.OpenedClosedTags  WHERE CustomerID = 4820583 ORDER BY CustomerID, TagAgency, TagID, HistID
+		*/
+
+		------------------------------------------------------------------------------------------------------------------------------------------
+		--:: Count Customer Tags 
+		------------------------------------------------------------------------------------------------------------------------------------------
+
+		--:: Month Begin Tags
+		IF OBJECT_ID('Stage.MonthBeginTags') IS NOT NULL DROP TABLE Stage.MonthBeginTags
+		CREATE TABLE Stage.MonthBeginTags WITH (DISTRIBUTION = HASH(CustomerID)) AS 
+		SELECT SRC, MonthID, HistID, CustTagID, CustomerID, TagAgency, TagID, TagStatus, MonthBeginDate, TagStartDate, TagEndDate, RN
+		FROM
+		(
+			SELECT SRC, MonthID, HistID, CustTagID, CustomerID, TagAgency, TagID, TagStatus, MonthBeginDate, TagStartDate, TagEndDate, ROW_NUMBER() OVER(PARTITION BY MonthID, CustomerID, TagAgency, TagID  ORDER BY HistID DESC) RN
+			FROM Stage.CustomerTags
+			JOIN #Load_Months ON MonthBeginDate BETWEEN TagStartDate AND TagEndDate
+			WHERE TagStatus = 'Assigned'
+			--AND TagID = '13525663'
+			--ORDER BY MonthID, CustomerID, HistID 
+		) T
+		WHERE RN = 1 --> Handle duplicates caused by same TagStartDate or TagEndDate or both in Current + History table. Example: TagID = '13525663'
+		--ORDER BY MonthID, CustTagID, T.HistID
+
+ 		--:: Create Statistics
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_001 ON Stage.MonthBeginTags (MonthID)
+  		CREATE STATISTICS Stats_Stage_MonthBeginTags_002 ON Stage.MonthBeginTags (SRC)
+		CREATE STATISTICS Stats_Stage_MonthBeginTags_003 ON Stage.MonthBeginTags (HistID)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_004 ON Stage.MonthBeginTags (CustTagID)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_005 ON Stage.MonthBeginTags (CustomerID)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_006 ON Stage.MonthBeginTags (TagAgency)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_007 ON Stage.MonthBeginTags (TagID)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_008 ON Stage.MonthBeginTags (TagStatus)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_009 ON Stage.MonthBeginTags (TagStartDate)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_010 ON Stage.MonthBeginTags (TagEndDate)
+ 		CREATE STATISTICS Stats_Stage_MonthBeginTags_011 ON Stage.MonthBeginTags (MonthBeginDate)
+
+	    SET  @Log_Message = 'Loaded Stage.MonthBeginTags'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Check
+		SELECT * FROM Stage.CustomerTags WHERE TagID = '13525663' ORDER BY CustTagID, HistID 
+		SELECT * FROM Stage.MonthBeginTags WHERE CustomerID = 1147255
+		*/
+
+		--:: Month Opened Tags
+		IF OBJECT_ID('Stage.MonthOpenedTags') IS NOT NULL DROP TABLE Stage.MonthOpenedTags
+		CREATE TABLE Stage.MonthOpenedTags WITH (DISTRIBUTION = HASH(CustomerID)) AS 
+		SELECT	OCT.SRC, OCT.MonthID, HistID, CustTagID, CustomerID, TagAgency, TagID, TagStatus, TagStartDate, TagEndDate, MonthEndDate
+		FROM	Stage.OpenedClosedTags OCT
+		JOIN	#Load_Months M
+		ON		OCT.MonthID = M.MonthID
+  				AND OCT.TagStartDate <= M.MonthEndDate
+		WHERE	TagStatus = 'Active' --> OpenedTags 
+
+ 		--:: Create Statistics
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_001 ON Stage.MonthOpenedTags (MonthID)
+  		CREATE STATISTICS Stats_Stage_MonthOpenedTags_002 ON Stage.MonthOpenedTags (SRC)
+		CREATE STATISTICS Stats_Stage_MonthOpenedTags_003 ON Stage.MonthOpenedTags (HistID)
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_004 ON Stage.MonthOpenedTags (CustTagID)
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_005 ON Stage.MonthOpenedTags (CustomerID)
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_006 ON Stage.MonthOpenedTags (TagAgency)
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_007 ON Stage.MonthOpenedTags (TagID)
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_008 ON Stage.MonthOpenedTags (TagStatus)
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_009 ON Stage.MonthOpenedTags (TagStartDate)
+ 		CREATE STATISTICS Stats_Stage_MonthOpenedTags_010 ON Stage.MonthOpenedTags (TagEndDate)
+
+	    SET  @Log_Message = 'Loaded Stage.MonthOpenedTags'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Check
+		SELECT 'OPENED_TAGS' OPENED_TAGS, MonthID, CustomerID, COUNT(1) OPENED_TAGS FROM Stage.MonthOpenedTags GROUP BY MonthID, CustomerID ORDER BY MonthID, CustomerID
+		SELECT * FROM Stage.OpenedClosedTags Where TagStartDate > '1/1/2023' ORDER BY CustomerID, TagID, MonthID
+
+		--:: Same Tag opened multiple times within a month
+		SELECT 'OPENED_TAGS' OPENED_TAGS, MonthID, CustTagID, CustomerID, TagAgency, TagID, COUNT(1) DUP_OPENED_TAGS FROM Stage.MonthOpenedTags GROUP BY MonthID, CustTagID, CustomerID, TagAgency, TagID HAVING COUNT(1) > 1 ORDER BY MonthID, CustomerID, TagID, CustTagID
+		SELECT * FROM Stage.CustomerTags WHERE TagID = '02277666' ORDER BY TagStartDate
+		SELECT * FROM Stage.OpenedClosedTags WHERE TagID = '02277666' ORDER BY 
+		*/
+
+		--:: Month Closed Tags. Must have Active status before Closed status
+		IF OBJECT_ID('Stage.MonthClosedTags') IS NOT NULL DROP TABLE Stage.MonthClosedTags
+		CREATE TABLE Stage.MonthClosedTags WITH (DISTRIBUTION = HASH(CustomerID)) AS
+		SELECT	OCT.SRC, OCT.MonthID, HistID, CustTagID, CustomerID, TagAgency, TagID, TagStatus, TagStartDate, TagEndDate, MonthEndDate
+		FROM	Stage.OpenedClosedTags OCT
+		JOIN	#Load_Months M
+		ON		OCT.MonthID = M.MonthID
+				AND OCT.TagStartDate <= M.MonthEndDate
+		WHERE	OCT.TagStatus = 'Other' --> ClosedTags
+				AND EXISTS (SELECT 1 FROM Stage.CustomerTags CT WHERE CT.TagStatus = 'ASSIGNED' AND OCT.CustTagID = CT.CustTagID AND OCT.TagStartDate > CT.TagStartDate)
+				--AND OCT.CustomerID = 4820583 AND OCT.TagID = '11681327'
+
+ 		--:: Create Statistics
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_001 ON Stage.MonthClosedTags (MonthID)
+  		CREATE STATISTICS Stats_Stage_MonthClosedTags_002 ON Stage.MonthClosedTags (SRC)
+		CREATE STATISTICS Stats_Stage_MonthClosedTags_003 ON Stage.MonthClosedTags (HistID)
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_004 ON Stage.MonthClosedTags (CustTagID)
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_005 ON Stage.MonthClosedTags (CustomerID)
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_006 ON Stage.MonthClosedTags (TagAgency)
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_007 ON Stage.MonthClosedTags (TagID)
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_008 ON Stage.MonthClosedTags (TagStatus)
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_009 ON Stage.MonthClosedTags (TagStartDate)
+ 		CREATE STATISTICS Stats_Stage_MonthClosedTags_010 ON Stage.MonthClosedTags (TagEndDate)
+
+	    SET  @Log_Message = 'Loaded Stage.MonthClosedTags'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Check
+		SELECT 'CLOSED_TAGS' CLOSED_TAGS, MonthID, CustomerID, COUNT(1) CLOSED_TAGS FROM Stage.MonthClosedTags GROUP BY MonthID, CustomerID ORDER BY MonthID, CustomerID
+		
+		--:: Same Tag closed multiple times within a month
+		SELECT 'CLOSED_TAGS' CLOSED_TAGS, MonthID, CustTagID, CustomerID, TagAgency, TagID, COUNT(1) DUP_CLOSED_TAGS FROM Stage.MonthClosedTags GROUP BY MonthID, CustTagID, CustomerID, TagAgency, TagID HAVING COUNT(1) > 1 ORDER BY MonthID, CustomerID, TagID, CustTagID
+		SELECT * FROM Stage.CustomerTags WHERE TagID = '13644621' ORDER BY CustomerID, TagID, CustTagID, HistID
+		SELECT * FROM Stage.OpenedClosedTags Where TagID = '13644621' ORDER BY MonthID, CustomerID, TagID, CustTagID, HistID
+		SELECT * FROM Stage.MonthClosedTags WHERE TagID = '13644621'  ORDER BY MonthID, CustomerID
+
+		--:: One Tag with 3 customers. Pick the Tag where it has active status prior to closed status.
+		SELECT * FROM Stage.CustomerTags WHERE TagID = '03822931' ORDER BY CustomerID, TagID, CustTagID, HistID
+		SELECT * FROM Stage.OpenedClosedTags Where TagID = '03822931' ORDER BY MonthID, CustomerID, TagID, CustTagID, HistID
+		SELECT * FROM Stage.MonthClosedTags WHERE TagID = '03822931'  ORDER BY MonthID, CustomerID, TagID, CustTagID, HistID
+		*/
+
+		--:: Month End Tags
+		IF OBJECT_ID('Stage.MonthEndTags') IS NOT NULL DROP TABLE Stage.MonthEndTags
+		CREATE TABLE Stage.MonthEndTags WITH (DISTRIBUTION = HASH(CustomerID)) AS    
+		SELECT SRC, MonthID, HistID, CustTagID, CustomerID, TagAgency, TagID, TagStatus, TagStartDate, TagEndDate, CONVERT(DATETIME2(0),CONVERT(VARCHAR, MonthEndDate,120)) MonthEndDate, RN
+		FROM
+		(
+			SELECT SRC, MonthID, HistID, CustTagID, CustomerID, TagAgency, TagID, TagStatus, TagStartDate, TagEndDate, MonthEndDate, ROW_NUMBER() OVER(PARTITION BY MonthID, CustomerID, TagAgency, TagID  ORDER BY HistID DESC) RN
+			FROM Stage.CustomerTags
+			JOIN #Load_Months ON MonthEndDate BETWEEN TagStartDate AND TagEndDate
+			WHERE TagStatus = 'Assigned'
+			--AND TagID = '13525663'
+			--ORDER BY MonthID, CustomerID, HistID 
+		) T
+		WHERE RN = 1 -- Handle duplicates caused by same TagStartDate or TagEndDate or both in Current + History table. Example: TagID = '13525663'
+		--ORDER BY CustomerID, CustTagID
+
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_001 ON Stage.MonthEndTags (MonthID)
+  		CREATE STATISTICS Stats_Stage_MonthEndTags_002 ON Stage.MonthEndTags (SRC)
+		CREATE STATISTICS Stats_Stage_MonthEndTags_003 ON Stage.MonthEndTags (HistID)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_004 ON Stage.MonthEndTags (CustTagID)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_005 ON Stage.MonthEndTags (CustomerID)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_006 ON Stage.MonthEndTags (TagAgency)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_007 ON Stage.MonthEndTags (TagID)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_008 ON Stage.MonthEndTags (TagStatus)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_009 ON Stage.MonthEndTags (TagStartDate)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_010 ON Stage.MonthEndTags (TagEndDate)
+ 		CREATE STATISTICS Stats_Stage_MonthEndTags_011 ON Stage.MonthEndTags (MonthEndDate)
+
+	    SET  @Log_Message = 'Loaded Stage.MonthEndTags'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Check
+		SELECT * FROM Stage.CustomerTags WHERE CustomerID = 1147255 ORDER BY CustomerID, TagID, TagStartDate desc
+		SELECT * FROM Stage.MonthEndTags WHERE CustomerID = 1147255 ORDER BY CustomerID, TagID, MonthID
+
+		SELECT * FROM Stage.MonthEndTags Where CustomerID = 7800 ORDER BY CustomerID, TagID, MonthID
+		SELECT * FROM Stage.OpenedClosedTags Where CustomerID = 7800 ORDER BY CustomerID, TagID, MonthID
+		*/
+
+		--::======================================================================================================================================
+		--:: Load TollTag Customer and Customer History 
+		--::======================================================================================================================================
+		
+		--:: Current customer data from Dim_Customer table. 
+		IF OBJECT_ID('Stage.TollTagCustomer') IS NOT NULL DROP TABLE Stage.TollTagCustomer
+		CREATE TABLE Stage.TollTagCustomer WITH (CLUSTERED INDEX(CustomerID), DISTRIBUTION = HASH(CustomerID)) AS 
+		SELECT  CustomerID,
+				AccountTypeID,
+				AccountTypeDesc,
+				AccountStatusID,
+				AccountStatusDesc,
+				AccountStatusDate,
+				AutoReplenishmentID,
+				AutoReplenishmentCode,
+				RebillAmount,
+				CASE	WHEN RebillAmount IS NULL THEN -1
+						WHEN RebillAmount <  20 THEN 1
+						WHEN RebillAmount =  20 THEN 2 
+						WHEN RebillAmount >  20 AND RebillAmount < 40 THEN 3
+						WHEN RebillAmount >= 40 THEN 4  
+				END  RebillAmountGroupID,
+				NULLIF(NULLIF(ZipCode,'99999'),'') ZipCode,
+				AccountCreateDate,
+				AccountLastCloseDate
+		FROM	dbo.Dim_Customer
+		WHERE	AccountCategoryDesc = 'TagStore'  
+		AND		CustomerID IN (SELECT CustomerID FROM Stage.CustomerTags)
+
+	    SET  @Log_Message = 'Loaded Stage.TollTagCustomer'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		------------------------------------------------------------------------------------------------------------------------------------------
+		--:: Customer History. Get customer data as of the last day of each month
+		------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('Stage.TollTagCustomerHistory') IS NOT NULL DROP TABLE Stage.TollTagCustomerHistory
+		CREATE TABLE Stage.TollTagCustomerHistory WITH (CLUSTERED INDEX(CustomerID), DISTRIBUTION = HASH(CustomerID)) AS 
+		SELECT 	'Current' SRC, 999999999 HistID /*current*/, CustomerID, UserTypeID AccountTypeID, AccountStatusID, AccountStatusDate, UpdatedDate
+		FROM	LND_TBOS.TollPlus.TP_CUSTOMERS 
+		WHERE	CustomerID IN (SELECT DISTINCT CustomerID FROM Stage.TollTagCustomer) AND LND_UpdateType <> 'D'
+		UNION
+		SELECT	'History' SRC, HistID, CustomerID, UserTypeID AccountTypeID, AccountStatusID, AccountStatusDate, UpdatedDate
+		FROM	LND_TBOS.History.TP_CUSTOMERS 
+		WHERE	CustomerID IN (SELECT DISTINCT CustomerID FROM Stage.TollTagCustomer) AND LND_UpdateType <> 'D'
+
+  		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_001 ON Stage.TollTagCustomerHistory (SRC)
+		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_002 ON Stage.TollTagCustomerHistory (HistID)
+ 		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_003 ON Stage.TollTagCustomerHistory (AccountStatusID)
+
+	    SET  @Log_Message = 'Loaded Stage.TollTagCustomerHistory'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		IF OBJECT_ID('Stage.TollTagCustomerHistory_MonthEnd') IS NOT NULL DROP TABLE Stage.TollTagCustomerHistory_MonthEnd
+		CREATE TABLE Stage.TollTagCustomerHistory_MonthEnd WITH (CLUSTERED INDEX(CustomerID), DISTRIBUTION = HASH(CustomerID)) AS 
+		WITH CTE_TollTagCustomerHistory_MonthEnd AS
+		(
+			SELECT *, ROW_NUMBER() OVER (PARTITION BY MonthID, CustomerID ORDER BY UpdatedDate DESC, HistID DESC) RN
+			FROM Stage.TollTagCustomerHistory CH JOIN #Load_Months M ON CH.UpdatedDate < M.MonthEndDate 
+		) --SELECT * FROM CTE_TollTagCustomerHistory_MonthEnd WHERE CustomerID = 2754086 ORDER BY MonthID, CustomerID, RN
+		SELECT CHM.MonthID, CHM.SRC, CHM.HistID, CHM.CustomerID, CHM.AccountTypeID, T.AccountTypeDesc, CHM.AccountStatusID, S.AccountStatusDesc, CHM.AccountStatusDate
+		FROM CTE_TollTagCustomerHistory_MonthEnd CHM
+		LEFT JOIN dbo.Dim_AccountType AS T
+			ON CHM.AccountTypeID = T.AccountTypeID 
+		LEFT JOIN dbo.Dim_AccountStatus AS S 
+			ON CHM.AccountStatusID = S.AccountStatusID
+		WHERE CHM.RN = 1 
+		--ORDER BY CHR.MonthID, CHR.CustomerID 
+
+  		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_MonthEnd_001 ON Stage.TollTagCustomerHistory_MonthEnd (MonthID)
+  		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_MonthEnd_002 ON Stage.TollTagCustomerHistory_MonthEnd (SRC)
+		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_MonthEnd_003 ON Stage.TollTagCustomerHistory_MonthEnd (HistID)
+ 		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_MonthEnd_004 ON Stage.TollTagCustomerHistory_MonthEnd (AccountStatusID)
+ 		CREATE STATISTICS Stats_Stage_TollTagCustomerHistory_MonthEnd_005 ON Stage.TollTagCustomerHistory_MonthEnd (AccountStatusDesc)
+
+	    SET  @Log_Message = 'Loaded Stage.TollTagCustomerHistory_MonthEnd'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Quick test 
+		SELECT 'Current' SRC, * FROM LND_TBOS.TollPlus.TP_Customers WHERE LND_UpdateType <> 'D' AND CustomerID = 2754086 ORDER BY CustomerID, UpdatedDate
+		SELECT 'History' SRC, * FROM LND_TBOS.History.TP_Customers WHERE LND_UpdateType <> 'D' AND CustomerID = 2754086 ORDER BY CustomerID, UpdatedDate
+
+		SELECT 'Stage.TollTagCustomerHistory' SRC, * FROM Stage.TollTagCustomerHistory WHERE CustomerID = 2754086 ORDER BY CustomerID, UpdatedDate
+		SELECT 'Stage.TollTagCustomerHistory_MonthEnd' SRC, * FROM Stage.TollTagCustomerHistory_MonthEnd WHERE CustomerID = 2754086 ORDER BY CustomerID, MonthID
+		*/
+
+		------------------------------------------------------------------------------------------------------------------------------------------
+		--:: Customer Customer Zip code History. Get customer zip code as of the last day of each month
+		------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('Stage.CustomerZipcodeHistory') IS NOT NULL DROP TABLE Stage.CustomerZipcodeHistory
+		CREATE TABLE Stage.CustomerZipcodeHistory WITH (CLUSTERED INDEX(CustomerID), DISTRIBUTION = HASH(CustomerID)) AS 
+		SELECT 	'Current' SRC, CustomerID, ISNULL(CAST(NULLIF(Zip1,'') AS VARCHAR(10)),'UNKNOWN') ZipCode, UpdatedDate
+		FROM	LND_TBOS.TollPlus.TP_Customer_Addresses 
+		WHERE	CustomerID IN (SELECT DISTINCT CustomerID FROM Stage.TollTagCustomer) AND IsActive = 1 AND IsCommunication = 1 AND LND_UpdateType <> 'D' -- AND CustomerID = 4141325
+		UNION
+		SELECT 	'History' SRC, CustomerID, ISNULL(CAST(NULLIF(Zip1,'') AS VARCHAR(10)),'UNKNOWN') ZipCode, UpdatedDate
+		FROM	LND_TBOS.History.TP_Customer_Addresses
+		WHERE	CustomerID IN (SELECT DISTINCT CustomerID FROM Stage.TollTagCustomer) AND IsActive = 1 AND IsCommunication = 1 AND LND_UpdateType <> 'D' -- AND CustomerID = 4141325
+		
+ 		CREATE STATISTICS Stats_Stage_CustomerZipcodeHistory_001 ON Stage.CustomerZipcodeHistory (ZipCode)
+ 		CREATE STATISTICS Stats_Stage_CustomerZipcodeHistory_002 ON Stage.CustomerZipcodeHistory (UpdatedDate)
+
+	    SET  @Log_Message = 'Loaded Stage.CustomerZipcodeHistory'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		IF OBJECT_ID('Stage.CustomerZipcodeHistory_MonthEnd') IS NOT NULL DROP TABLE Stage.CustomerZipcodeHistory_MonthEnd
+		CREATE TABLE Stage.CustomerZipcodeHistory_MonthEnd WITH (CLUSTERED INDEX(CustomerID), DISTRIBUTION = HASH(CustomerID)) AS 
+		WITH CTE_CustomerZipcodeHistory_MonthEnd AS
+		(
+			SELECT	M.MonthID, SRC, CustomerID, ZipCode, UpdatedDate, ROW_NUMBER() OVER (PARTITION BY MonthID, CustomerID ORDER BY UpdatedDate DESC) RN
+			FROM	Stage.CustomerZipcodeHistory ZH JOIN #Load_Months M ON ZH.UpdatedDate < M.MonthEndDate 
+		) --SELECT * FROM CTE_CustomerZipcodeHistory_MonthEnd WHERE CustomerID = 4141325 ORDER BY MonthID, CustomerID, RN
+		SELECT MonthID, SRC, CustomerID, ZipCode, UpdatedDate, RN
+		FROM	CTE_CustomerZipcodeHistory_MonthEnd 
+		WHERE	RN = 1 
+		--AND	CustomerID = 4141325
+		--ORDER BY CustomerID, MonthID, UpdatedDate
+
+ 		CREATE STATISTICS Stats_Stage_CustomerZipcodeHistory_MonthEnd_001 ON Stage.CustomerZipcodeHistory_MonthEnd (MonthID)
+ 		CREATE STATISTICS Stats_Stage_CustomerZipcodeHistory_MonthEnd_002 ON Stage.CustomerZipcodeHistory_MonthEnd (ZipCode)
+ 		CREATE STATISTICS Stats_Stage_CustomerZipcodeHistory_MonthEnd_003 ON Stage.CustomerZipcodeHistory_MonthEnd (UpdatedDate)
+		
+	    SET  @Log_Message = 'Loaded Stage.CustomerZipcodeHistory_MonthEnd'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Quick test 
+		SELECT 'Current' SRC, * FROM LND_TBOS.TollPlus.TP_Customer_Addresses WHERE	IsActive = 1 AND IsCommunication = 1 AND LND_UpdateType <> 'D' AND CustomerID = 4141325 ORDER BY CustomerID, UpdatedDate
+		SELECT 'History' SRC, * FROM LND_TBOS.History.TP_Customer_Addresses WHERE	IsActive = 1 AND IsCommunication = 1 AND LND_UpdateType <> 'D' AND CustomerID = 4141325 ORDER BY CustomerID, UpdatedDate
+		SELECT * FROM Stage.CustomerZipcodeHistory WHERE CustomerID = 4141325 ORDER BY CustomerID, UpdatedDate -- more than one zip code, all in one month example. 75149 and 75181 in 202101 based on UpdatedDate
+		SELECT * FROM Stage.CustomerZipcodeHistory_MonthEnd WHERE CustomerID = 4141325 ORDER BY CustomerID, MonthID, UpdatedDate
+		*/
+
+		------------------------------------------------------------------------------------------------------------------------------------------
+		--:: Customer Rebill Amount History. Get customer rebill amount as of the last day of each month
+		------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('Stage.RebillHistory') IS NOT NULL DROP TABLE Stage.RebillHistory
+		CREATE TABLE Stage.RebillHistory WITH (CLUSTERED INDEX(CustomerID), DISTRIBUTION = HASH(CustomerID)) AS 
+		SELECT 	'Current' SRC, 999999999 HistID /*current*/, CustomerID, AutoReplenishmentID, CalculatedRebillAmount RebillAmount, UpdatedDate
+		FROM	LND_TBOS.TollPlus.TP_CUSTOMER_ATTRIBUTES
+		WHERE	CustomerID IN (SELECT DISTINCT CustomerID FROM Stage.TollTagCustomer) AND LND_UpdateType <> 'D'-- WHERE CustomerID = 2015793598
+		UNION
+		SELECT	'History' SRC, HistID, CustomerID, AutoReplenishmentID, CalculatedRebillAmount, UpdatedDate
+		FROM	LND_TBOS.History.TP_CUSTOMER_ATTRIBUTES
+		WHERE	CustomerID IN (SELECT DISTINCT CustomerID FROM Stage.TollTagCustomer) AND LND_UpdateType <> 'D'-- WHERE CustomerID = 2015793598
+ 
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_001 ON Stage.RebillHistory (AutoReplenishmentID)
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_002 ON Stage.RebillHistory (RebillAmount)
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_003 ON Stage.RebillHistory (UpdatedDate)
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_004 ON Stage.RebillHistory (HistID)
+
+ 	    SET  @Log_Message = 'Loaded Stage.RebillHistory'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		IF OBJECT_ID('Stage.RebillHistory_MonthEnd') IS NOT NULL DROP TABLE Stage.RebillHistory_MonthEnd
+		CREATE TABLE Stage.RebillHistory_MonthEnd WITH (CLUSTERED INDEX(CustomerID), DISTRIBUTION = HASH(CustomerID)) AS 
+		WITH CTE_RebillHistory_MonthEnd AS
+		(
+			SELECT	M.MonthID, SRC, HistID, CustomerID, AutoReplenishmentID, RebillAmount, UpdatedDate, 
+					ROW_NUMBER() OVER (PARTITION BY MonthID, CustomerID ORDER BY UpdatedDate DESC, HistID DESC) RN
+			FROM	Stage.RebillHistory RBH JOIN #Load_Months M ON RBH.UpdatedDate < M.MonthEndDate 
+		) --SELECT * FROM CTE_RebillHistory_MonthEnd WHERE CustomerID = 2015793598 ORDER BY MonthID, CustomerID, RN
+		SELECT  MonthID,
+				SRC,
+				HistID,
+				CustomerID,
+				AutoReplenishmentID,
+				RebillAmount,
+				CASE	WHEN RebillAmount IS NULL THEN -1
+						WHEN RebillAmount <  20 THEN 1
+						WHEN RebillAmount =  20 THEN 2 
+						WHEN RebillAmount >  20 AND RebillAmount < 40 THEN 3
+						WHEN RebillAmount >= 40 THEN 4  
+				END  RebillAmountGroupID,
+				UpdatedDate,
+				RN
+		FROM CTE_RebillHistory_MonthEnd 
+		WHERE RN = 1 
+		--AND CustomerID = 2022417992
+		--ORDER BY CustomerID, MonthID, UpdatedDate
+
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_MonthEnd_001 ON Stage.RebillHistory_MonthEnd (MonthID)
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_MonthEnd_002 ON Stage.RebillHistory_MonthEnd (AutoReplenishmentID)
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_MonthEnd_003 ON Stage.RebillHistory_MonthEnd (RebillAmount)
+ 		CREATE STATISTICS Stats_Stage_RebillHistory_MonthEnd_004 ON Stage.RebillHistory_MonthEnd (UpdatedDate)
+
+	    SET  @Log_Message = 'Loaded Stage.RebillHistory_MonthEnd'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		/*
+		--:: Quick test 
+		SELECT 	'Current' SRC, * FROM LND_TBOS.TollPlus.TP_CUSTOMER_ATTRIBUTES WHERE CustomerID = 2015793598 AND LND_UpdateType <> 'D' 
+		SELECT 	'History' SRC, * FROM LND_TBOS.History.TP_CUSTOMER_ATTRIBUTES WHERE CustomerID = 2015793598 AND LND_UpdateType <> 'D' 
+		SELECT 'Stage.RebillHistory' SRC, * FROM Stage.RebillHistory WHERE CustomerID = 2015793598 ORDER BY CustomerID, UpdatedDate
+		SELECT 'Stage.RebillHistory_MonthEnd' SRC, * FROM Stage.RebillHistory_MonthEnd WHERE CustomerID = 2015793598 ORDER BY CustomerID, MonthID
+		*/
+
+		--::======================================================================================================================================
+		--:: Load dbo.Fact_CustomerTagDetail
+		--::======================================================================================================================================
+
+		IF OBJECT_ID('Stage.CustomerTagDetail') IS NOT NULL DROP TABLE Stage.CustomerTagDetail
+		CREATE TABLE Stage.CustomerTagDetail WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH(CustomerID)) AS 
+		SELECT MonthID, CustTagID, CustomerID, TagAgency, TagID, 'MONTH BEGIN' TagCounter, MonthBeginDate TagCounterDate, 1 MonthBeginTag, 0 OpenedTag, 0 ClosedTag, 0 MonthEndTag
+			FROM Stage.MonthBeginTags
+		UNION ALL
+		SELECT MonthID, CustTagID, CustomerID, TagAgency, TagID, 'TAG OPENED' TagCounter, TagStartDate TagCounterDate, 0 MonthBeginTag, 1 OpenedTag, 0 ClosedTag, 0 MonthEndTag
+			FROM Stage.MonthOpenedTags
+		UNION ALL
+		SELECT MonthID, CustTagID, CustomerID, TagAgency, TagID, 'TAG CLOSED' TagCounter, TagStartDate TagCounterDate, 0 MonthBeginTag, 0 OpenedTag, 1 ClosedTag, 0 MonthEndTag
+			FROM Stage.MonthClosedTags
+		UNION ALL
+		SELECT MonthID, CustTagID, CustomerID, TagAgency, TagID, 'MONTH END' TagCounter, MonthEndDate TagCounterDate, 0 MonthBeginTag, 0 OpenedTag, 0 ClosedTag, 1 MonthEndTag
+			FROM Stage.MonthEndTags
+	    
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_001 ON Stage.CustomerTagDetail (MonthID)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_002 ON Stage.CustomerTagDetail (CustomerID)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_003 ON Stage.CustomerTagDetail (TagAgency)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_004 ON Stage.CustomerTagDetail (TagID)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_005 ON Stage.CustomerTagDetail (TagCounter)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_006 ON Stage.CustomerTagDetail (TagCounterDate)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_007 ON Stage.CustomerTagDetail (MonthBeginTag)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_008 ON Stage.CustomerTagDetail (OpenedTag)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_009 ON Stage.CustomerTagDetail (ClosedTag)
+		CREATE STATISTICS Stats_Stage_CustomerTagDetail_010 ON Stage.CustomerTagDetail (MonthEndTag)
+
+		SET  @Log_Message = 'Loaded Stage.CustomerTagDetail'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL	
+
+		SET @SQL = ' 
+		IF OBJECT_ID(''dbo.Fact_CustomerTagDetail_NEW'') IS NOT NULL DROP TABLE dbo.Fact_CustomerTagDetail_NEW
+		CREATE TABLE dbo.Fact_CustomerTagDetail_NEW WITH ' + @CreateTableWith + ' AS
+		SELECT	TD.MonthID,
+				TD.CustomerID,
+				ISNULL(CAST(RH.RebillAmountGroupID AS SMALLINT),-1) RebillAmountGroupID,
+				RH.RebillAmount RebillAmount,
+				ISNULL(CAST(RH.AutoReplenishmentID AS INT),-1) AutoReplenishmentID,
+				ISNULL(CAST(CH.AccountStatusID AS INT),-1) AccountStatusID,
+				ISNULL(CAST(CH.AccountTypeID AS INT),-1) AccountTypeID,
+				ISNULL(CZH.ZipCode,''UNK'') ZipCode,
+				A.AccountCreateDate,
+				A.AccountLastCloseDate,
+				TD.CustTagID,
+				TD.TagAgency,
+				TD.TagID,
+				TD.TagCounter,
+				TD.TagCounterDate,
+				TD.MonthBeginTag,
+				TD.OpenedTag,
+				TD.ClosedTag,
+				TD.MonthEndTag,
+				CAST(SYSDATETIME() AS DATETIME2(3)) EDW_UpdateDate
+		FROM	Stage.CustomerTagDetail TD
+		JOIN	Stage.TollTagCustomer A
+					ON TD.CustomerID = A.CustomerID
+		LEFT JOIN	Stage.TollTagCustomerHistory_MonthEnd CH
+					ON CH.CustomerID = A.CustomerID
+					AND CH.MonthID = TD.MonthID
+		LEFT JOIN	Stage.RebillHistory_MonthEnd RH
+					ON RH.CustomerID = A.CustomerID
+					AND RH.MonthID = TD.MonthID
+		LEFT JOIN	Stage.CustomerZipcodeHistory_MonthEnd CZH
+					ON CZH.CustomerID = A.CustomerID
+					AND CZH.MonthID = TD.MonthID 
+		OPTION  (LABEL = ''dbo.Fact_CustomerTagDetail_NEW'');'
+
+		IF @Trace_Flag = 1 EXEC Utility.LongPrint @SQL
+		EXEC (@SQL)
+       
+		SET  @Log_Message = 'Loaded dbo.Fact_CustomerTagDetail_NEW'
+		EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, -1
+
+		IF @Trace_Flag = 1 SELECT TOP 100 'dbo.Fact_CustomerTagDetail_NEW' SRC, * FROM dbo.Fact_CustomerTagDetail_NEW ORDER BY MonthID, CustomerID 
+
+		------------------------------------------------------------------------------------------------------------------------------------------
+		-- Finish full load
+		------------------------------------------------------------------------------------------------------------------------------------------
+		IF @Is_Full_Load = 1
+		BEGIN
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_001 ON dbo.Fact_CustomerTagDetail_NEW (MonthID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_002 ON dbo.Fact_CustomerTagDetail_NEW (CustomerID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_003 ON dbo.Fact_CustomerTagDetail_NEW (RebillAmountGroupID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_004 ON dbo.Fact_CustomerTagDetail_NEW (AccountStatusID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_005 ON dbo.Fact_CustomerTagDetail_NEW (AccountTypeID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_006 ON dbo.Fact_CustomerTagDetail_NEW (AutoReplenishmentID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_007 ON dbo.Fact_CustomerTagDetail_NEW (ZipCode)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_008 ON dbo.Fact_CustomerTagDetail_NEW (CustTagID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_009 ON dbo.Fact_CustomerTagDetail_NEW (TagAgency)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_010 ON dbo.Fact_CustomerTagDetail_NEW (TagID)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_011 ON dbo.Fact_CustomerTagDetail_NEW (TagCounter)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_012 ON dbo.Fact_CustomerTagDetail_NEW (RebillAmount)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_013 ON dbo.Fact_CustomerTagDetail_NEW (AccountCreateDate)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_014 ON dbo.Fact_CustomerTagDetail_NEW (AccountLastCloseDate)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_015 ON dbo.Fact_CustomerTagDetail_NEW (MonthBeginTag)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_016 ON dbo.Fact_CustomerTagDetail_NEW (OpenedTag)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_017 ON dbo.Fact_CustomerTagDetail_NEW (ClosedTag)
+			CREATE STATISTICS Stats_dbo_Fact_CustomerTagDetail_018 ON dbo.Fact_CustomerTagDetail_NEW (MonthEndTag)
+
+			-- Table swap!
+			EXEC Utility.TableSwap 'dbo.Fact_CustomerTagDetail_NEW', 'dbo.Fact_CustomerTagDetail'
+			SET @Log_Message = 'Completed full load'
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', NULL, NULL
+		END 
+		ELSE	
+		------------------------------------------------------------------------------------------------------------------------------------------
+		-- Finish incremental load
+		------------------------------------------------------------------------------------------------------------------------------------------
+		BEGIN
+			IF @Trace_Flag = 1 PRINT 'Calling: Utility.ManagePartitions_DateID'
+			EXEC Utility.ManagePartitions_DateID 'dbo.Fact_CustomerTagDetail', 'MonthID:Month'
+            
+			--:: Delete old rows from the main table
+			DELETE dbo.Fact_CustomerTagDetail
+			WHERE MonthID BETWEEN @Start_Month_ID AND @End_Month_ID
+			SET @Log_Message = 'Delete old rows for ' + @Load_Period + ' (' + CONVERT(VARCHAR,@Start_Month_ID) + ' to ' + CONVERT(VARCHAR,@End_Month_ID) + ') from dbo.Fact_CustomerTagDetail'
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL
+
+			--:: Add new rows from _NEW table which has new and modified rows
+			INSERT	dbo.Fact_CustomerTagDetail (MonthID,CustomerID,RebillAmountGroupID,RebillAmount,AccountStatusID,AccountTypeID,AutoReplenishmentID,ZipCode,AccountCreateDate,AccountLastCloseDate,CustTagID,TagAgency,TagID,TagCounter,TagCounterDate,MonthBeginTag,OpenedTag,ClosedTag,MonthEndTag,EDW_UpdateDate)
+			SELECT	MonthID,CustomerID,RebillAmountGroupID,RebillAmount,AccountStatusID,AccountTypeID,AutoReplenishmentID,ZipCode,AccountCreateDate,AccountLastCloseDate,CustTagID,TagAgency,TagID,TagCounter,TagCounterDate,MonthBeginTag,OpenedTag,ClosedTag,MonthEndTag,EDW_UpdateDate
+			FROM	dbo.Fact_CustomerTagDetail_NEW
+            
+			SET @Log_Message = 'Inserted new rows for ' + @Load_Period + ' (' + CONVERT(VARCHAR,@Start_Month_ID) + ' to ' + CONVERT(VARCHAR,@End_Month_ID) + ') into dbo.Fact_CustomerTagDetail'
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL
+
+			UPDATE STATISTICS dbo.Fact_CustomerTagDetail
+
+			-- Log
+			SET @Log_Message = 'Completed Incremental Daily Load'
+			EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', NULL, NULL
+		END
+
+		/*
+		--:: Quick test 
+		SELECT 'Stage.CustomerTagDetail' SRC, * FROM Stage.CustomerTagDetail  WHERE CustomerID = 2015793598 ORDER BY MonthID, CustomerID, TagAgency, TagID, CustTagID, TagCounterDate
+		SELECT 'dbo.Fact_CustomerTagDetail_NEW' SRC, * FROM dbo.Fact_CustomerTagDetail_NEW  WHERE CustomerID = 2015793598 ORDER BY MonthID, CustomerID, TagAgency, TagID, CustTagID, TagCounterDate
+		SELECT 'dbo.vw_CustomerTagSummary' SRC,TOP 100 * FROM dbo.vw_CustomerTagSummary WHERE MonthID >= 202101 AND CustomerID = 2015793598  ORDER BY CustomerID DESC, MonthID
+		*/		
+		
+        IF @Trace_Flag = 1 SELECT TOP 1000 'dbo.Fact_CustomerTagDetail' SRC, * FROM dbo.Fact_CustomerTagDetail ORDER BY CustomerID DESC, MonthID DESC
+        IF @Trace_Flag = 1 SELECT TOP 100  'Utility.ProcessLog' SRC, * FROM Utility.ProcessLog WHERE LogSource = 'dbo.Fact_CustomerTagDetail_Load' AND LogDate >= @Log_Start_Date ORDER BY LogDate DESC
+
+
+    END	TRY
+	
+    BEGIN CATCH
+		
+	    DECLARE @Error_Message VARCHAR(MAX) = ERROR_MESSAGE();
+	    EXEC    Utility.ToLog @Log_Source, @Log_Start_Date, @Error_Message, 'E', NULL, NULL;
+	    EXEC	Utility.FromLog @Log_Source, @Log_Start_Date;
+	    THROW;  -- Rethrow the error!
+	
+    END CATCH;
+END	
+
+
+ /*
+--::======================================================================================================================================
+-- DEVELOPER TESTING ZONE to thoroughly test the code for various scenarios
+--::======================================================================================================================================
+
+--:: Run SP
+EXEC dbo.Fact_CustomerTagDetail_Load @Start_Month_ID = 202101, @End_Month_ID = 202311, @Is_Full_Load = 1 -- Month Range Full Load
+EXEC dbo.Fact_CustomerTagDetail_Load @Start_Month_ID = 202302, @End_Month_ID = 202303, @Is_Full_Load = 0 -- Month Range Load
+EXEC dbo.Fact_CustomerTagDetail_Load @Start_Month_ID = NULL, @End_Month_ID = NULL, @Is_Full_Load = 0 -- Daily Incremental Run
+
+SELECT TOP 100 * FROM Utility.ProcessLog WHERE LogSource = 'dbo.Fact_CustomerTagDetail_Load' ORDER BY 1 DESC
+SELECT TOP 100 'dbo.Fact_CustomerTagDetail_Load' Table_Name, * FROM dbo.Fact_CustomerTagDetail ORDER BY 1,2
+
+--::======================================================================================================================================
+-- dbo.Fact_CustomerTagDetail data validation and research scripts
+--::======================================================================================================================================
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+--:1: Account/Tag level attributes validation
+-------------------------------------------------------------------------------------------------------------------------------------------
+DECLARE @MonthID INT = 202202, @CustomerID BIGINT = 112864,  @TagID VARCHAR(20) = NULL
+--:: Fact table output
+SELECT 'vw_CustomerTagSummary' ViewName, * FROM dbo.vw_CustomerTagSummary WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID
+SELECT 'dbo.Fact_CustomerTagDetail' TableName, * FROM dbo.Fact_CustomerTagDetail F WHERE	F.MonthID = ISNULL(@MonthID,F.MonthID) AND F.CustomerID = @CustomerID AND F.TagID = ISNULL(@TagID,TagID) ORDER BY CustomerID, F.MonthID, TagID, TagCounterDate
+--:: Source and ETL stage tables used in the process of loading the fact table
+SELECT 'Stage.CustomerTagDetail' TableName, * FROM Stage.CustomerTagDetail WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, MonthID, TagID, TagCounterDate -- Open/Close in this month
+SELECT 'Stage.CustomerTags' TableName, *  FROM Stage.CustomerTags WHERE CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, TagID, HistID -- Source data AFTER some data clean up
+SELECT 'Stage.CustomerTags_Source' TableName, *  FROM Stage.CustomerTags_Source WHERE CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, TagID, HistID -- Source data AS IS
+SELECT 'Stage.CustomerTags' TableName, *  FROM Stage.CustomerTags WHERE CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, TagID, HistID -- Source data AFTER some data clean up
+SELECT 'Stage.MonthBeginTags' TableName, * FROM Stage.MonthBeginTags WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, MonthID, TagID, HistID
+SELECT 'Stage.MonthEndTags' TableName, * FROM Stage.MonthEndTags WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, MonthID, TagID, HistID
+SELECT 'Stage.OpenedClosedTags_Source' TableName, * FROM Stage.OpenedClosedTags_Source WHERE CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, TagID, HistID, CHANGE_NUM, CHANGE_NUM_SEQ -- Full picture
+SELECT 'Stage.OpenedClosedTags' TableName, * FROM Stage.OpenedClosedTags WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, MonthID, TagID, HistID -- Open/Close in this month
+SELECT 'Stage.MonthOpenedTags' TableName, * FROM Stage.MonthOpenedTags WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, MonthID, TagID, HistID
+SELECT 'Stage.MonthClosedTags' TableName, * FROM Stage.MonthClosedTags WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID AND TagID = ISNULL(@TagID,TagID)  ORDER BY CustomerID, MonthID, TagID, HistID 
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+--:2: Account level attributes validation
+-------------------------------------------------------------------------------------------------------------------------------------------
+DECLARE @MonthID INT = 202202, @CustomerID BIGINT = 112864,  @TagID VARCHAR(20) = NULL
+SELECT 'Stage.TollTagCustomer' TableName, * FROM Stage.TollTagCustomer WHERE CustomerID = @CustomerID  
+SELECT 'Stage.TollTagCustomerHistory' TableName, * FROM Stage.TollTagCustomerHistory WHERE CustomerID = @CustomerID ORDER BY CustomerID, HistID  
+SELECT 'Stage.TollTagCustomerHistory_MonthEnd' TableName, * FROM Stage.TollTagCustomerHistory_MonthEnd WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID ORDER BY CustomerID, MonthID, HistID
+SELECT 'Stage.RebillHistory' TableName, * FROM Stage.RebillHistory WHERE CustomerID = @CustomerID ORDER BY CustomerID, HistID  
+SELECT 'Stage.RebillHistory_MonthEnd' TableName, * FROM Stage.RebillHistory_MonthEnd WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID ORDER BY CustomerID, MonthID, HistID
+SELECT 'Stage.CustomerZipcodeHistory' TableName, * FROM Stage.CustomerZipcodeHistory WHERE CustomerID = @CustomerID ORDER BY CustomerID 
+SELECT 'Stage.CustomerZipcodeHistory_MonthEnd' TableName, * FROM Stage.CustomerZipcodeHistory_MonthEnd WHERE MonthID = ISNULL(@MonthID,MonthID) AND CustomerID = @CustomerID ORDER BY CustomerID, MonthID 
+ 
+--::======================================================================================================================================
+-- Technical help
+--::======================================================================================================================================
+
+-- Fact Table Partition info
+SELECT s.name + '.' + t.[name] table_name, p.[partition_number], rv.[value], *
+FROM      sys.schemas s
+JOIN      sys.Tables t                  ON t.[schema_id]      = s.[schema_id]
+JOIN      sys.partitions p              ON p.[object_id]      = t.[object_id] AND p.[index_id] <= 1
+JOIN      sys.indexes i                 ON i.[object_id]      = p.[object_id] AND i.[index_id] = p.[index_id]
+JOIN      sys.data_spaces ds            ON ds.[data_space_id] = i.[data_space_id]
+LEFT JOIN sys.partition_schemes ps      ON ps.[data_space_id] = ds.[data_space_id]
+LEFT JOIN sys.partition_functions pf    ON pf.[function_id]   = ps.[function_id]
+LEFT JOIN sys.partition_range_values rv ON rv.[function_id]   = pf.[function_id] AND rv.[boundary_id] = p.[partition_number]
+WHERE s.name = 'dbo' AND t.[name] = 'Fact_CustomerTagDetail'
+ORDER BY 1,2
+
+--::======================================================================================================================================
+-- !!! Dynamic SQL!!! 
+--::======================================================================================================================================
+
+IF OBJECT_ID('dbo.Fact_CustomerTagDetail_NEW') IS NOT NULL DROP TABLE dbo.Fact_CustomerTagDetail_NEW
+CREATE TABLE dbo.Fact_CustomerTagDetail_NEW WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH(CustomerID), 
+		PARTITION (MonthID RANGE RIGHT FOR VALUES 
+					(20201201,20210101,20210201,20210301,20210401,20210501,20210601,20210701,20210801,20210901,20211001,20211101,20211201,
+					          20220101,20220201,20220301,20220401,20220501,20220601,20220701,20220801,20220901,20221001,20221101,20221201,
+					          20230101,20230201,20230301,20230401,20230501,20230601,20230701,20230801,20230901,20231001,20231101,20231201,
+					          20240101,20240201))) AS
+SELECT	TD.MonthID,
+		TD.CustomerID,
+		ISNULL(CAST(RH.RebillAmountGroupID AS SMALLINT),-1) RebillAmountGroupID,
+		RH.RebillAmount RebillAmount,
+		ISNULL(CAST(RH.AutoReplenishmentID AS INT),-1) AutoReplenishmentID,
+		ISNULL(CAST(CH.AccountStatusID AS INT),-1) AccountStatusID,
+		ISNULL(CAST(CH.AccountTypeID AS INT),-1) AccountTypeID,
+		ISNULL(CZH.ZipCode,'UNKNOWN') ZipCode,
+		A.AccountCreateDate,
+		A.AccountLastCloseDate,
+		TD.CustTagID,
+		TD.TagAgency,
+		TD.TagID,
+		TD.TagCounter,
+		TD.TagCounterDate,
+		TD.MonthBeginTag,
+		TD.OpenedTag,
+		TD.ClosedTag,
+		TD.MonthEndTag,
+		CAST(SYSDATETIME() AS DATETIME2(3)) EDW_UpdateDate
+FROM	Stage.CustomerTagDetail TD
+JOIN	Stage.TollTagCustomer A
+			ON TD.CustomerID = A.CustomerID
+LEFT JOIN	Stage.TollTagCustomerHistory_MonthEnd CH
+			ON CH.CustomerID = A.CustomerID
+			AND CH.MonthID = TD.MonthID
+LEFT JOIN	Stage.RebillHistory_MonthEnd RH
+			ON RH.CustomerID = A.CustomerID
+			AND RH.MonthID = TD.MonthID
+LEFT JOIN	Stage.CustomerZipcodeHistory_MonthEnd CZH
+			ON CZH.CustomerID = A.CustomerID
+			AND CZH.MonthID = TD.MonthID 
+OPTION  (LABEL = 'dbo.Fact_CustomerTagDetail_NEW');
+
+*/

@@ -1,0 +1,105 @@
+CREATE PROC [dbo].[Fact_TollTransaction_Monthly_Summary_Full_Load] AS
+/*
+############################################################################################################################################
+Proc Description: 
+--------------------------------------------------------------------------------------------------------------------------------------------
+Loads dbo.Fact_TollTransaction_Monthly_Summary. This table provides monthly summary of Customer Toll Txn data from Bubble fact table. 
+============================================================================================================================================
+Change Log:
+--------------------------------------------------------------------------------------------------------------------------------------------
+CHG0044450	Sagarika 		2023-12-28  	New!
+============================================================================================================================================
+Example:
+--------------------------------------------------------------------------------------------------------------------------------------------
+EXEC dbo.Fact_TollTransaction_Monthly_Summary_Full_Load
+SELECT * FROM Utility.ProcessLog Where LogSource = 'dbo.Fact_TollTransaction_MonthlySummary_Full_Load' ORDER BY 1 DESC
+SELECT TOP 1000 * FROM dbo.Fact_TollTransaction_Monthly_Summary ORDER BY CustomerID ASC, TripMonthID DESC, VehicleID, CustTagID
+############################################################################################################################################
+*/
+
+BEGIN
+	BEGIN TRY
+	    DECLARE @TableName VARCHAR(100) = 'dbo.Fact_CustomerTagDetail', @Log_Source VARCHAR(100) = 'dbo.Fact_TollTransaction_MonthlySummary_Full_Load' 
+	    DECLARE @Log_Start_Date DATETIME2 (3) = SYSDATETIME(), @Log_Message VARCHAR(1000), @Trace_Flag BIT = 0 -- Testing
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, 'Started full load', 'I', NULL, NULL
+
+        --============================================================================================================
+	    -- Load dbo.Fact_TollTransaction_MonthlySummary       
+	    --=============================================================================================================
+
+        IF OBJECT_ID('dbo.Fact_TollTransaction_Monthly_Summary_NEW','U') IS NOT NULL DROP TABLE dbo.Fact_TollTransaction_Monthly_Summary_New;
+        CREATE TABLE dbo.Fact_TollTransaction_Monthly_Summary_New 
+        WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH(CustomerID), PARTITION (TripMonthID RANGE RIGHT FOR VALUES (202001,202101,202201,202301,202401,202501)))
+        AS
+        SELECT C.CustomerID,
+               CAST(TripDayID / 100 AS INT) AS TripMonthID,
+               ISNULL(CAST(V.VehicleID AS BIGINT),-1) VehicleID,
+               ISNULL(CAST(FUT.CustTagID AS BIGINT),-1) CustTagID, 
+               FUT.OperationsMappingID, -- Gateway to dbo.Dim_OperationsMapping columns which include TripIdentMethodID, TransactionPostingTypeID and a bunch more! Very valuable Bubble column
+               L.FacilityID,
+               COUNT_BIG(1) AS TxnCount,
+               ISNULL(CAST(SUM(FUT.AdjustedExpectedAmount) AS DECIMAL(19, 2)), 0) AS AdjustedExpectedAmount,
+               ISNULL(CAST(SUM(FUT.ActualPaidAmount) AS DECIMAL(19, 2)), 0) AS ActualPaidAmount,
+               CAST(SYSDATETIME() AS DATETIME2(3)) EDW_UpdateDate
+        FROM dbo.Fact_UnifiedTransaction FUT
+            JOIN dbo.Dim_Customer C
+                ON C.CustomerID = FUT.CustomerID
+            JOIN dbo.Dim_Lane L
+                ON L.LaneID = FUT.LaneID
+			LEFT JOIN dbo.Dim_Vehicle V -- This check can be taken away when dbo.Fact_UnifiedTransaction load handles it.
+				ON FUT.VehicleID = V.VehicleID
+        WHERE AccountCategoryDesc = 'TagStore'
+              AND FUT.TripDayID >= 20210101
+              AND FUT.TripStatusID = 2 -- Posted
+        GROUP BY C.CustomerID,
+               CAST(TripDayID / 100 AS INT), 
+               ISNULL(CAST(V.VehicleID AS BIGINT),-1),
+               ISNULL(CAST(FUT.CustTagID AS BIGINT),-1),
+               FUT.OperationsMappingID,
+               L.FacilityID 
+	    OPTION (LABEL = 'dbo.Fact_TollTransaction_Monthly_Summary_NEW Load');
+
+        SET  @Log_Message = 'Loaded dbo.Fact_TollTransaction_Monthly_Summary_NEW' 
+	    EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, 'I', -1, NULL
+
+	    --:: Create Statistics
+        CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_001 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (CustomerID)
+	    CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_002 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (TripMonthID)
+	    CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_003 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (VehicleID)
+	    CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_004 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (FacilityID)
+	    CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_005 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (CustTagID)
+	    CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_006 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (FacilityID)
+        CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_007 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (OperationsMappingID)
+        CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_008 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (TxnCount)
+        CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_009 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (AdjustedExpectedAmount)
+        CREATE STATISTICS STATS_Fact_TollTransaction_Monthly_Summary_010 ON dbo.Fact_TollTransaction_Monthly_Summary_NEW (ActualPaidAmount)
+
+        -- Table swap!
+	    EXEC Utility.TableSwap 'dbo.Fact_TollTransaction_Monthly_Summary_NEW','dbo.Fact_TollTransaction_Monthly_Summary'
+        EXEC Utility.ToLog @Log_Source, @Log_Start_Date, 'Completed full load', 'I', NULL, NULL
+
+	    -- Show results
+	    IF @Trace_Flag = 1 EXEC Utility.FromLog @Log_Source, @Log_Start_Date
+	    IF @Trace_Flag = 1 SELECT TOP 1000 'dbo.Fact_TollTransaction_Monthly_Summary' TableName, * FROM dbo.Fact_TollTransaction_Monthly_Summary ORDER BY CustomerID, TripMonthID
+    END	TRY
+	BEGIN CATCH
+		DECLARE @Error_Message VARCHAR(MAX) = ERROR_MESSAGE();
+		EXEC    Utility.ToLog @Log_Source, @Log_Start_Date, @Error_Message, 'E', NULL, NULL;
+		EXEC	Utility.FromLog @Log_Source, @Log_Start_Date;
+		THROW;  -- Rethrow the error!
+	END CATCH
+ END
+
+/*
+--===============================================================================================================
+-- DEVELOPER TESTING ZONE to thoroughly test the code for various scenarios
+--===============================================================================================================
+
+SELECT * FROM dbo.Fact_TollTransaction_MonthlySummary WHERE	CustomerID = 6680625 ORDER BY CustomerID, TripMonthID
+SELECT * FROM dbo.Dim_Customer WHERE LastName ='TULSHIBAGWALE' and  CustomerID = 6680625 and  AccountCategoryDesc = 'TagStore'
+SELECT * FROM dbo.Dim_Vehicle WHERE CustomerID = 6680625
+SELECT * FROM dbo.Dim_CustomerTag WHERE CustomerID = 6680625
+
+*/
+
+				

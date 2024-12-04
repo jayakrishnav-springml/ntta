@@ -1,0 +1,17 @@
+## Translation time: 2024-03-04T06:41:57.683170Z
+## Translation job ID: 00dc6676-2c12-444a-b02a-71c7788bdc89
+## Source: ntta-gcp-poc-source-code-scripts/APS1_DDLs_latest/EDW_TRIPS/Tables/dbo_Dim_BusinessProcesses.sql
+## Translated from: SqlServer
+## Translated to: BigQuery
+
+CREATE TABLE IF NOT EXISTS EDW_TRIPS_APS.Dim_BusinessProcesses
+(
+  businessprocessid INT64 NOT NULL,
+  businessprocesscode STRING NOT NULL,
+  businessprocessdescription STRING NOT NULL,
+  status STRING,
+  isavailable INT64,
+  edw_updatedate TIMESTAMP NOT NULL
+)
+CLUSTER BY businessprocessid
+;

@@ -1,0 +1,1 @@
+CREATE VIEW [dbo].[vw_Bankruptcy] AS SELECT * FROM LND_TBOS.[dbo].[Bankruptcy];

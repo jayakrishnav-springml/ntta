@@ -1,0 +1,13 @@
+CREATE TABLE [dbo].[Fact_TollTransaction_Monthly_Summary] (
+    [CustomerID] bigint NOT NULL, 
+    [TripMonthID] int NULL, 
+    [VehicleID] bigint NOT NULL, 
+    [CustTagID] bigint NOT NULL, 
+    [OperationsMappingID] int NULL, 
+    [FacilityID] int NULL, 
+    [TxnCount] bigint NULL, 
+    [AdjustedExpectedAmount] decimal(19, 2) NOT NULL, 
+    [ActualPaidAmount] decimal(19, 2) NOT NULL, 
+    [EDW_UpdateDate] datetime2(3) NULL
+)
+WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH([CustomerID]),  PARTITION ([TripMonthID] RANGE RIGHT FOR VALUES (202001, 202101, 202201, 202301, 202401, 202501)));

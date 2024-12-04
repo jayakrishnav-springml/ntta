@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS LND_LG_TS.Tag_Owner_Aux_File_Stage_Detail (
+    aux_file_stage_header_id NUMERIC(29) NOT NULL,
+    aux_file_stage_detail_id NUMERIC(29) NOT NULL,
+    aux_external_reference_id STRING,
+    lic_plate_nbr STRING NOT NULL,
+    lic_plate_state STRING NOT NULL,
+    vehicle_year STRING,
+    vehicle_color STRING,
+    vehicle_make STRING,
+    vehicle_model STRING,
+    vehicle_description STRING,
+    vehicle_class_code STRING NOT NULL,
+    aux_tag_action STRING NOT NULL,
+    aux_tag_disposition_code STRING NOT NULL,
+    date_created DATETIME NOT NULL,
+    created_by STRING NOT NULL,
+    date_modified DATETIME NOT NULL,
+    modified_by STRING NOT NULL,
+    last_update_date DATETIME,
+    last_update_type STRING
+);

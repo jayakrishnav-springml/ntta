@@ -1,0 +1,10 @@
+CREATE TABLE [Stage].[CAMigratedNonTerminalInvoice] (
+    [InvoiceNumber] varchar(50) COLLATE Latin1_General_100_CI_AS_KS_WS NULL, 
+    [PrimaryCollectionAgencyDate] datetime2(3) NULL, 
+    [SecondaryCollectionagencyDate] datetime2(3) NULL, 
+    [NoOfTimesSentToPrimary] int NULL, 
+    [NoOfTimesSentToSecondary] int NULL, 
+    [PrimaryCollectionAgency] varchar(29) COLLATE Latin1_General_100_CI_AS_KS_WS NULL, 
+    [SecondaryCollectionAgency] varchar(30) COLLATE Latin1_General_100_CI_AS_KS_WS NULL
+)
+WITH (CLUSTERED INDEX ( [InvoiceNumber] ASC ), DISTRIBUTION = HASH([InvoiceNumber]));

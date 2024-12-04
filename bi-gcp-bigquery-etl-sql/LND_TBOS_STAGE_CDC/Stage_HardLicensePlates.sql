@@ -1,0 +1,71 @@
+## Translation time: 2024-03-04T06:44:00.523569Z
+## Translation job ID: a86d938d-fa65-424d-bf4e-0008985e1778
+## Source: ntta-gcp-poc-source-code-scripts/APS1_DDLs_latest/LND_TBOS/Tables/Stage_HardLicensePlates.sql
+## Translated from: SqlServer
+## Translated to: BigQuery
+
+CREATE TABLE IF NOT EXISTS LND_TBOS_STAGE_CDC.DMV_HardLicensePlates
+(
+  hardplaterecordid INT64 NOT NULL,
+  vin STRING,
+  licenseplatenumber STRING NOT NULL,
+  licenseplatestate STRING NOT NULL,
+  licenseplatetype STRING,
+  titleno STRING NOT NULL,
+  titleissuedate DATETIME,
+  surrenderedtitledate DATETIME,
+  documenttypecode STRING,
+  registrationeffectivedate DATETIME,
+  registrationexpirydate DATETIME,
+  ownername1 STRING,
+  ownername2 STRING,
+  owneraddress1 STRING,
+  owneraddress2 STRING,
+  ownercity STRING,
+  ownerstate STRING,
+  ownerzip1 STRING,
+  ownerzip2 STRING,
+  ownercountry STRING,
+  bodyvin STRING,
+  county STRING,
+  vehiclebodystyle STRING,
+  vehicleclass STRING,
+  vehiclemake STRING,
+  vehiclemodel STRING,
+  vehicleyear STRING,
+  vehiclemajorcolor STRING,
+  vehicleminorcolor STRING,
+  trailertypecode STRING,
+  vehiclesolddate DATETIME,
+  isvehiclestolen INT64,
+  recipientname STRING,
+  renewalmailingstreet1 STRING,
+  renewalmailingstreet2 STRING,
+  renewalmailingcity STRING,
+  renewalmailingstate STRING,
+  renewalmailingzip1 STRING,
+  renewalmailingzip2 STRING,
+  previousownername STRING,
+  previousplateno STRING,
+  previousregistrationexpirydate DATETIME,
+  previoustitleno STRING,
+  previoustitleissuedate DATETIME,
+  ownershipstartdate DATETIME NOT NULL,
+  ownershipenddate DATETIME NOT NULL,
+  fileid INT64 NOT NULL,
+  stage1recordid INT64 NOT NULL,
+  stage2recordid INT64 NOT NULL,
+  isownershipdatesdefaulted INT64,
+  normalisedlicenseplatenumber STRING NOT NULL,
+  normalisedpreviousplateno STRING,
+  createduser STRING,
+  createdtimestamp DATETIME,
+  updateduser STRING,
+  updatedtimestamp DATETIME,
+  lnd_updatedate DATETIME,
+  lnd_updatetype STRING,
+  src_changedate DATETIME
+)
+CLUSTER BY
+hardplaterecordid
+;

@@ -1,0 +1,262 @@
+﻿--File1 Primary_Collection_Agency_File_LESPAM
+IF OBJECT_ID('EDW_TRIPS.dbo.Primary_Collection_Agency_File_LESPAM') IS NOT NULL DROP TABLE EDW_TRIPS.dbo.Primary_Collection_Agency_File_LESPAM; 
+SELECT  TT.* INTO EDW_TRIPS.dbo.Primary_Collection_Agency_File_LESPAM FROM 
+(
+            SELECT TP1.ViolatorId,
+                   TP1.InvoiceNumber,
+                   TP1.ZCInvoiceDate,
+                   TP1.CurrentInvoiceStatus,
+                   TP1.Tolls,
+                   TP1.Fees,
+                   TP1.InvoiceAmount,
+                   TP1.[Primary_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Primary],
+                   TP1.Created_at_Primary_Collection_agency,
+                   TP1.[Seconday_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Secondary],
+                   TP1.Created_at_Secondary_Collection_agency,
+                   TP1.PaymentPlanID,
+                   TP1.Locationname,
+                   TP1.ChannelName,
+                   TP2.Paymentdate,
+                   TP2.InvoicePaid,
+                   TP2.TollPaid,
+                   TP2.FeePaid,
+                   TP2.AdjustmentAmount,
+                   TP2.VTollAmount,
+                   TP2.VtollPostedDate
+            FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments   TP1 
+            LEFT JOIN EDW_TRIPS.dbo.CollectionInvoiceTotalPayments   TP2 ON  TP1.InvoiceNumber = TP2.InvoiceNumber 
+            AND ( TP2.PaymentDate >= CAST(CONVERT(VARCHAR,TP1.Created_at_Primary_Collection_agency,112) AS INT) 
+                        AND 
+                  TP2.PaymentDate < ISNULL(CAST(CONVERT(VARCHAR,TP1.Created_at_Secondary_Collection_agency, 112) AS INT), CAST(CONVERT(VARCHAR,GETDATE(), 112) AS INT))
+                )
+            WHERE  TP1.Primary_Collection_Agency = 'Duncan Solutions (LES/PAM)'
+              and TP1.VTollAmount is null
+
+UNION 
+
+
+SELECT ViolatorId,
+	   InvoiceNumber, 
+	   ZCInvoiceDate,
+	   CurrentInvoiceStatus,
+	   Tolls,
+	   Fees,
+	   InvoiceAmount,
+	   Primary_Collection_Agency, 
+
+       	   No_of_Times_Sent_to_Primary,
+                  Created_at_Primary_Collection_agency,
+	   Seconday_Collection_Agency,
+       	   No_of_Times_Sent_to_Secondary,
+       Created_at_Secondary_Collection_agency,
+
+	   PaymentPlanId,
+	  NULL Locationname,NULL ChannelName, NULL Paymentdate,	 NULL InvoicePaid,	 NULL TollPaid,NULL FeePaid, NULL Adjustmentamount,
+	  VTollAmount ,
+	  VtollPostedDate
+FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments      
+WHERE Primary_Collection_Agency = 'Duncan Solutions (LES/PAM)' 
+AND VTollAmount > 0
+AND ( VtollPostedDate >= Created_at_Primary_Collection_agency 
+          AND VtollPostedDate < ISNULL(Created_at_Secondary_Collection_agency,GETDATE())
+    )
+) TT 
+order by TT.InvoiceNumber,TT.violatorid;
+
+---FILE2  Primary_Collection_Agency_File_CPA 
+IF OBJECT_ID('EDW_TRIPS.dbo.Primary_Collection_Agency_File_CPA') IS NOT NULL DROP TABLE EDW_TRIPS.dbo.Primary_Collection_Agency_File_CPA;
+SELECT  TT.* INTO EDW_TRIPS.dbo.Primary_Collection_Agency_File_CPA    FROM  
+(
+            SELECT TP1.ViolatorId,
+                   TP1.InvoiceNumber,
+                   TP1.ZCInvoiceDate,
+                   TP1.CurrentInvoiceStatus,
+                   TP1.Tolls,
+                   TP1.Fees,
+                   TP1.InvoiceAmount,
+                   TP1.[Primary_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Primary],
+                   TP1.Created_at_Primary_Collection_agency,
+                   TP1.[Seconday_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Secondary],
+                   TP1.Created_at_Secondary_Collection_agency,
+                   TP1.PaymentPlanID,
+                   TP1.Locationname,
+                   TP1.ChannelName,
+                   TP2.Paymentdate,
+                   TP2.InvoicePaid,
+                   TP2.TollPaid,
+                   TP2.FeePaid,
+                   TP2.AdjustmentAmount,
+                   TP2.VTollAmount,
+                   TP2.VtollPostedDate
+            FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments     TP1 
+            LEFT JOIN EDW_TRIPS.dbo.CollectionInvoiceTotalPayments       TP2 ON  TP1.InvoiceNumber = TP2.InvoiceNumber 
+            AND ( TP2.PaymentDate >= CAST(CONVERT(VARCHAR,TP1.Created_at_Primary_Collection_agency,112) AS INT) 
+                        AND 
+                        TP2.PaymentDate < ISNULL(CAST(CONVERT(VARCHAR,TP1.Created_at_Secondary_Collection_agency, 112) AS INT), CAST(CONVERT(VARCHAR,GETDATE(), 112) AS INT))
+                )
+            WHERE  TP1.Primary_Collection_Agency = 'Credit Protected Assoc. (CPA)'
+            and TP1.VTollAmount is null
+
+
+UNION 
+
+
+SELECT ViolatorId,
+	   InvoiceNumber, 
+	   ZCInvoiceDate,
+	   CurrentInvoiceStatus,
+	   Tolls,
+	   Fees,
+	   InvoiceAmount,
+	   Primary_Collection_Agency, 
+       No_of_Times_Sent_to_Primary,
+       Created_at_Primary_Collection_agency,
+       Seconday_Collection_Agency,
+       No_of_Times_Sent_to_Secondary,
+       Created_at_Secondary_Collection_agency,
+       PaymentPlanId,
+	   NULL Locationname,NULL ChannelName, NULL Paymentdate,	 NULL InvoicePaid,	 NULL TollPaid,NULL FeePaid, NULL Adjustmentamount,
+	   VTollAmount ,
+	   VtollPostedDate
+FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments     
+WHERE Primary_Collection_Agency = 'Credit Protected Assoc. (CPA)'
+AND VTollAmount > 0
+AND ( VtollPostedDate >= Created_at_Primary_Collection_agency 
+          AND VtollPostedDate < ISNULL(Created_at_Secondary_Collection_agency,GETDATE())
+    )
+
+) TT 
+order by TT.InvoiceNumber,TT.violatorid;
+
+--File3 --Seconday_Collection_Agency_File_CMI
+IF OBJECT_ID('EDW_TRIPS.dbo.Seconday_Collection_Agency_File_CMI') IS NOT NULL DROP TABLE EDW_TRIPS.dbo.Seconday_Collection_File_CMI;
+SELECT  TT.* into EDW_TRIPS.dbo.Seconday_Collection_Agency_File_CMI    FROM 
+(
+            SELECT TP1.ViolatorId,
+                   TP1.InvoiceNumber,
+                   TP1.ZCInvoiceDate,
+                   TP1.CurrentInvoiceStatus,
+                   TP1.Tolls,
+                   TP1.Fees,
+                   TP1.InvoiceAmount,
+                   TP1.[Primary_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Primary],
+                   TP1.Created_at_Primary_Collection_agency,
+                   TP1.[Seconday_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Secondary],
+                   TP1.Created_at_Secondary_Collection_agency,
+                   TP1.PaymentPlanID,
+                   TP1.Locationname,
+                   TP1.ChannelName,
+                   TP2.Paymentdate,
+                   TP2.InvoicePaid,
+                   TP2.TollPaid,
+                   TP2.FeePaid,
+                   TP2.AdjustmentAmount,
+                   TP2.VTollAmount,
+                   TP2.VtollPostedDate
+            FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments     TP1 
+            LEFT JOIN EDW_TRIPS.dbo.CollectionInvoiceTotalPayments       TP2 ON  TP1.InvoiceNumber = TP2.InvoiceNumber 
+																             AND  TP2.PaymentDate >= ISNULL(CAST(CONVERT(VARCHAR,TP1.Created_at_Secondary_Collection_agency, 112) AS INT),
+																													            CAST(CONVERT(VARCHAR,GETDATE(), 112) AS INT))
+            WHERE  TP1.Seconday_Collection_Agency = 'Credit Management Group (CMI)'
+             and TP1.VTollAmount is null
+
+UNION 
+
+
+SELECT ViolatorId,
+	   InvoiceNumber, 
+	   ZCInvoiceDate,
+	   CurrentInvoiceStatus,
+	   Tolls,
+	   Fees,
+	   InvoiceAmount,
+	   Primary_Collection_Agency, 
+              	   No_of_Times_Sent_to_Primary,
+       Created_at_Primary_Collection_agency,
+
+	   Seconday_Collection_Agency,
+       	   No_of_Times_Sent_to_Secondary,
+       Created_at_Secondary_Collection_agency,
+
+	   PaymentPlanId,
+	  NULL Locationname,NULL ChannelName, NULL Paymentdate,	 NULL InvoicePaid,	 NULL TollPaid,NULL FeePaid, NULL Adjustmentamount,
+	  VTollAmount ,
+	  VtollPostedDate
+FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments     
+WHERE Seconday_Collection_Agency = 'Credit Management Group (CMI)'
+AND VTollAmount > 0
+AND VtollPostedDate >= ISNULL(Created_at_Secondary_Collection_agency,GETDATE())
+
+) TT 
+order by TT.InvoiceNumber,TT.violatorid;
+
+
+--File4 --Seconday_Collection_Agency_File_SWC
+IF OBJECT_ID('EDW_TRIPS.dbo.Seconday_Collection_Agency_File_SWC') IS NOT NULL DROP TABLE EDW_TRIPS.dbo.Seconday_Collection_File_SWC;
+SELECT  TT.* into EDW_TRIPS.dbo.Seconday_Collection_Agency_File_SWC     FROM 
+(
+            SELECT TP1.ViolatorId,
+                   TP1.InvoiceNumber,
+                   TP1.ZCInvoiceDate,
+                   TP1.CurrentInvoiceStatus,
+                   TP1.Tolls,
+                   TP1.Fees,
+                   TP1.InvoiceAmount,
+                   TP1.[Primary_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Primary],
+                   TP1.Created_at_Primary_Collection_agency,
+                   TP1.[Seconday_Collection_Agency],
+                   TP1.[No_of_Times_Sent_to_Secondary],
+                   TP1.Created_at_Secondary_Collection_agency,
+                   TP1.PaymentPlanID,
+                   TP1.Locationname,
+                   TP1.ChannelName,
+                   TP2.Paymentdate,
+                   TP2.InvoicePaid,
+                   TP2.TollPaid,
+                   TP2.FeePaid,
+                   TP2.AdjustmentAmount,
+                   TP2.VTollAmount,
+                   TP2.VtollPostedDate
+            FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments     TP1 
+            LEFT JOIN EDW_TRIPS.dbo.CollectionInvoiceTotalPayments       TP2 ON  TP1.InvoiceNumber = TP2.InvoiceNumber 
+																             AND  TP2.PaymentDate >= ISNULL(CAST(CONVERT(VARCHAR,TP1.Created_at_Secondary_Collection_agency, 112) AS INT),
+																													            CAST(CONVERT(VARCHAR,GETDATE(), 112) AS INT))
+            WHERE  TP1.Seconday_Collection_Agency = 'Southwest Credit Systems (SWC)'
+            and TP1.VTollAmount is null
+
+UNION 
+
+
+SELECT ViolatorId,
+	   InvoiceNumber, 
+	   ZCInvoiceDate,
+	   CurrentInvoiceStatus,
+	   Tolls,
+	   Fees,
+	   InvoiceAmount,
+	   Primary_Collection_Agency, 
+              	   No_of_Times_Sent_to_Primary,
+       Created_at_Primary_Collection_agency,
+
+	   Seconday_Collection_Agency,
+       	   No_of_Times_Sent_to_Secondary,
+       Created_at_Secondary_Collection_agency,
+
+	   PaymentPlanId,
+	  NULL Locationname,NULL ChannelName, NULL Paymentdate,	 NULL InvoicePaid,	 NULL TollPaid,NULL FeePaid, NULL Adjustmentamount,
+	  VTollAmount ,
+	  VtollPostedDate
+FROM EDW_TRIPS.dbo.CollectionInvoiceTotalPayments     
+WHERE Seconday_Collection_Agency = 'Southwest Credit Systems (SWC)'
+AND VTollAmount > 0
+AND VtollPostedDate >= ISNULL(Created_at_Secondary_Collection_agency,GETDATE())
+
+) TT 
+order by TT.InvoiceNumber,TT.violatorid;

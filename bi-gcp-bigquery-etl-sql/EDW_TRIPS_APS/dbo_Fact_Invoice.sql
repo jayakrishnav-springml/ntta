@@ -1,0 +1,61 @@
+## Translation time: 2024-03-04T06:41:57.683170Z
+## Translation job ID: 00dc6676-2c12-444a-b02a-71c7788bdc89
+## Source: ntta-gcp-poc-source-code-scripts/APS1_DDLs_latest/EDW_TRIPS/Tables/dbo_Fact_Invoice.sql
+## Translated from: SqlServer
+## Translated to: BigQuery
+
+CREATE TABLE IF NOT EXISTS EDW_TRIPS_APS.Fact_Invoice
+(
+  invoicenumber INT64,
+  firstinvoiceid INT64,
+  currentinvoiceid INT64,
+  customerid INT64,
+  testcasefailedflag INT64,
+  migratedflag INT64 NOT NULL,
+  vtollflag INT64 NOT NULL,
+  unassignedflag INT64 NOT NULL,
+  agestageid INT64,
+  collectionstatusid INT64,
+  currmbsid INT64,
+  vehicleid INT64,
+  edw_invoicestatusid INT64,
+  zipcashdate DATE,
+  firstnoticedate DATE,
+  secondnoticedate DATE,
+  thirdnoticedate DATE,
+  legalactionpendingdate DATE,
+  citationdate DATE,
+  duedate DATE,
+  currmbsgenerateddate DATE,
+  firstpaymentdate DATE,
+  lastpaymentdate DATE,
+  firstfeepaymentdate DATE,
+  lastfeepaymentdate DATE,
+  txncnt INT64,
+  invoiceamount NUMERIC(31, 2),
+  pbmtollamount NUMERIC(31, 2),
+  avitollamount NUMERIC(31, 2),
+  premiumamount NUMERIC(31, 2),
+  tolls NUMERIC(31, 2),
+  fnfees NUMERIC(31, 2),
+  snfees NUMERIC(31, 2),
+  expectedamount NUMERIC(31, 2),
+  tollsadjusted NUMERIC(31, 2),
+  fnfeesadjusted NUMERIC(31, 2),
+  snfeesadjusted NUMERIC(31, 2),
+  adjustedamount NUMERIC(31, 2),
+  adjustedexpectedtolls NUMERIC(31, 2),
+  adjustedexpectedfnfees NUMERIC(31, 2),
+  adjustedexpectedsnfees NUMERIC(31, 2),
+  adjustedexpectedamount NUMERIC(31, 2),
+  tollspaid NUMERIC(31, 2),
+  fnfeespaid NUMERIC(31, 2),
+  snfeespaid NUMERIC(31, 2),
+  paidamount NUMERIC(31, 2),
+  tolloutstandingamount NUMERIC(31, 2),
+  fnfeesoutstandingamount NUMERIC(31, 2),
+  snfeesoutstandingamount NUMERIC(31, 2),
+  outstandingamount NUMERIC(31, 2),
+  edw_update_date TIMESTAMP NOT NULL
+)
+;

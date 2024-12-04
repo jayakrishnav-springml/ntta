@@ -1,0 +1,13 @@
+CREATE TABLE [dbo].[Fact_OCR] (
+    [TpTripID] bigint NOT NULL, 
+    [TripDayID] int NOT NULL, 
+    [DayNightFlag] varchar(1) COLLATE Latin1_General_100_CI_AS_KS_WS NOT NULL, 
+    [ExitTripDateTime] datetime2(3) NULL, 
+    [LaneID] int NULL, 
+    [TripIdentMethodID] smallint NULL, 
+    [ManuallyReviewedFlag] bit NULL, 
+    [TollAmount] decimal(38, 2) NULL, 
+    [TxnCount] int NULL, 
+    [EDW_UpdateDate] datetime2(7) NOT NULL
+)
+WITH (CLUSTERED INDEX ( [TpTripID] ASC ), DISTRIBUTION = HASH([TpTripID]));

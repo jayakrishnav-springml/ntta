@@ -1,0 +1,18 @@
+CREATE TABLE [Stage].[DismissedVtollTxn] (
+    [InvoiceNumber] varchar(50) COLLATE Latin1_General_100_CI_AS_KS_WS NULL, 
+    [TpTripID] bigint NOT NULL, 
+    [CitationID] bigint NOT NULL, 
+    [TripStatusID_CT] int NOT NULL, 
+    [PaymentStatusID] bigint NULL, 
+    [FirstPaymentDate] datetime2(3) NULL, 
+    [LastPaymentDate] datetime2(3) NULL, 
+    [Tolls] decimal(19, 2) NULL, 
+    [PBMTollAmount] decimal(19, 2) NULL, 
+    [AVITollAmount] decimal(19, 2) NULL, 
+    [PremiumAmount] decimal(20, 2) NULL, 
+    [PaidAmount_VT] decimal(38, 2) NULL, 
+    [TollsAdjusted] decimal(38, 2) NULL, 
+    [OutstandingAmount] decimal(19, 2) NOT NULL, 
+    [EDW_UpdateDate] datetime2(7) NOT NULL
+)
+WITH (CLUSTERED INDEX ( [TpTripID] ASC ), DISTRIBUTION = HASH([TpTripID]));

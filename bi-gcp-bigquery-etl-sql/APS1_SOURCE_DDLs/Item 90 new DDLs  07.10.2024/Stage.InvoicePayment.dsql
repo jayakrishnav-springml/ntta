@@ -1,0 +1,17 @@
+CREATE TABLE [Stage].[InvoicePayment] (
+    [InvoiceNumber] bigint NULL, 
+    [ExcusedDate] datetime2(3) NULL, 
+    [FirstPaymentDatePriortoZC] date NULL, 
+    [LastPaymentDatePriortoZC] date NULL, 
+    [FirstPaymentDateAfterZC] date NULL, 
+    [LastPaymentDateAfterZC] date NULL, 
+    [PaymentChannel] varchar(422) COLLATE Latin1_General_100_CI_AS_KS_WS NULL, 
+    [POS] varchar(4022) COLLATE Latin1_General_100_CI_AS_KS_WS NULL, 
+    [PBMTollAmount] decimal(19, 2) NULL, 
+    [AVITollAmount] decimal(19, 2) NULL, 
+    [Tolls] decimal(19, 2) NULL, 
+    [TollsPaid] decimal(19, 2) NULL, 
+    [TollsAdjusted] decimal(19, 2) NULL, 
+    [EDW_UpdateDate] datetime2(3) NULL
+)
+WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH([InvoiceNumber]));

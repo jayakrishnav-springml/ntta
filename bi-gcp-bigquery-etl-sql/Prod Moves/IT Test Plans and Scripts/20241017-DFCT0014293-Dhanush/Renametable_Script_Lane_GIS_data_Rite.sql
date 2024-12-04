@@ -1,0 +1,1 @@
+Alter table `EDW_TRIPS_SUPPORT.Lane_GIS_Data` Rename to `Lane_GIS_Data_Rite`

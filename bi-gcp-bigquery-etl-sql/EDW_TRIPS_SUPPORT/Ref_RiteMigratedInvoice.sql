@@ -1,0 +1,61 @@
+## Translation time: 2024-03-04T06:41:57.683170Z
+## Translation job ID: 00dc6676-2c12-444a-b02a-71c7788bdc89
+## Source: ntta-gcp-poc-source-code-scripts/APS1_DDLs_latest/EDW_TRIPS/Tables/Ref_RiteMigratedInvoice.sql
+## Translated from: SqlServer
+## Translated to: BigQuery
+
+CREATE TABLE IF NOT EXISTS EDW_TRIPS_SUPPORT.RiteMigratedInvoice
+(
+  invoicenumber INT64 NOT NULL,
+  firstinvoiceid INT64,
+  currentinvoiceid INT64,
+  customerid INT64 NOT NULL,
+  agestageid INT64 NOT NULL,
+  collectionstatusid INT64,
+  currmbsid INT64,
+  vehicleid INT64 NOT NULL,
+  lic_plate_nbr STRING NOT NULL,
+  lic_plate_state STRING NOT NULL,
+  migratedflag INT64 NOT NULL,
+  invoicestatus STRING NOT NULL,
+  edw_invoicestatusid INT64,
+  zipcashdate DATE NOT NULL,
+  firstnoticedate DATE,
+  vb_inv_date_modified_secondnoticedate DATE,
+  secondnoticedate DATE,
+  thirdnoticedate TIMESTAMP,
+  citationdate DATETIME,
+  legalactionpendingdate TIMESTAMP,
+  duedate DATE NOT NULL,
+  currmbsgenerateddate STRING NOT NULL,
+  firstpaymentdate DATE,
+  lastpaymentdate DATE,
+  invoiceamount NUMERIC(33, 4) NOT NULL,
+  pbmtollamount INT64,
+  avitollamount INT64,
+  premiumamount INT64,
+  txncnt INT64 NOT NULL,
+  tolls NUMERIC(33, 4) NOT NULL,
+  fnfees NUMERIC(33, 4),
+  snfees NUMERIC(33, 4),
+  feesdue NUMERIC(33, 4),
+  expectedamount NUMERIC(33, 4),
+  tollsadjusted NUMERIC(33, 4),
+  fnfeesadjusted NUMERIC(33, 4),
+  snfeesadjusted NUMERIC(33, 4),
+  adjustedamount NUMERIC(33, 4),
+  tollspaid NUMERIC(33, 4) NOT NULL,
+  fnfeespaid NUMERIC(33, 4),
+  snfeespaid NUMERIC(33, 4),
+  paidamount NUMERIC(33, 4) NOT NULL,
+  lastcacompanyid INT64 NOT NULL,
+  adjustedexpectedtolls NUMERIC(33, 4),
+  adjustedexpectedfnfees NUMERIC(33, 4),
+  adjustedexpectedsnfees NUMERIC(33, 4),
+  adjustedexpectedamount NUMERIC(33, 4),
+  tolloutstandingamount NUMERIC(33, 4),
+  fnfeesoutstandingamount NUMERIC(33, 4),
+  snfeesoutstandingamount NUMERIC(33, 4),
+  outstandingamount NUMERIC(33, 4)
+)
+;

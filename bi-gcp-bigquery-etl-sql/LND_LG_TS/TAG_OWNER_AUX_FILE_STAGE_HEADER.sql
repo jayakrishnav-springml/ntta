@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS LND_LG_TS.Tag_Owner_Aux_File_Stage_Header (
+    aux_file_stage_header_id NUMERIC(29) NOT NULL,
+    aux_agency_id NUMERIC(29) NOT NULL,
+    file_name STRING NOT NULL,
+    exception_file_name STRING,
+    aux_file_disposition_code STRING NOT NULL,
+    record_count NUMERIC(29) NOT NULL,
+    error_count NUMERIC(29) NOT NULL,
+    load_start_date DATETIME NOT NULL,
+    load_end_date DATETIME,
+    process_start_date DATETIME,
+    process_end_date DATETIME,
+    retry_attempts INT64 NOT NULL,
+    date_created DATETIME NOT NULL,
+    created_by STRING NOT NULL,
+    date_modified DATETIME NOT NULL,
+    modified_by STRING NOT NULL,
+    last_update_date DATETIME,
+    last_update_type STRING
+);

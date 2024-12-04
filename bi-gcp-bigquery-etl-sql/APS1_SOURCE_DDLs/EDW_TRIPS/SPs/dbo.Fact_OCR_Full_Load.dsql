@@ -1,0 +1,148 @@
+CREATE PROC [dbo].[Fact_OCR_Full_Load] AS
+/*
+IF OBJECT_ID ('dbo.Fact_OCR', 'P') IS NOT NULL DROP PROCEDURE dbo.Fact_OCR
+###################################################################################################################
+Proc Description: 
+-------------------------------------------------------------------------------------------------------------------
+Load dbo.Fact_OCR. 
+
+@IsFullLoad - 1 means forced Full load, 0 or NULL - incremental load. If the main table is not exists - it goes with full load.
+
+This Proc has been created to help OCR daily Loads. Initially OCR Report is consumed by Bubble. As bubble Fact_Unified_SUmmary table load happens weekly,
+The Requirement is to give something daily . In addition, DayNIghtFlag says wheather the trip has happened in a day or NIght.
+
+"1" represents Day. "0" Represents Night.
+
+===================================================================================================================
+Change Log:
+-------------------------------------------------------------------------------------------------------------------
+		Sagarika		2024-03-21	New!
+
+===================================================================================================================
+Example:
+-------------------------------------------------------------------------------------------------------------------
+EXEC dbo.Fact_OCR_Full_Load 
+
+EXEC Utility.FromLog 'dbo.Fact_OCR', 1
+SELECT 'dbo.Fact_OCR' Table_Name, COUNT_BIG(1) Row_Count FROM dbo.Fact_OCR
+SELECT TOP 100 * FROM dbo.Fact_OCR
+###################################################################################################################
+*/
+BEGIN
+
+	BEGIN TRY
+
+		DECLARE @Log_Source VARCHAR(100) = 'dbo.Fact_OCR_Full_Load', @TableName VARCHAR(50) = 'dbo.Fact_OCR', @StageTableName VARCHAR(100) = 'dbo.Fact_OCR_NEW'
+		DECLARE @Log_Start_Date DATETIME2 (3) = SYSDATETIME(), @Log_Message VARCHAR(1000), @Row_Count BIGINT, @Trace_Flag BIT = 1 -- Testing
+		DECLARE @Last_UpdatedDate DATETIME2(3), @IdentifyingColumns VARCHAR(100) = '[VehicleID]' 
+		DECLARE @sql VARCHAR(MAX), @WhereSql VARCHAR(8000) = ''
+
+
+		
+	   --=============================================================================================================
+	   		-- Load Stage.IPS_Image_Review_Results_Daily	6:00	( (1171784068 row(s) affected)
+	   --=============================================================================================================
+
+		IF OBJECT_ID('Stage.IPS_Image_Review_Results_OCR','U') IS NOT NULL DROP TABLE Stage.IPS_Image_Review_Results_OCR; -- (689882940 row(s) affected)
+		CREATE TABLE Stage.IPS_Image_Review_Results_OCR WITH (CLUSTERED INDEX (TPTripID), DISTRIBUTION = HASH(TPTripID)) AS
+		SELECT ImageReviewResultID, IPSTransactionID, TPTripID, ManuallyReviewedFlag, CreatedUser, CreatedDate, UpdatedUser, UpdatedDate, CAST(SYSDATETIME() AS DATETIME2(3)) EDW_UpdateDate
+		FROM 
+		(
+			SELECT ImageReviewResultID, IPSTransactionID, SourceTransactionID AS TPTripID, IsManuallyReviewed AS ManuallyReviewedFlag, IRR.CreatedUser,
+			IRR.CreatedDate, IRR.UpdatedUser, IRR.UpdatedDate, ROW_NUMBER() OVER (PARTITION BY SourceTransactionID ORDER BY ImageReviewResultID DESC) RN
+			FROM   LND_TBOS.TollPlus.TP_Image_Review_Results IRR																																																				 
+			LEFT JOIN dbo.Dim_Lane L 
+					ON L.IPS_FacilityCode = IRR.FacilityCode
+					AND L.IPS_PlazaCode = IRR.PlazaCode
+					AND L.LaneNumber = CONVERT(VARCHAR,IRR.LaneCode)
+			WHERE  IRR.Timestamp >= '1/1/2021'  																																												 
+				   AND IRR.LND_UpdateType <> 'D'																																																								 
+		) T
+		WHERE RN = 1
+		OPTION (LABEL = 'Stage.IPS_Image_Review_Results_OCR Load');
+
+		--:: Create Statistics
+		CREATE STATISTICS STATS_Stage_IPS_Image_Review_Results_OCR_01 ON Stage.IPS_Image_Review_Results_OCR(ManuallyReviewedFlag);
+
+		--=============================================================================================================
+				-- Load Fact_OCR	
+		--=============================================================================================================
+		
+	
+		IF OBJECT_ID('dbo.Fact_OCR_NEW','U') IS NOT NULL DROP TABLE dbo.Fact_OCR_NEW;
+		CREATE TABLE dbo.Fact_OCR_NEW WITH (CLUSTERED INDEX (TPTripID), DISTRIBUTION = HASH(TPTripID)) AS
+				
+		SELECT 
+		       TT.TpTripID,
+		       ISNULL(CAST(CONVERT(VARCHAR(8), TT.ExitTripDateTime, 112) AS INT), -1) AS TripDayID,
+			   CASE WHEN DATEPART(HOUR,TT.ExitTripDateTime) > 7 AND  DATEPART(HOUR,TT.ExitTripDateTime) < 19 THEN '1' ELSE '0' END AS DayNightFlag,
+			   TT.ExitTripDateTime,
+		       TT.ExitLaneID AS LaneID,
+		       DTIM.TripIdentMethodID,
+		       IRR.ManuallyReviewedFlag,
+		       SUM(TT.TollAmount) TollAmount,
+		       COUNT(*) AS TxnCount,
+			   ISNULL(CAST(SYSDATETIME() AS DATETIME2(7)), '1900-01-01') AS EDW_UpdateDate
+		
+		FROM LND_TBOS.TollPlus.TP_Trips TT
+		    JOIN dbo.Dim_TripIdentMethod DTIM
+		        ON DTIM.TripIdentMethod = TT.TripIdentMethod
+		    LEFT JOIN Stage.IPS_Image_Review_Results_OCR IRR
+		        ON IRR.TPTripID = TT.TpTripID
+		WHERE TT.SourceOfEntry IN ( 1, 3 ) -- TSA & NTTA 
+		      AND TT.Exit_TollTxnID >= 0
+		      AND TT.ExitTripDateTime > '2021-01-01' -- @Load_Cutoff_Date
+		      AND TT.ExitTripDateTime < SYSDATETIME()
+		  --AND TT.TpTripID in (5585698810,5317497867,5320564131,5320351224)
+		GROUP BY TT.TpTripID,
+		         ISNULL(CAST(CONVERT(VARCHAR(8), TT.ExitTripDateTime, 112) AS INT), -1),
+				 TT.ExitTripDateTime,
+		         TT.ExitLaneID,
+		         DTIM.TripIdentMethodID,
+		         IRR.ManuallyReviewedFlag
+		
+			OPTION (LABEL = 'dbo.Fact_OCR_NEW');
+		
+		SET  @Log_Message = 'Loaded ' + @StageTableName
+		EXEC Utility.FastLog @Log_Source, @Log_Message, -1
+	
+		--:: Create Statistics
+		CREATE STATISTICS STATS_Fact_OCR_01 ON Fact_OCR_NEW(LaneID);
+		CREATE STATISTICS STATS_Fact_OCR_02 ON Fact_OCR_NEW(TripDayID);
+		CREATE STATISTICS STATS_Fact_OCR_03 ON Fact_OCR_NEW(ManuallyReviewedFlag);
+		CREATE STATISTICS STATS_Fact_OCR_04 ON Fact_OCR_NEW(DayNightFlag) ;
+
+
+		-- Table swap!
+		EXEC Utility.TableSwap @StageTableName, @TableName
+
+		EXEC Utility.ToLog @Log_Source, @Log_Start_Date, 'Completed full load', 'I', NULL, NULL
+
+	END	TRY
+	
+	BEGIN CATCH
+		
+		DECLARE @Error_Message VARCHAR(MAX) = ERROR_MESSAGE();
+		EXEC    Utility.ToLog @Log_Source, @Log_Start_Date, @Error_Message, 'E', NULL, NULL;
+		EXEC	Utility.FromLog @Log_Source, @Log_Start_Date;
+		THROW;  -- Rethrow the error!
+	
+	END CATCH
+
+END
+
+/*
+--===============================================================================================================
+-- DEVELOPER TESTING ZONE to thoroughly test the code for various scenarios
+--===============================================================================================================
+EXEC dbo.Fact_OCR_Full_Load 1
+
+SELECT TOP 100 'dbo.Fact_OCR_Full_Load' Table_Name, * FROM dbo.Fact_OCR
+
+--===============================================================================================================
+-- USEFUL DATA VALIDATION SCRIPTS for post prod move monitoring or for others to not reinvent the wheel
+--===============================================================================================================
+
+
+*/
+

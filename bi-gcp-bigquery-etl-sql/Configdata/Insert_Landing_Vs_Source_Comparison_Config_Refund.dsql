@@ -1,0 +1,12 @@
+INSERT INTO
+  LND_TBOS_SUPPORT.Landing_Vs_Source_Comparison_Config(sourcedatabase,
+    sourceschema,
+    sourcetable,
+    keycolumn,
+    landingdataset,
+    landingtable,
+    comparisonrunflag,
+    level2checkflag,
+    groupbycolumn)
+VALUES ('TBOS','TollPlus','CaseLinks','caselinkid','LND_TBOS','TollPlus_CaseLinks','Y','N','CreatedDate'),
+       ('TBOS','Finance','RefundResponseDetails','refundresponseId','LND_TBOS','Finance_RefundResponseDetails','Y','N','CreatedDate')

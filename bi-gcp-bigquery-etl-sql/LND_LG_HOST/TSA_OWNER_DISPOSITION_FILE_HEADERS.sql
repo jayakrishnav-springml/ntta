@@ -1,0 +1,31 @@
+-- Translation time: 2024-06-04T07:57:18.317878Z
+-- Translation job ID: b2abff43-eccf-406a-aa5d-053048797d89
+-- Source: ntta-gcp-poc-source-code-scripts/APS1_DDLs_latest/LND_LG_HOST/Tables/TSA_OWNER_DISPOSITION_FILE_HEADERS.sql
+-- Translated from: SqlServer
+-- Translated to: BigQuery
+
+CREATE TABLE IF NOT EXISTS LND_LG_HOST.Tsa_Owner_Disposition_File_Headers
+(
+  disposition_file_header_id NUMERIC(29) NOT NULL,
+  record_type STRING NOT NULL,
+  version STRING NOT NULL,
+  file_date DATETIME NOT NULL,
+  disp_file_control_number NUMERIC(29) NOT NULL,
+  subscriber_id STRING NOT NULL,
+  record_count NUMERIC(29) NOT NULL,
+  file_size NUMERIC(29) NOT NULL,
+  checksum STRING NOT NULL,
+  disposition_file_status_id NUMERIC(29) NOT NULL,
+  file_name STRING NOT NULL,
+  additional_comments STRING,
+  created_by STRING,
+  date_created DATETIME,
+  modified_by STRING,
+  date_modified DATETIME,
+  subscriber_list_id INT64,
+  file_type_id INT64,
+  last_update_type STRING NOT NULL,
+  last_update_date DATETIME NOT NULL
+)
+cluster by disposition_file_header_id
+;

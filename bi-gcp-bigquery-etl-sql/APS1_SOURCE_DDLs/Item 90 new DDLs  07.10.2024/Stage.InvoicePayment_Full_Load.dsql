@@ -1,0 +1,581 @@
+CREATE PROC [Stage].[InvoicePayment_Full_Load] AS
+/*
+###############################################################################################################################
+Proc Description: 
+-------------------------------------------------------------------------------------------------------------------------------
+Load [Stage].[InvoicePayment_Full_Load] table. 
+===============================================================================================================================
+Change Log:
+-------------------------------------------------------------------------------------------------------------------------------
+CHG0042443	Gouthami		2023-02-09	New!
+									   1) This Stored procedure is created using some part of bubble logic. In order to fix the 
+										  credit adjustments issue i.e,Pure payments on transactions that are made through 
+										  Adjustments.
+									   2) Second stage is created to bring all the Transaction Payments and Adjustments to
+										  Invoice level
+																			 
+================================================================================================================================
+Example:
+--------------------------------------------------------------------------------------------------------------------------------
+EXEC Stage.InvoicePayment_Full_Load
+EXEC Utility.FromLog 'Stage.InvoicePayment_Full_Load', 1
+SELECT TOP 100 'Stage.InvoicePayment_Full_Load' Table_Name, * FROM Stage.violtrippayment ORDER BY 2
+################################################################################################################################
+*/
+
+BEGIN
+BEGIN TRY
+
+		DECLARE @Log_Source VARCHAR(100) = 'Stage.InvoicePayment_Full_Load', @Log_Start_Date DATETIME2(3) = SYSDATETIME();
+		DECLARE @Log_Message VARCHAR(1000), @Row_Count BIGINT, @Trace_Flag BIT = 0; -- Testing
+		EXEC    Utility.ToLog @Log_Source, @Log_Start_Date, 'Started full load', 'I', NULL, NULL;
+	
+	
+	
+	
+	--=============================================================================================================
+		-- Load Stage.DismissedVtollTxn
+	--=============================================================================================================
+	
+	
+	 IF OBJECT_ID('Stage.DismissedVtollTxn') IS NOT NULL DROP TABLE Stage.DismissedVtollTxn;
+	 CREATE  TABLE Stage.DismissedVtollTxn WITH (CLUSTERED INDEX (tptripID), DISTRIBUTION = HASH(tptripID))
+	 AS	
+	 WITH CTE_Vtolls AS 
+			(
+			   SELECT  VT.ReferenceInvoiceID InvoiceNumber
+					    ,TC.TpTripID
+						,Vt.TpTripID TpTripID_VT
+						,TC.CustTripID
+						,VT.CitationID
+					    ,VT.TripStatusID TripStatusID_VT
+						,TC.TripStatusID TripStatusID_CT
+					    ,CASE WHEN TC.PaymentStatusID=456 AND VT.SourceViolationStatus='Z' THEN 3852 ELSE TC.PaymentStatusID END PaymentStatusID
+					    ,TC.PostedDate
+						,CASE WHEN COUNT(VT.tptripID)>1 AND SUM(CASE WHEN TC.TripStatusID=2 THEN 1 ELSE 0 END )>1 
+								THEN CAST((VT.PBMTollAmount)/COUNT(VT.tptripID) AS DECIMAL(16,2)) 
+						 ELSE (CASE WHEN TC.PaymentStatusID=3852 AND VT.TripStatusID<>154 AND TC.TripStatusID NOT IN (155,159,135,170)  THEN 0 ELSE VT.PBMTollAmount END) -- PaymentstatusID 3852 and tripstatusID=153 is not considered as tollamount, as the trips are posted multilple times.There can be Adjustments from CSR and status is 155. We need to consider the toll amount. 
+						 END
+						 AS PBMTollAmount
+						 ,CASE WHEN COUNT(VT.tptripID)>1 AND SUM(CASE WHEN TC.TripStatusID=2 THEN 1 ELSE 0 END )>1 
+								THEN CAST((VT.AVITollAmount)/COUNT(VT.tptripID) AS DECIMAL(16,2)) 
+						 ELSE (CASE WHEN TC.PaymentStatusID=3852 AND VT.TripStatusID<>154 AND  TC.TripStatusID NOT IN (155,159,135,170)  THEN 0 ELSE VT.AVITollAmount END) -- PaymentstatusID 3852 and tripstatusID=153 is not considered as tollamount, as the trips are posted multilple times.There can be Adjustments from CSR and status is 155. We need to consider the toll amount. 
+						 END
+						 AS AVITollAmount
+						 
+						,CASE WHEN COUNT(VT.tptripID)>1 AND SUM(CASE WHEN TC.TripStatusID=2 THEN 1 ELSE 0 END )>1 
+								THEN CAST((VT.TollAmount)/COUNT(VT.tptripID) AS DECIMAL(16,2))							--Ex:1226708097 
+							 
+						 ELSE (CASE WHEN TC.PaymentStatusID=3852 AND VT.TripStatusID<>154 AND TC.TripStatusID NOT IN (155,159,135,170) THEN 0 ELSE VT.TollAmount END) -- PaymentstatusID 3852 and tripstatusID=153 is not considered as tollamount, as the trips are posted multilple times.There can be Adjustments from CSR and status is 155. We need to consider the toll amount. 
+						 END
+						 AS Tolls
+						,CASE WHEN COUNT(VT.tptripID)>1 THEN (SUM(CASE WHEN TC.PaymentStatusID=456 AND TC.TripStatusID=5  THEN TC.TollAmount 
+								  WHEN TC.PaymentStatusID=456 THEN TC.TollAmount  						  
+								  WHEN TC.PaymentStatusID=457 THEN 	 (TC.TollAmount - TC.OutstandingAmount) 
+							 ELSE 0 END )/ COUNT(VT.tptripID))
+						 ELSE 			
+								SUM(
+									CASE WHEN TC.PaymentStatusID=456 AND TC.TripStatusID=5  THEN TC.TollAmount 
+										 WHEN TC.PaymentStatusID=456 AND VT.SourceViolationStatus='Z' THEN 0
+										 WHEN TC.PaymentStatusID=456 THEN TC.TollAmount  						  
+										 WHEN TC.PaymentStatusID=457 THEN 	 (TC.TollAmount - TC.OutstandingAmount) 
+									ELSE 0 END
+									) 
+						 END AS PaidAmount_VT 
+						,TC.OutstandingAmount  
+						,SUM((CASE  
+									WHEN TC.PaymentStatusID=456 AND VT.SourceViolationStatus='Z' THEN TC.TollAmount
+									WHEN  TC.PaymentStatusID=3852 AND TC.TripStatusID=135 AND  VT.PaymentStatusID=456 AND  vt.TripStatusID=2 THEN 0 -- these are the txns that got posted in VT table and paid in vtrt 
+								    WHEN  TC.PaymentStatusID=3852  AND TC.TripStatusID =118/* 118 - Unmatched , 135 - CSR Adjusted*/ THEN 0 -- 1223509842
+									WHEN  TC.PaymentStatusID=458 AND TC.OutstandingAmount<>TC.TollAmount AND TC.OutstandingAmount=TC.PBMTollAmount AND TC.OutstandingAmount=TC.AVITollAmount THEN (TC.TollAmount-TC.OutstandingAmount)-- Ex:1236741507	
+									WHEN  VT.TripStatusID=154 AND TC.TripStatusID=135 AND TT.PaymentStatusID=456 THEN  VT.TollAmount -- Trips that got vtolled and posted to different zipcash account
+									WHEN   TC.PaymentStatusID=3852 AND TC.TripStatusID=135 AND VT.PaymentStatusID=3852 THEN vt.TollAmount	--ex:1225983731
+									WHEN   TC.PaymentStatusID=3852 AND TC.TripStatusID=154 THEN 0 --Ex:1222959778
+									WHEN   TC.PaymentStatusID=3852 THEN VT.amount 								
+									WHEN   TC.TollAmount<>VT.Amount THEN VT.Amount-TC.TollAmount
+									WHEN   TC.TollAmount=TC.PBMTollAmount AND TC.OutstandingAmount=TC.AVITollAmount AND TC.PaymentStatusID=458 THEN (TC.TollAmount-TC.OutstandingAmount) --Ex:1234342591
+									WHEN   TC.TollAmount=TC.PBMTollAmount THEN 0 	
+									WHEN   TC.TollAmount=0 AND (VT.TollAmount=TC.PBMTollAmount) THEN TC.PBMTollAmount
+									WHEN   (TC.TollAmount=VT.amount) AND tc.TollAmount<>TC.PBMTollAmount AND tc.TollAmount<>TC.AVITollAmount THEN 0
+									WHEN  TC.TollAmount=0 AND TC.PaymentStatusID=456 THEN 0
+									
+							ELSE (TC.PBMTollAmount-TC.AVITollAmount) END)) TollsAdjusted --
+				FROM 
+				(
+						--SELECT * FROM
+						--(
+								SELECT ROW_NUMBER() OVER (PARTITION BY vt.TpTripID--,L.ReferenceInvoiceID
+									                          ORDER BY vt.CitationID DESC,
+									                                   vt.ExitTripDateTime DESC) RN_VT,					
+										VT.CitationID,VT.TpTripID,VT.ViolatorID,VT.TollAmount,VT.OutstandingAmount,VT.PBMTollAmount,VT.AVITollAmount,
+										VT.CitationStage,VT.TripStageID,VT.TripStatusID,VT.StageModifiedDate,
+										VT.EntryTripDateTime,VT.ExitTripDateTime,VT.PaymentStatusID,VT.PostedDate,
+										L.LinkID,L.Amount,L.LinkSourceName,L.TxnDate,L.ReferenceInvoiceID,L.SourceViolationStatus --SELECT *
+								FROM LND_TBOS.TollPlus.Invoice_Header H WITH (NOLOCK)
+								JOIN LND_TBOS.TollPlus.Invoice_LineItems L WITH (NOLOCK)
+									ON L.InvoiceID = H.InvoiceID
+								JOIN LND_TBOS.TollPlus.TP_ViolatedTrips VT WITH (NOLOCK)
+									ON L.LinkID = VT.CitationID 
+										AND L.LinkSourceName = 'TOLLPLUS.TP_VIOLATEDTRIPS' AND VT.TripStatusID NOT IN (171,170,118)
+										--WHERE VT.TpTripID=2170804023
+										--AND (VT.PaymentStatusID<>456 AND  vt.TripStatusID<>2)  -- This is to avoid those Txns that are vtolled first and then moved back to Violated trips table
+										--AND VT.TripStatusID NOT IN (171,118) -- EX: 1233445625,1234165987,1230780604. This condition is for the Txns that are unassignd from an invoice and assigned to a different one and then gor VTOLLED.In this case, the citationID is going to change but TPTRIPID remains same. While joining this VT table to CT,we are goint to get all the txns assigned to the TPTRIPID(Assigned and Vtolled). 
+								--WHERE VT.TpTripID=5623227552
+								--WHERE  VT.TpTripID=3888729265
+							--WHERE VT.TpTripID=2592187014
+							--WHERE VT.TpTripID=3888497531--3110762177
+						 --) VT WHERE  RN_VT=1 --AND VT.ReferenceInvoiceID=1223304290
+				) VT 
+				JOIN 
+					( 
+						--SELECT * FROM 
+						--(
+							SELECT TC.TpTripID,TC.CustTripID,TC.TripStatusID,TC.PaymentStatusID,TC.PostedDate,TC.TollAmount,TC.PBMTollAmount,TC.AVITollAmount,TC.OutStandingAmount,
+								  ROW_NUMBER() OVER (PARTITION BY TC.TpTripID ORDER BY TC.CustTripID DESC, TC.PostedDate DESC) RN
+							 FROM LND_TBOS.TollPlus.TP_CustomerTrips TC 
+							 WHERE  TC.TransactionPostingType NOT IN ( 'Prepaid AVI', 'NTTA Fleet' )
+							-- AND TC.TpTripID=2170804023
+							 --AND TC.TpTripID=3888729265
+							--AND  TC.TpTripID=2592187014
+							--AND TC.TpTripID=3888497531--3110762177
+						 --) A WHERE RN=1
+					) TC
+					 ON TC.TpTripID = VT.TpTripID	AND TC.RN=VT.RN_VT					
+				JOIN LND_TBOS.TollPlus.TP_Trips TT ON TT.TpTripID=TC.TpTripID 
+					AND TT.TripWith IN ('C')
+					--WHERE VT.TpTripID=3888729265
+				--WHERE TC.TpTripID=3888497531--3110762177
+				--WHERE VT.TpTripID=2592187014
+				--where VT.TpTripID=3548802379
+					--WHERE H.InvoiceNumber=1230002032 --partial vtoll
+					--WHERE H.InvoiceNumber=1237067582 -- issue in stage table joining to customer trips as these trips have 135 and 2 statuses	
+					--H.InvoiceNumber= 1227517722  -- some of the Txns on these invoice are on the customer account first, and then moved to Violated trips and got invoiced as the auto payment was not done on the account
+		            --WHERE H.InvoiceNumber IN (1030630051,1120029424)	
+					GROUP BY VT.ReferenceInvoiceID,TC.TpTripID,VT.TripStatusID,TC.PaymentStatusID,TC.PostedDate,VT.TollAmount,TC.OutstandingAmount,
+					         VT.TpTripID,TC.CusttripID,VT.CitationID,
+					         VT.TripStatusID,
+					         VT.PaymentStatusID,
+					         VT.PostedDate,
+					         VT.OutstandingAmount,TC.TripStatusID,VT.PBMTollAmount,VT.AVITollAmount,VT.SourceViolationStatus
+						
+		--	) A
+		--GROUP BY A.InvoiceNumber
+		)
+		SELECT CTE_Vtolls.InvoiceNumber,
+			   CTE_Vtolls.TpTripID,
+			   CTE_Vtolls.CitationID,
+			   CTE_Vtolls.TripStatusID_CT,
+			   CTE_Vtolls.PaymentStatusID,
+			  -- cte.TotalTxnCnt TotalTxnCnt,
+			   CASE WHEN paidamount_VT=0 THEN NULL ELSE CTE_Vtolls.PostedDate END FirstPaymentDate,
+			   CASE WHEN paidamount_VT=0 THEN NULL ELSE CTE_Vtolls.PostedDate END LastPaymentDate,
+			   CTE_Vtolls.Tolls,
+			   CTE_Vtolls.PBMTollAmount,
+			   CTE_Vtolls.AVITollAmount,
+			   (CTE_Vtolls.PBMTollAmount-CTE_Vtolls.AVITollAmount) PremiumAmount,
+               CTE_Vtolls.PaidAmount_VT,
+			   TollsAdjusted TollsAdjusted,
+			   --cte.ExcusedTollsAdjusted,
+               CTE_Vtolls.OutstandingAmount,			   
+			   ISNULL(CAST(SYSDATETIME() AS DATETIME2(7)), '1900-01-01') AS EDW_UpdateDate		
+              
+		FROM CTE_Vtolls
+		--WHERE CTE_Vtolls.TpTripID=3888729265
+		--LEFT JOIN cte ON cte.InvoiceNumber = CTE_Vtolls.InvoiceNumber	
+
+						-- Log 
+		SET  @Log_Message = 'Loaded Stage.DismissedVtollTxn'
+		EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, '-1', -1, 'I'
+		
+		-- Create statistics and swap table
+		CREATE STATISTICS STATS_Stage_DismissedVtollTxn_001 ON Stage.DismissedVtollTxn(InvoiceNumber)
+		CREATE STATISTICS STATS_Stage_DismissedVtollTxn_002 ON Stage.DismissedVtollTxn(PaymentStatusID)	
+
+
+		IF @Trace_Flag = 1 SELECT TOP 100 'Stage.DismissedVtollTxn' TableName, * FROM Stage.DismissedVtollTxn ORDER BY 2 DESC
+
+
+	
+	
+	
+	
+	--=============================================================================================================
+	--	 Load Stage.ViolatedTripPayment
+	--=============================================================================================================
+		IF OBJECT_ID('Stage.ViolTripPayment','U') IS NOT NULL DROP TABLE  Stage.ViolTripPayment
+		CREATE TABLE Stage.ViolTripPayment WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH(CitationID)) AS
+
+
+		WITH CTE_VT_Receipts_Tracker AS
+		(
+			SELECT	VT.TPTripID, --TT.TripWith, 
+					VT.CitationID, VT.TollAmount, VT.OutstandingAmount, VT.TripStatusID,
+					VT.PaymentStatusID, RT.TripReceiptID, RT.LinkID AS RT_LinkID, RT.LinkSourceName AS RT_LinkSourceName,
+					RT.TxnDate, RT.AmountReceived TxnAmount
+			FROM   -- LND_TBOS.TollPlus.TP_Trips TT
+			      	LND_TBOS.TollPlus.TP_ViolatedTrips VT
+					--ON VT.TPTripID = TT.TPTripID AND VT.CitationID = TT.LinkID AND TT.TripWith = 'V' AND TT.LND_UpdateType <> 'D' AND VT.LND_UpdateType <> 'D'
+			JOIN	LND_TBOS.TollPlus.TP_Violated_Trip_Receipts_Tracker RT
+					ON VT.CitationID = RT.CitationID AND RT.LND_UpdateType <> 'D'
+			WHERE   RT.LinkSourceName IN ('FINANCE.PAYMENTTXNS','FINANCE.ADJUSTMENTS') /* exclude TOLLPLUS.TP_CUSTOMERTRIPS */		
+			--AND VT.TpTripID=3985864122
+			--AND VT.TpTripID=3513822875
+					--AND VT.TpTripID=3909830376
+					--AND VT.TpTripID=4617548112
+					--AND VT.TpTripID=2804016262
+					--AND VT.TpTripID=3795348233
+
+		)
+		--SELECT * FROM CTE_VT_Receipts_Tracker ORDER BY TPTripID, TxnDate
+		, 	CTE_ALI AS
+		(
+			--:: Payment Txns
+			SELECT	RT.*, CAST(NULL AS BIGINT) AdjustmentID, 
+				    CAST(NULL AS BIGINT) AS ALI_LinkID, 
+					CAST(NULL AS VARCHAR(50)) ALI_LinkSourceName, 
+					CAST(1 AS SMALLINT) ALI_Seq
+			FROM	CTE_VT_Receipts_Tracker RT
+			WHERE	RT.RT_LinkSourceName = 'FINANCE.PAYMENTTXNS'
+			--AND RT.TpTripID=3985864122
+			UNION
+			--:: Payment thru Adjustment and pure Adjustments
+			SELECT	RT.*, ALI.AdjustmentID, ALI.LinkID AS ALI_LinkID, ALI.LinkSourceName AS ALI_LinkSourceName,
+					ROW_NUMBER() OVER (	PARTITION BY RT.CitationID, RT.TripReceiptID, ALI.AdjustmentID 
+										ORDER BY CASE WHEN (ALI.LinkSourceName = 'TOLLPLUS.INVOICE_HEADER') OR
+												           (ALI.LinkSourceName = 'TOLLPLUS.TP_VIOLATEDTRIPS' AND ALI.LinkID = RT.CitationID) THEN 1 
+													  ELSE 2 END) ALI_Seq
+			FROM	CTE_VT_Receipts_Tracker RT
+			JOIN LND_TBOS.Finance.Adjustment_LineItems ALI
+					ON ALI.AdjustmentID = RT.RT_LinkID
+					AND ALI.LinkSourceName IN ('TOLLPLUS.TP_VIOLATEDTRIPS','TOLLPLUS.INVOICE_HEADER','FINANCE.ADJUSTMENTS') 
+					AND RT.RT_LinkSourceName = 'FINANCE.ADJUSTMENTS'
+					AND ALI.LND_UpdateType <> 'D'
+			JOIN LND_TBOS.Finance.Adjustments ADJ
+					ON ADJ.AdjustmentID = ALI.AdjustmentID
+					AND ADJ.ApprovedStatusID = 466 -- Approved
+					AND ADJ.LND_UpdateType <> 'D'
+					--WHERE RT.TpTripID=3985864122
+			--WHERE RT.TpTripID=3513822875
+				--WHERE RT.TpTripID=4617548112
+				--AND RT.TpTripID=2804016262
+				--WHERE RT.TpTripID=3795348233
+		)
+		--SELECT * FROM CTE_ALI ORDER BY TPTripID, TxnDate, CTE_ALI.ALI_Seq
+		,	CTE_Viol_Payments AS
+		(
+			SELECT	TpTripID,  CitationID, TollAmount, OutstandingAmount, PaymentStatusID,A.TripStatusID, TxnDate, TxnAmount, 
+					CASE WHEN RT_LinkSourceName = 'FINANCE.PAYMENTTXNS' OR NOT (ALI_LinkSourceName = 'TOLLPLUS.TP_VIOLATEDTRIPS' /*2539986413*/ AND ALI_LinkID = CitationID /*2530609156*/) THEN TxnAmount ELSE 0 END ActualPaidAmount,
+					CASE WHEN ALI_LinkSourceName = 'TOLLPLUS.TP_VIOLATEDTRIPS' AND ALI_LinkID = CitationID THEN TxnAmount ELSE 0 END AdjustedAmount,
+					CASE WHEN RT_LinkSourceName = 'FINANCE.PAYMENTTXNS' THEN RT_LinkID END PaymentID,
+					CASE WHEN RT_LinkSourceName = 'FINANCE.ADJUSTMENTS' THEN RT_LinkID END AdjustmentID,
+					RT_LinkSourceName, ALI_LinkSourceName, ALI_LinkID,
+					ROW_NUMBER() OVER (PARTITION BY CitationID ORDER BY TxnDate) TxnSeq, ALI_Seq,
+					SUM(TxnAmount) OVER (PARTITION BY CitationID ORDER BY TxnDate) RunningTotalAmount
+			FROM	CTE_ALI A
+			WHERE	ALI_Seq = 1
+		)
+		--SELECT * FROM CTE_Viol_Payments ORDER BY TPTripID, TxnDate
+		, CTE_FirstCreditAdjTxnDate AS
+		(
+			SELECT TpTripID, CitationID, MAX(TxnDate) FirstCreditAdjTxnDate
+			FROM CTE_Viol_Payments 
+			WHERE AdjustedAmount < 0 -- Credit Adjustment
+			GROUP BY TpTripID, CitationID
+		) 
+		--SELECT * FROM CTE_FirstCreditAdjTxnDate -- 2021-09-14 13:40:59.197
+		, CTE_ValidLastZeroAmountTxnDate AS
+		(
+			SELECT P.TpTripID, P.CitationID, MAX(P.TxnDate) ZeroAmountTxnDate
+			FROM CTE_Viol_Payments P
+			JOIN CTE_FirstCreditAdjTxnDate CAD ON P.TpTripID = CAD.TpTripID
+			WHERE P.RunningTotalAmount = 0 AND P.TxnDate < CAD.FirstCreditAdjTxnDate /* Example: 2864601976 with Payment Reversal (that is, $0 Running Total) before the first Credit Adjustment */
+			GROUP BY P.TpTripID, P.CitationID
+		),
+		--SELECT * FROM CTE_ValidLastZeroAmountTxnDate -- 2021-09-14 13:34:21.907
+		CTE_TxnAmounts AS(
+		
+		SELECT A.TpTripID,
+               A.CitationID,
+			   CASE WHEN VTollTxn.CitationID IS NOT NULL THEN 1 ELSE 0 END AS VTollFlag,
+               CASE WHEN A.PaymentStatusID = 3852 AND (A.TripStatusID IN (153,154)) THEN COALESCE(VTollTxn.TripstatusID_CT,A.TripStatusID) ELSE A.TripStatusID END TripStatusID,
+               A.TotalTxnAmount,
+               A.TollAmount,
+               CASE WHEN A.PaymentStatusID = 3852 AND (A.TripStatusID IN (153,154))  THEN COALESCE(VTollTxn.TollsAdjusted,(A.AdjustedAmount*-1))/*3795348233*/ ELSE (A.AdjustedAmount*-1) END AdjustedAmount,
+               CASE WHEN (A.PaymentStatusID = 3852 OR A.PaymentStatusID = 456) AND (A.TripStatusID IN (153,154))  THEN VTollTxn.PaidAmount_VT 
+					WHEN A.PaymentStatusID = 456 THEN A.ActualPaidAmount
+			   ELSE A.ActualPaidAmount END ActualPaidAmount,
+               CASE WHEN (A.PaymentStatusID = 3852 OR A.PaymentStatusID = 456) AND (A.TripStatusID IN (153,154))  THEN VTollTxn.OutstandingAmount ELSE A.OutstandingAmount END OutstandingAmount,
+               CASE WHEN (A.PaymentStatusID = 3852 OR A.PaymentStatusID = 456) AND (A.TripStatusID IN (153,154))  THEN COALESCE(VTollTxn.PaymentStatusID,A.PaymentStatusID) ELSE A.PaymentStatusID END PaymentStatusID,
+               CASE WHEN (A.PaymentStatusID = 3852 OR A.PaymentStatusID = 456) AND (A.TripStatusID IN (153,154))  THEN VTollTxn.FirstPaymentDate 						
+					WHEN A.TripStatusID NOT IN (456,457) AND A.ActualPaidAmount=0 THEN NULL 
+					WHEN A.TripStatusID=170 AND A.ActualPaidAmount=0 THEN NULL
+			   ELSE A.FirstPaidDate END FirstPaidDate,
+               CASE WHEN (A.PaymentStatusID = 3852 OR A.PaymentStatusID = 456) AND (A.TripStatusID IN (153,154))  THEN VTollTxn.LastPaymentDate 
+					WHEN A.TripStatusID NOT IN (456,457) AND A.ActualPaidAmount=0 THEN NULL 
+					WHEN A.TripStatusID=170 AND A.ActualPaidAmount=0 THEN NULL
+			   ELSE A.LastPaidDate END LastPaidDate,
+			   CASE WHEN (A.PaymentStatusID = 3852 OR A.PaymentStatusID = 456) AND (A.TripStatusID=170)  THEN A.LastPaidDate ELSE NULL END ExcusedDate, 
+			   CAST(SYSDATETIME() AS DATETIME2(3)) EDW_UpdateDate
+               --SELECT * 
+		FROM (
+			SELECT  VP.TpTripID, VP.CitationID,VP.TripStatusID,
+				CAST(SUM(TxnAmount) AS DECIMAL(19,2)) TotalTxnAmount, 
+				VP.TollAmount, 
+				CAST(SUM(AdjustedAmount) AS DECIMAL(19,2)) AdjustedAmount, 
+				CAST(SUM(ActualPaidAmount) * -1 AS DECIMAL(19,2)) ActualPaidAmount, 
+				VP.OutstandingAmount, 
+				VP.PaymentStatusID,
+				MIN(TxnDate) AS FirstPaidDate, 
+				MAX(TxnDate) AS LastPaidDate
+		FROM CTE_Viol_Payments VP
+		WHERE NOT EXISTS (SELECT 1  FROM CTE_ValidLastZeroAmountTxnDate ZD WHERE ZD.CitationID = VP.CitationID AND VP.TxnDate <= ZD.ZeroAmountTxnDate)
+		GROUP BY VP.TpTripID, VP.CitationID, VP.TollAmount, VP.OutstandingAmount, VP.PaymentStatusID ,VP.TripStatusID
+		) A 
+	    LEFT JOIN stage.DismissedVtollTxn VTollTxn ON VTollTxn.TpTripID = A.TpTripID AND VTollTxn.CitationID = A.CitationID
+		--WHERE A.TpTripID=2168982908
+	--WHERE A.TpTripID=3795348233
+	--WHERE A.TpTripID=3513822875
+		)
+		SELECT CTE_TxnAmounts.TpTripID,
+               CTE_TxnAmounts.CitationID,
+               CTE_TxnAmounts.VTollFlag,
+               CTE_TxnAmounts.TripStatusID,
+               CTE_TxnAmounts.TotalTxnAmount,
+               CTE_TxnAmounts.TollAmount,
+               CTE_TxnAmounts.AdjustedAmount,
+               CTE_TxnAmounts.ActualPaidAmount,
+               CTE_TxnAmounts.OutstandingAmount,
+               CASE WHEN CTE_TxnAmounts.ActualPaidAmount=CTE_TxnAmounts.TollAmount AND CTE_TxnAmounts.TripStatusID=170 THEN 456 ELSE CTE_TxnAmounts.PaymentStatusID END PaymentStatusID, /*Txn status is excused but there is a payment Ex:2669027877*/
+               CTE_TxnAmounts.FirstPaidDate,
+               CTE_TxnAmounts.LastPaidDate,
+               CTE_TxnAmounts.ExcusedDate,
+               CTE_TxnAmounts.EDW_UpdateDate
+		FROM CTE_TxnAmounts
+		
+				-- Log 
+		SET  @Log_Message = 'Loaded Stage.ViolTripPayment'
+		EXEC Utility.ToLog @Log_Source, @Log_Start_Date, @Log_Message, '-1', -1, 'I'
+		
+		-- Create statistics and swap table
+		CREATE STATISTICS STATS_Stage_ViolTripPayment_001 ON Stage.ViolTripPayment(CitationID)
+		CREATE STATISTICS STATS_Stage_ViolTripPayment_002 ON Stage.ViolTripPayment(TpTripID)
+
+
+		IF @Trace_Flag = 1 SELECT TOP 100 'Stage.ViolTripPayment' TableName, * FROM Stage.ViolTripPayment ORDER BY 2 DESC
+
+
+
+		---------------------------------------------------------------------------------------------------------------------
+		-- load Stage.InvoicePayment_NEW - This is to sum up at Invoice level
+		---------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('Stage.InvoicePayment_NEW','U') IS NOT NULL DROP TABLE Stage.InvoicePayment_NEW
+		CREATE TABLE Stage.InvoicePayment_NEW WITH (CLUSTERED COLUMNSTORE INDEX, DISTRIBUTION = HASH(invoicenumber))
+		AS
+		
+		WITH CTE_PaymentChannel 
+		AS (
+							SELECT 
+							    InvoiceNumber,
+							    STUFF(COALESCE(' - '+[1], '') + COALESCE(' - '+[2], '') + COALESCE(' - '+[3], '') + COALESCE(' - '+[4], '') + COALESCE(' - '+[5], '') + COALESCE(' - '+[6], '') + COALESCE(' - '+[7], '') + COALESCE(' - '+[8], ''),1,3,'')  AS PaymentChannel
+							FROM (
+								SELECT *, ROW_NUMBER() OVER (PARTITION BY InvoiceNumber ORDER BY ChannelName) AS ChannelNumber
+								FROM (
+											SELECT DISTINCT 
+											    InvoiceNumber,
+											    ChannelName       
+											FROM EDW_TRIPS.dbo.Fact_PaymentDetail PD
+											JOIN EDW_TRIPS.dbo.Dim_Channel PC ON PD.ChannelID=PC.ChannelID 
+											JOIN EDW_TRIPS.dbo.Dim_POSLocation POS ON POS.POSID = PD.POSID
+											--WHERE PD.InvoiceNumber IN (1249075076,1198639441,1254902914,1239190976)
+											--WHERE PD.InvoiceNumber=1257480211
+											--WHERE PD.InvoiceNumber=1257517968
+											--WHERE InvoiceNumber IN (1193212468 ,850223486,1233700037)
+										) A --ORDER BY A.InvoiceNumber
+							) AS SourceTable
+							PIVOT (
+							    MAX(ChannelName) FOR ChannelNumber IN ([1], [2], [3], [4], [5], [6], [7], [8])
+							) AS PivotTable
+							
+		),
+							
+		CTE_POS 
+		AS (
+							SELECT 
+							    InvoiceNumber,
+							    STUFF(COALESCE(' - '+[1], '') + COALESCE(' - '+[2], '') + COALESCE(' - '+[3], '') + COALESCE(' - '+[4], '') + COALESCE(' - '+[5], '') + COALESCE(' - '+[6], '') + COALESCE(' - '+[7], '') + COALESCE(' - '+[8], ''),1,3,'')  AS POS
+							FROM (
+								SELECT *, ROW_NUMBER() OVER (PARTITION BY InvoiceNumber ORDER BY A.POSName) AS POSNumber
+								FROM (
+											SELECT DISTINCT 
+											    InvoiceNumber,
+											    POS.POSName       
+											FROM EDW_TRIPS.dbo.Fact_PaymentDetail PD
+											JOIN EDW_TRIPS.dbo.Dim_POSLocation POS ON POS.POSID = PD.POSID
+											--WHERE PD.InvoiceNumber IN (1249075076,1198639441,1254902914,1239190976)
+											--WHERE PD.InvoiceNumber=1257480211
+											--WHERE PD.InvoiceNumber=1257517968
+											--WHERE InvoiceNumber IN (1193212468 ,850223486,1233700037)
+										) A --ORDER BY A.InvoiceNumber
+							) AS SourceTable
+							PIVOT (
+							    MAX(POSName) FOR POSNumber IN ([1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12])
+							) AS PivotTable
+		 )			
+					
+			SELECT  CAST(A.referenceInvoiceID AS BIGINT) InvoiceNumber,							
+							--CAST(SUM(A.InvoiceAmount) AS DECIMAL(19,2)) InvoiceAmount,
+							MAX(A.ExcusedDate) ExcusedDate,
+							CAST(MIN(A.FirstPaymentDatePriortoZC) AS DATE) FirstPaymentDatePriortoZC, 
+							CASE WHEN CAST(MAX(A.LastPaymentDatePriortoZC) AS DATE) IS NULL AND CAST(MIN(A.FirstPaymentDatePriortoZC) AS DATE) < CAST(MIN(A.FirstPaymentDateAfterZC) AS DATE)
+								THEN CAST(MIN(A.FirstPaymentDatePriortoZC) AS DATE) 
+							ELSE CAST(MAX(A.LastPaymentDatePriortoZC) AS DATE) END AS LastPaymentDatePriortoZC, 
+							CAST(MIN(A.FirstPaymentDateAfterZC) AS DATE) FirstPaymentDateAfterZC, 
+							CAST(MAX(A.LastPaymentDateAfterZC) AS DATE) LastPaymentDateAfterZC, 
+							PaymentChannel,
+							POS.POS,
+							CAST(SUM(A.PBMTollAmount) AS DECIMAL(19,2)) PBMTollAmount,
+							CAST(SUM(A.AVITollAmount) AS DECIMAL(19,2)) AVITollAmount,
+							CAST(SUM(A.Tolls) AS DECIMAL(19,2)) Tolls,
+							CAST(SUM(A.TollsPaid) AS DECIMAL(19,2)) TollsPaid,
+							CAST(SUM(A.TollsAdjusted) AS DECIMAL(19,2)) TollsAdjusted,
+							CAST(SYSDATETIME() AS DATETIME2(3)) EDW_UpdateDate
+							-- select *
+					FROM 
+						(
+							SELECT IL.ReferenceInvoiceID,
+								   vt.TpTripID,
+							       VT.CitationID,
+							       VT.TripStatusID,
+							       VT.PaymentStatusID,
+							       ExitTripDateTime,
+								   vt.StageModifiedDate,
+								   --CASE WHEN IL.TxnType = 'VTOLL' THEN CAST(IL.CreatedDate AS DATE) ELSE NULL END AS ZipCashDate,
+								   MAX(T.ExcusedDate) AS ExcusedDate,
+								   MIN(CASE WHEN T.ActualPaidAmount>0 AND T.FirstPaidDate< CASE WHEN IL.TxnType = 'VTOLL' 
+																								 THEN CAST(IL.CreatedDate AS DATE)
+																							ELSE CAST('1900-01-01' AS DATE) END
+											 THEN T.FirstPaidDate
+										 ELSE NULL END) FirstPaymentDatePriortoZC, 
+									MAX(CASE WHEN T.ActualPaidAmount>0 AND T.LastpaidDate <
+																							CASE WHEN IL.TxnType = 'VTOLL' 
+																								 THEN CAST(IL.CreatedDate AS DATE)
+																							ELSE CAST('1900-01-01' AS DATE) END
+											 THEN T.LastPaidDate
+										 ELSE NULL END) LastPaymentDatePriortoZC, 
+									MIN(CASE WHEN T.ActualPaidAmount>0 AND T.FirstPaidDate >
+																							CASE WHEN IL.TxnType = 'VTOLL' 
+																								 THEN CAST(IL.CreatedDate AS DATE)
+																							ELSE CAST('1900-01-01' AS DATE) END
+											 THEN T.FirstPaidDate
+											 WHEN T.ActualPaidAmount>0 AND T.LastPaidDate >
+																							CASE WHEN IL.TxnType = 'VTOLL' 
+																								 THEN CAST(IL.CreatedDate AS DATE)
+																							ELSE CAST('1900-01-01' AS DATE) END
+											 THEN T.LastPaidDate
+										 ELSE NULL END) FirstPaymentDateAfterZC, 
+									MAX(CASE WHEN T.ActualPaidAmount>0 AND  T.Lastpaiddate >
+																							CASE WHEN IL.TxnType = 'VTOLL' 
+																								 THEN CAST(IL.CreatedDate AS DATE)
+																							ELSE CAST('1900-01-01' AS DATE) END
+											 THEN T.Lastpaiddate 
+										  ELSE NULL END) LastPaymentDateAfterZC,
+								   VT.TollAmount,
+							       AVITollAmount,
+							       PBMTollAmount,
+								   --CASE WHEN  IL.CustTxnCategory IN ('TOLL','FEE' ) THEN IL.Amount ELSE  0 END  InvoiceAmount,
+								   CASE WHEN  IL.LinkSourceName = 'TOLLPLUS.TP_VIOLATEDTRIPS' THEN IL.Amount ELSE  0 END  Tolls,
+								   ISNULL(T.ActualPaidAmount,0) TollsPaid,
+								   ISNULL(T.AdjustedAmount,0) TollsAdjusted,
+							        ROW_NUMBER() OVER (PARTITION BY vt.TpTripID,IL.ReferenceInvoiceID
+							                          ORDER BY vt.CitationID DESC,
+							                                   vt.ExitTripDateTime DESC
+							                         )    RN			--select *
+							FROM LND_TBOS.TollPlus.Invoice_LineItems IL
+							     JOIN LND_TBOS.TollPlus.TP_ViolatedTrips vt
+							        ON ABS(IL.LinkID) = vt.CitationID
+							           AND IL.TxnType= 'VTOLL'
+									   AND CitationStage<>'INVOICE'
+								LEFT JOIN Stage.ViolTripPayment T ON VT.CitationID=T.CitationID 
+								--WHERE IL.ReferenceInvoiceID=1214361358
+								--WHERE IL.ReferenceInvoiceID=1252802508
+								--WHERE IL.ReferenceInvoiceID=1180582597
+								--WHERE IL.ReferenceInvoiceID=1253211410
+								--WHERE IL.ReferenceInvoiceID IN (1198639441,1249075076,1254902914,1239190976)
+								--WHERE IL.ReferenceInvoiceID=1257517968--1257480211---1257517968
+								--WHERE IL.ReferenceInvoiceID=1222085789
+							--WHERE vt.TpTripID = 3432483382
+							--WHERE vt.TpTripID IN (3968522557,3968531731,3969234413,3969252534)
+							--WHERE IL.ReferenceInvoiceID IN (1237141486,1236141325,1237171775,1237206818,1237070055,1230776160,1227662935,1225424611,1232976582,1223907444,1227352365,1234364963)
+							--WHERE IL.ReferenceInvoiceID IN (1240068046)
+							--WHERE IL.ReferenceInvoiceID=1241247249
+							
+							GROUP BY CASE
+                                     WHEN IL.LinkSourceName = 'TOLLPLUS.TP_VIOLATEDTRIPS' THEN
+                                     IL.Amount
+                                     ELSE
+                                     0
+                                     END,
+                                     ISNULL(T.ActualPaidAmount, 0),
+                                     ISNULL(T.AdjustedAmount, 0),
+                                     CASE
+                                     WHEN IL.TxnType = 'VTOLL' THEN
+                                     CAST(IL.CreatedDate AS DATE)
+                                     ELSE
+                                     NULL
+                                     END,
+                                     IL.ReferenceInvoiceID,
+                                     vt.TpTripID,
+                                     vt.CitationID,
+                                     vt.TripStatusID,
+                                     vt.PaymentStatusID,
+                                     vt.ExitTripDateTime,
+                                     vt.StageModifiedDate,
+                                     vt.TollAmount,
+                                     vt.AVITollAmount,
+                                     vt.PBMTollAmount
+						)A 
+						LEFT JOIN CTE_PaymentChannel PC ON PC.Invoicenumber=A.ReferenceInvoiceID
+						LEFT JOIN CTE_POS POS ON POS.Invoicenumber=A.ReferenceInvoiceID
+						WHERE A.RN=1
+						GROUP BY A.ReferenceInvoiceID,PaymentChannel,
+								 POS.POS
+
+		CREATE STATISTICS STATS_Stage_InvoicePayment_001 ON Stage.InvoicePayment_NEW (InvoiceNumber)
+		EXEC Utility.TableSwap 'Stage.InvoicePayment_NEW','Stage.InvoicePayment'
+		
+		
+		EXEC Utility.ToLog @Log_Source, @Log_Start_Date,'Completed full load', 'I',NULL,NULL;
+
+		-- Show results
+		IF @Trace_Flag = 1  EXEC Utility.FromLog @Log_Source, @Log_Start_Date;
+		IF @Trace_Flag = 1  SELECT TOP 1000 'Stage.InvoicePayment ' TableName, * FROM Stage.InvoicePayment   ORDER BY 2 DESC;
+	
+	END	TRY
+	
+	BEGIN CATCH
+	
+		DECLARE @Error_Message VARCHAR(MAX) = ERROR_MESSAGE();
+		EXEC    Utility.ToLog @Log_Source, @Log_Start_Date, @Error_Message, 'E', NULL, NULL;
+		EXEC	Utility.FromLog @Log_Source, @Log_Start_Date;
+		THROW;  -- Rethrow the error!
+	
+	END CATCH;
+
+END
+
+
+		
+
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

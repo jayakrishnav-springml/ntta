@@ -1,0 +1,186 @@
+#This Workflow includes the Orchestration Steps for Package GL_CDC_Load_Daily_Run - EDW_TRIPS: GL Daily CDC Load
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:EDW_TRIPS_GL_Daily_Run
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {}  # logging payload variable declaration
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_GL_DailySummary_Full_Load"
+    #ProcessId: 8501
+    #ProcessName: EDW_TRIPS_Fact_GL_DailySummary_Full_Load
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_GL_DailySummary_Full_Load:
+        try:
+            steps: 
+                - call_fact_gl_dailysummary_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_GL_DailySummary_Full_Load 
+                        connector_params:
+                            timeout: 21600
+                    result: execution_result
+                - assign_8501_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_GL_DailySummary_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_DailySummary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8501_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"   
+        except:
+            as: e
+            steps:
+                - assign_8501_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_GL_DailySummary_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_DailySummary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8501_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"      
+
+    - Run_Steps_in_Parallel:   
+        #Call children workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results,payload]
+            branches:
+                # Call Process EDW_TRIPS_Fact_GL_Transactions_Full_Load
+                - EDW_TRIPS_Fact_GL_Transactions_Full_Load:
+                    steps:
+                        - start_fact_gl_transactions_full_load:
+                            try:
+                                steps:
+                                    - call_fact_gl_transactions_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_GL_Transactions_Full_Load 
+                                            connector_params:
+                                                timeout: 21600
+                                        result: wf_execution_result
+                                    - assign_8502_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_GL_Transactions_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_Transactions_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8502_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO"  
+                            except:
+                                as: e
+                                steps:
+                                    - assign_8502_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_GL_Transactions_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_Transactions_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8502_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"      
+
+                # Call Process 8503 - EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load
+                - EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load:
+                    steps:
+                        - start_fact_gl_txn_lineitems_full_load:
+                            try:
+                                steps:
+                                    - call_fact_gl_txn_lineitems_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load 
+                                            connector_params:
+                                                timeout: 21600
+                                        result: wf_execution_result
+                                    - assign_8503_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8503_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO"                                     
+                
+                            except:
+                                as: e
+                                steps:
+                                    - assign_8503_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8503_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"      
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load"
+    #ProcessId: 8523
+    #ProcessName: EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load:
+        try:
+            steps: 
+                - call_fact_gl_iop:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load 
+                        connector_params:
+                            timeout: 21600
+                    result: execution_result
+                - assign_8523_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8523_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_8523_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8523_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"      
+
+
+    - return_execution_results:
+        return: ${execution_results}
+

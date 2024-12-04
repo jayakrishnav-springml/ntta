@@ -1,0 +1,19 @@
+{
+        "EDW_TRIPS_GL_Daily_Run":{
+               "labels":"workflow=parent,process_id=9005,callout=childworkflows",
+               "description":"This Workflow includes the Orchestration Steps for Package 9005 - EDW_TRIPS: GL Daily CDC Load"},
+        "EDW_TRIPS_Fact_GL_DailySummary_Full_Load":{
+                "labels":"workflow=child,process_id=8501,callout=sql",
+                "description":"Child workflow for Process 8501, \nProcess Name - EDW_TRIPS_Fact_GL_DailySummary_Full_Load  "},        
+        "EDW_TRIPS_Fact_GL_Transactions_Full_Load":{
+                "labels":"workflow=child,process_id=8502,callout=sql",
+                "description":"Child workflow for Process 8502, \nProcess Name - EDW_TRIPS_Fact_GL_Transactions_Full_Load"},    
+        "EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load":{
+                "labels":"workflow=child,process_id=8503,callout=sql",
+                "description":"Child workflow for Process 8503, \nProcess Name - EDW_TRIPS_Fact_GL_Txn_LineItems_Full_Load        "},    
+        "EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load":{
+                "labels":"workflow=child,process_id=8523,callout=sql",
+                "description":"Child workflow for Process 8523, \nProcess Name - EDW_TRIPS_Fact_GL_IOP_UnidentifiedAgingTxnSnapshot_Load"}  
+
+}
+        

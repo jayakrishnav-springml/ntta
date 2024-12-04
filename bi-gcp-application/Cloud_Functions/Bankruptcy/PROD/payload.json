@@ -1,0 +1,12 @@
+{
+    "bucket_name":"prj-ntta-ops-bi-prod-shared-data",
+    "main_dataset_id":"LND_TBOS",
+    "secret_id":"BANKRUPTCY_SECRET_KEY",
+    "version":1,
+    "project_id":"prj-ntta-ops-bi-prod-svc-01",
+    "stage_dataset_id":"LND_TBOS_STAGE_FULL",
+    "stage_table_id":"Bankruptcy",
+    "main_table_id":"dbo_Bankruptcy",
+    "input_folder":"Imports/Bankruptcy",
+    "destination_folder":"Archive/Bankruptcy"
+}

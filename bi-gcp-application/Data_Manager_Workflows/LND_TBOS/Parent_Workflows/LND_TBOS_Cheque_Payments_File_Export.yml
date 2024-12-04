@@ -1,0 +1,151 @@
+# Child Workflow for Process LND_TBOS_Cheque_Payments_File_Export
+# Process Name - LND_TBOS: Cheque_Payments_File_Export
+# Calls a stored procedure - LND_TBOS.Cheque_Payments_File_Export()
+
+
+# labels
+# workflow:parent
+# callout:sql
+
+main:
+    steps:
+    - init:
+        assign:
+          - workflow_id: ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - bucket_name: "BUCKET_NAME"
+          - year: ${text.split(time.format(sys.now()),"-")[0]}
+          - month: ${text.split(time.format(sys.now()),"-")[1]}
+          - year_month: ${year+"_"+month}
+          - table_name: ${"ChequePayments_"+year_month}     #Extracts table name 
+          - dataset_name: "FILES_EXPORT"  #Extracts Dataset name
+
+    - LND_TBOS_Cheque_Payments:
+        try:
+            call: googleapis.bigquery.v2.jobs.query
+            args:
+                projectId: ${project_id}
+                body:
+                    useLegacySql: false
+                    useQueryCache: false 
+                    query: ${"CALL LND_TBOS.Cheque_Payments_File_Export();"}
+            result: query_result    
+        except:
+            as: e
+            steps:
+                - assign_sp_execution_error:
+                    assign:
+                        - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]: ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_sp_execution_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+                - raise_query_error:
+                    raise: ${e}    
+
+    - Set_Job_Id:
+        assign:
+          - sp_job_id : ${query_result.jobReference.jobId}
+          - location : ${query_result.jobReference.location}
+
+    - Get_Job_Info:
+        try:
+            call: googleapis.bigquery.v2.jobs.get
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: job_info   #Storing result into variable job_info
+        except:
+            as: e
+            steps:
+                - assign_job_info_error:
+                    assign:
+                        
+                        - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]: ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_job_info_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+                - raise_job_error:
+                    raise: ${e}   
+
+    - Check_Job_State:
+        switch:
+          - condition: ${job_info.status.state != "DONE"}
+            steps: 
+              - wait_30_s:
+                  call: sys.sleep # Polling through sleep
+                  args:
+                    seconds: 30
+                  next: Get_Job_Info
+
+    - Get_Sp_Job_Result:
+        try:
+            call: googleapis.bigquery.v2.jobs.getQueryResults
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: sp_result
+        except:
+            as: e
+            steps:
+                - assign_job_result_error:
+                    assign:
+                        
+                        - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]: ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_job_result_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+                - raise_job_result_error:
+                    raise: ${e}
+
+    #Creates a Bigquery export job from BQ Table to Google Cloud Storage
+    - LND_TBOS_Cheque_Payments_File_Export:
+        try:
+            call: googleapis.bigquery.v2.jobs.insert
+            args:
+                projectId: ${project_id}
+                body:
+                    configuration:
+                      extract:
+                        destinationFormat: CSV
+                        destinationUris: 
+                            - ${"gs://"+bucket_name+"/Exports/ChequePayments/"+year_month+"/ChequePayments_"+year_month+".csv"}
+                        sourceTable:
+                            datasetId: ${dataset_name}
+                            projectId: ${project_id}
+                            tableId: ${table_name}
+                connector_params:
+                    timeout: 3600
+            result: job_result    
+        except:
+            as: e
+            steps:
+                - assign_export_job_error:
+                    assign:
+                        
+                        - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]: ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_export_job_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+                - raise_sp_error:
+                    raise: ${e}
+
+    - returnOutput:
+            return: '${job_result}'

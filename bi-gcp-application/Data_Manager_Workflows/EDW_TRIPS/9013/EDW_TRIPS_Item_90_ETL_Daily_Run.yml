@@ -1,0 +1,194 @@
+#This Workflow includes the Orchestration Steps for Package Item_90_ETL_Daily_Run - EDW_TRIPS: Item_90_ETL_Daily_Run
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:Item_90_ETL_Daily_Run
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {} # logging payload variable declaration
+
+    #Step to call child workflow with id "EDW_TRIPS_Stage_InvoicePayment_Full_Load"
+    #ProcessId: 8535
+    #ProcessName: EDW_TRIPS_Stage.InvoicePayment_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Stage_InvoicePayment_Full_Load:        
+        try:
+            steps: 
+                - call_invoicepayment_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Stage_InvoicePayment_Full_Load 
+                        connector_params:
+                            timeout: 3600    
+                    result: execution_result
+                - assign_8535_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Stage_InvoicePayment_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Stage_InvoicePayment_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8535_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_8535_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Stage_InvoicePayment_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Stage_InvoicePayment_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8535_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+
+
+    #Step to call child workflows with ids mentioned below in parallel
+    # "EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load"
+    # "EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load"
+    #ProcessIds: 8536-8537
+    #Run Mode: Parallel
+
+    - Run_Steps_in_Parallel:   
+        #Call children workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results,payload]
+            branches:
+                # Call Process 8536 - EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load
+                - EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load:
+                    steps:
+                        - start_migratednonterminalinvoice_full_load:
+                            try:
+                                steps:
+                                    - call_migratednonterminalinvoice_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    - assign_8536_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8536_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:                         
+                                    - assign_8536_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8536_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"  
+
+                # Call Process 8537 - EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load
+                - EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load:
+                    steps:
+                        - start_nonmigratedinvoice_full_load:
+                            try:
+                                steps:
+                                    - call_nonmigratedinvoice_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    - assign_8537_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8537_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:                                
+                                    - assign_8537_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8537_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"  
+
+
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_Invoice_Full_Load"
+    #ProcessId: 8504
+    #ProcessName: EDW_TRIPS_Fact_Invoice_Full_Load
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_Invoice_Full_Load:        
+        try:
+            steps: 
+                - call_invoice_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_Invoice_Full_Load   
+                        connector_params:
+                            timeout: 3600  
+                    result: execution_result
+                - assign_8504_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_Invoice_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_Invoice_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8504_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_8504_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_Invoice_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_Invoice_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8504_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+
+    - return_execution:
+        return: ${execution_results}
+
+ 

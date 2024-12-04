@@ -1,0 +1,31 @@
+{
+    "LND_TBOS_Bankruptcy":{
+        "job_name": "LND_TBOS_Bankruptcy_Scheduler",
+        "schedule": "0 8 * * 2-6",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}", 
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+    "LND_TBOS_Cheque_Payments_File_Export":{
+        "job_name": "LND_TBOS_Cheque_Payments_File_Export_Scheduler",
+        "schedule": "0 7 2 * *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+
+    },
+    "LND_TBOS_Chargeback":{
+        "job_name": "LND_TBOS_Chargeback_Scheduler",
+        "schedule": "0 10 10-20 * *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}", 
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+	"LND_TBOS_Creditcardmonitoring":{
+        "job_name": "LND_TBOS_Creditcardmonitoring_Scheduler",
+        "schedule": "0 10 * * *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}", 
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    }
+}

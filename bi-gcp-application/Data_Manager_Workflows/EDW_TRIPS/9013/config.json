@@ -1,0 +1,24 @@
+{
+    "EDW_TRIPS_Item_90_ETL_Daily_Run":{
+        "labels":"workflow=parent,process_id=9013,callout=childworkflows",
+        "description":"This Workflow includes the Orchestration Steps for Package Item_90_ETL_Daily_Run - EDW_TRIPS: Item_90_ETL_Daily Run"},
+    "EDW_TRIPS_Fact_Invoice_Full_Load":{
+            "labels":"workflow=child,process_id=8504,callout=sql",
+            "description":"Child Workflow for Process 8504, \nProcess Name - EDW_TRIPS_Fact_Invoice_Full_Load"},
+    "EDW_TRIPS_Stage_InvoicePayment_Full_Load":{
+            "labels":"workflow=child,process_id=8535,callout=sql",
+            "description":"Child workflow for Process 8535, \nProcess Name - EDW_TRIPS_Stage_InvoicePayment_Full_Load  "},        
+    "EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load":{
+            "labels":"workflow=child,process_id=8536,callout=sql",
+            "description":"Child workflow for Process 8536, \nProcess Name - EDW_TRIPS_Stage_MigratedNonTerminalInvoice_Full_Load"},    
+    "EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load":{
+            "labels":"workflow=child,process_id=8537,callout=sql",
+            "description":"Child workflow for Process 8537, \nProcess Name - EDW_TRIPS_Stage_NonMigratedInvoice_Full_Load        "},    
+    "EDW_TRIPS_SUPPORT_Item90_TestResult_Load":{
+            "labels":"workflow=child,process_id=8539,callout=sql",
+            "description":"Child workflow for Process 8539, \nProcess Name - EDW_TRIPS_SUPPORT_Item90_TestResult_Load"},
+    "EDW_TRIPS_SUPPORT_Item90_TestResultDetail_Load":{
+            "labels":"workflow=child,process_id=8540,callout=sql",
+            "description":"Child workflow for Process 8540, \nProcess Name - EDW_TRIPS_SUPPORT_Item90_TestResultDetail_Load"}
+    }
+    

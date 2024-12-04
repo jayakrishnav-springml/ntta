@@ -1,0 +1,5 @@
+{
+    "tables_list": ["dbo.IOPOutboundAndViolationLinking"],
+    "id_list": [],
+    "get_schema_from": "source"
+}

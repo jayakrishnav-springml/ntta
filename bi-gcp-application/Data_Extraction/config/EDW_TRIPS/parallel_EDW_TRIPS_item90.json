@@ -1,0 +1,245 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=EDW_TRIPS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "EDW_TRIPS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadMediumRC",
+        "password_secret_id": "APS2_MEDUIM_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-stage-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_TRIPS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\edw_trips",
+    "log_folder_path": "E:\\bcp_logs\\edw_trips",
+    "max_process_count": 5,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE_APS",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "Fact_Invoice",
+            "schema_name": "dbo",
+            "id_field": "InvoiceNumber",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, FirstInvoiceID, CurrentInvoiceID, CustomerID, TestCaseFailedFlag, MigratedFlag, VTollFlag, UnassignedFlag, AgeStageID, CollectionStatusID, CurrMbsID, VehicleID, [EDW_InvoiceStatusID], PaymentPlanID, ZipCashDate, FirstNoticeDate, SecondNoticeDate, ThirdNoticeDate, LegalActionPendingDate, CitationDate, DueDate, CurrMbsGeneratedDate, FirstpaymentDate, LastPaymentDate, FirstFeePaymentDate, LastFeePaymentDate, PrimaryCollectionAgencyDate, SecondaryCollectionAgencyDate, TxnCnt, VtollTxncnt, ExcusedTxnCnt, UnassignedTxncnt, PaidTxncnt, NoOfTimesSentToPrimary, NoOfTimesSentToSecondary, CASE when Paymentchannel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Paymentchannel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Paymentchannel, CASE when POS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(POS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as POS, CASE when PrimaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PrimaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PrimaryCollectionAgency, CASE when SecondaryCollectionagency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SecondaryCollectionagency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SecondaryCollectionagency, InvoiceAmount, PBMTollAmount, AVITollAmount, PremiumAmount, Tolls, FNFees, SNFees, ExpectedAmount, TollsAdjusted, FNFeesAdjusted, SNFeesAdjusted, AdjustedAmount, AdjustedExpectedTolls, AdjustedExpectedFNFees, AdjustedExpectedSNFees, AdjustedExpectedAmount, TollsPaid, FNFeesPaid, SNFeesPaid, PaidAmount, TollOutStandingAmount, FNFeesOutStandingAmount, SNFeesOutStandingAmount, OutstandingAmount, CAST(EDW_Update_Date AS datetime2(6)) AS EDW_Update_Date from dbo.Fact_Invoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "migratednonterminalinvoice",
+            "schema_name": "Stage",
+            "id_field": "CustomerID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, FirstInvoiceID, CurrentInvoiceID, CustomerID, MigratedFlag, VTollFlag, UnassignedFlag, TxnPriortoZCFlag, AgeStageID, CollectionStatusID, CurrMbsID, VehicleID, InvoiceStatusID, [EDW_InvoiceStatusID], [EDW_InvoiceStatusIDAfterZC], PaymentPlanID, ZipCashDate, FirstNoticeDate, SecondNoticeDate, ThirdNoticeDate, LegalActionPendingDate, CitationDate, DueDate, CurrMbsGeneratedDate, FirstPaymentDatePriortoZC, LastPaymentDatePriortoZC, FirstPaymentDateAfterZC, LastPaymentDateAfterZC, FirstFeePaymentDate, LastFeePaymentDate, PrimaryCollectionAgencyDate, SecondaryCollectionagencyDate, TxnCntPriortoZC, VtollTxnCntPriortoZC, PaidTxnCntPriortoZC, ExcusedTxnCntPriortoZC, TxnCntAfterZC, VTollTxnCntAfterZC, PaidTxnCntAfterZC, ExcusedTxnCntAfterZC, TxnCnt, ExcusedTxnCnt, UnassignedTxnCnt, VTollTxnCnt, PaidTxnCnt, NoOfTimesSentToPrimary, NoOfTimesSentToSecondary, CASE when Paymentchannel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Paymentchannel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Paymentchannel, CASE when POS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(POS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as POS, CASE when PrimaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PrimaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PrimaryCollectionAgency, CASE when SecondaryCollectionagency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SecondaryCollectionagency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SecondaryCollectionagency, InvoiceAmount, PBMTollAmount, AVITollAmount, PremiumAmount, VtollAmountPriortoZC, VtollAmountAfterZC, VtollAmount, ExcusedAmountPriortoZC, ExcusedAmountAfterZC, ExcusedAmount, TollsPriortoZC, TollsAfterZC, Tolls, FNFees, SNFees, ExpectedAmount, TollsAdjustedPriortoZC, TollsAdjustedAfterZC, TollsAdjusted, FNFeesAdjusted, SNFeesAdjusted, AdjustedAmount, AdjustedExpectedTollsPriortoZC, AdjustedExpectedTollsAfterZC, AdjustedExpectedTolls, AdjustedExpectedFNFees, AdjustedExpectedSNFees, AdjustedExpectedAmount, TollsPaidPriortoZC, TollsPaidAfterZC, TollsPaid, FNFeesPaid, SNFeesPaid, PaidAmount, TollOutStandingAmountPriortoZC, TollOutStandingAmountAfterZC, TollOutStandingAmount, FNFeesOutStandingAmount, SNFeesOutStandingAmount, OutstandingAmount, CAST(EDW_Update_Date AS datetime2(6)) AS EDW_Update_Date from Stage.migratednonterminalinvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nonmigratedinvoice",
+            "schema_name": "Stage",
+            "id_field": "CustomerID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, FirstInvoiceID, CurrentInvoiceID, CustomerID, MigratedFlag, VTollFlag, UnassignedFlag, TxnPriortoZCFlag, AgeStageID, CollectionStatusID, CurrMbsID, VehicleID, PaymentPlanID, InvoiceStatusID, [EDW_InvoiceStatusID], [EDW_InvoiceStatusIDAfterZC], ZipCashDate, FirstNoticeDate, SecondNoticeDate, ThirdNoticeDate, LegalActionPendingDate, CitationDate, DueDate, CurrMbsGeneratedDate, FirstPaymentDatePriortoZC, LastPaymentDatePriortoZC, FirstPaymentDateAfterZC, LastPaymentDateAfterZC, FirstFeePaymentDate, LastFeePaymentDate, PrimaryCollectionAgencyDate, SecondaryCollectionagencyDate, TxnCntPriortoZC, VtollTxnCntPriortoZC, PaidTxnCntPriortoZC, ExcusedTxnCntPriortoZC, TxnCntAfterZC, VTollTxnCntAfterZC, PaidTxnCntAfterZC, ExcusedTxnCntAfterZC, TxnCnt, ExcusedTxnCnt, UnassignedTxnCnt, VTollTxnCnt, PaidTxnCnt, NoOfTimesSentToPrimary, NoOfTimesSentToSecondary, CASE when Paymentchannel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Paymentchannel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Paymentchannel, CASE when POS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(POS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as POS, CASE when PrimaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PrimaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PrimaryCollectionAgency, CASE when SecondaryCollectionagency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SecondaryCollectionagency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SecondaryCollectionagency, InvoiceAmount, PBMTollAmount, AVITollAmount, PremiumAmount, VtollAmountPriortoZC, VtollAmountAfterZC, VtollAmount, ExcusedAmountPriortoZC, ExcusedAmountAfterZC, ExcusedAmount, TollsPriortoZC, TollsAfterZC, Tolls, FNFees, SNFees, ExpectedAmount, TollsAdjustedPriortoZC, TollsAdjustedAfterZC, TollsAdjusted, FNFeesAdjusted, SNFeesAdjusted, AdjustedAmount, AdjustedExpectedTollsPriortoZC, AdjustedExpectedTollsAfterZC, AdjustedExpectedTolls, AdjustedExpectedFNFees, AdjustedExpectedSNFees, AdjustedExpectedAmount, TollsPaidPriortoZC, TollsPaidAfterZC, TollsPaid, FNFeesPaid, SNFeesPaid, PaidAmount, TollOutStandingAmountPriortoZC, TollOutStandingAmountAfterZC, TollOutStandingAmount, FNFeesOutStandingAmount, SNFeesOutStandingAmount, OutstandingAmount, CAST(EDW_Update_Date AS datetime2(6)) AS EDW_Update_Date from Stage.nonmigratedinvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "InvoicePayment",
+            "schema_name": "Stage",
+            "id_field": "InvoiceNumber",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, ExcusedDate, FirstPaymentDatePriortoZC, LastPaymentDatePriortoZC, FirstPaymentDateAfterZC, LastPaymentDateAfterZC, CASE when PaymentChannel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PaymentChannel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PaymentChannel, CASE when POS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(POS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as POS, PBMTollAmount, AVITollAmount, Tolls, TollsPaid, TollsAdjusted, EDW_UpdateDate from Stage.InvoicePayment",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolTripPayment",
+            "schema_name": "Stage",
+            "id_field": "TpTripID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TpTripID, CitationID, VTollFlag, TripStatusID, TotalTxnAmount, TollAmount, AdjustedAmount, ActualPaidAmount, OutstandingAmount, PaymentStatusID, FirstPaidDate, LastPaidDate, ExcusedDate, EDW_UpdateDate from Stage.ViolTripPayment",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "migratedinvoice",
+            "schema_name": "Stage",
+            "id_field": "CustomerID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [RN_MAX], CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, InvoiceID, CustomerID, AgeStageID, CollectionStatus, VehicleID, InvoiceDate, DueDate, AdjustedAmount, CASE when InvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceStatus, CASE when [LND_UpdateType] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([LND_UpdateType], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [LND_UpdateType], [AgeStageID_RI], [ZipCashDate_RI], [FirstNoticeDate_RI], [SecondNoticeDate_RI], CAST(ThirdNoticeDate_RI AS datetime2(6)) AS ThirdNoticeDate_RI, [CitationDate_RI], CAST(LegalActionPendingDate_RI AS datetime2(6)) AS LegalActionPendingDate_RI, [DueDate_RI], CASE when [CurrMBSGeneratedDate_RI] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([CurrMBSGeneratedDate_RI], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [CurrMBSGeneratedDate_RI], [FirstpaymentDatePriortoZC_RI], [LastPaymentDatePriortoZC_RI], [FirstpaymentDateAfterZC_RI], LastPaymentDateAfterZC_RI from Stage.migratedinvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "NonTerminalInvoice",
+            "schema_name": "Stage",
+            "id_field": "InvoiceNumber",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, FirstInvoiceID, CurrentInvoiceID, CustomerID, MigratedFlag, TxnPriortoZCFlag, AgeStageID, CollectionStatusID, CurrMbsID, VehicleID, InvoiceStatusID, PaymentPlanID, ZipCashDate, FirstNoticeDate, SecondNoticeDate, ThirdNoticeDate, LegalActionPendingDate, CitationDate, DueDate, CurrMbsGeneratedDate, FirstPaymentDatePriortoZC, LastPaymentDatePriortoZC, FirstPaymentDateAfterZC, LastPaymentDateAfterZC, FirstFeePaymentDate, LastFeePaymentDate, PrimaryCollectionAgencyDate, SecondaryCollectionagencyDate, TxnCnt, ExcusedTxnCnt, UnassignedTxnCnt, VTollTxnCnt, PaidTxnCnt, TxnCntPriortoZC, VtollTxnCntPriortoZC, ExcusedTxnCntPriortoZC, PaidTxnCntPriortoZC, NoOfTimesSentToPrimary, NoOfTimesSentToSecondary, CASE when Paymentchannel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Paymentchannel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Paymentchannel, CASE when POS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(POS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as POS, CASE when PrimaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PrimaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PrimaryCollectionAgency, CASE when SecondaryCollectionagency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SecondaryCollectionagency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SecondaryCollectionagency, InvoiceAmount, PBMTollAmount, AVITollAmount, PremiumAmount, ExcusedAmount, VtollAmount, Tolls, FNFees, SNFees, TollsPaid, FNFeesPaid, SNFeesPaid, TollsAdjusted, FNFeesAdjusted, SNFeesAdjusted, ExcusedAmountPriortoZC, VtollAmountPriortoZC, TollsPriortoZC, TollsAdjustedPriortoZC, TollsPaidPriortoZC, CAST(EDW_Update_Date AS datetime2(6)) AS EDW_Update_Date from Stage.NonTerminalInvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "unassignedinvoice",
+            "schema_name": "Stage",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when InvoiceNumber_Unass is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber_Unass, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber_Unass, [CitationID_Unassgned], UnassignedTxncnt, CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, [CitationID_All], Tolls, UnassignedFlag from Stage.unassignedinvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "invoice",
+            "schema_name": "Stage",
+            "id_field": "InvoiceNumber",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, FirstInvoiceID, CurrentInvoiceID, CustomerID, MigratedFlag, TxnPriortoZCFlag, AgeStageID, CollectionStatusID, CurrMbsID, VehicleID, InvoiceStatusID, PaymentPlanID, ZipCashDate, FirstNoticeDate, SecondNoticeDate, ThirdNoticeDate, LegalActionPendingDate, CitationDate, DueDate, CurrMbsGeneratedDate, FirstPaymentDatePriortoZC, LastPaymentDatePriortoZC, FirstPaymentDateAfterZC, LastPaymentDateAfterZC, FirstFeePaymentDate, LastFeePaymentDate, PrimaryCollectionAgencyDate, SecondaryCollectionagencyDate, TxnCnt, ExcusedTxnCnt, UnassignedTxnCnt, VTollTxnCnt, PaidTxnCnt, TxnCntPriortoZC, VtollTxnCntPriortoZC, PaidTxnCntPriortoZC, ExcusedTxnCntPriortoZC, NoOfTimesSentToPrimary, NoOfTimesSentToSecondary, CASE when Paymentchannel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Paymentchannel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Paymentchannel, CASE when POS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(POS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as POS, CASE when PrimaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PrimaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PrimaryCollectionAgency, CASE when SecondaryCollectionagency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SecondaryCollectionagency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SecondaryCollectionagency, CASE when InvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceStatus, InvoiceAmount, PBMTollAmount, AVITollAmount, PremiumAmount, ExcusedAmount, VtollAmount, Tolls, FNFees, SNFees, TollsPaid, FNFeesPaid, SNFeesPaid, TollsAdjusted, FNFeesAdjusted, SNFeesAdjusted, TollsPriortoZC, VtollAmountPriortoZC, ExcusedAmountPriortoZC, TollsAdjustedPriortoZC, TollsPaidPriortoZC, CAST(EDW_Update_Date AS datetime2(6)) AS EDW_Update_Date from Stage.invoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DismissedVtollTxn",
+            "schema_name": "Stage",
+            "id_field": "TpTripID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, TpTripID, CitationID, [TripStatusID_CT], PaymentStatusID, FirstPaymentDate, LastPaymentDate, Tolls, PBMTollAmount, AVITollAmount, PremiumAmount, [PaidAmount_VT], TollsAdjusted, OutstandingAmount, CAST(EDW_UpdateDate AS datetime2(6)) AS EDW_UpdateDate from Stage.DismissedVtollTxn",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CAMigratedNonTerminalInvoice",
+            "schema_name": "Stage",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, PrimaryCollectionAgencyDate, SecondaryCollectionagencyDate, NoOfTimesSentToPrimary, NoOfTimesSentToSecondary, CASE when PrimaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PrimaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PrimaryCollectionAgency, CASE when SecondaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SecondaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SecondaryCollectionAgency from Stage.CAMigratedNonTerminalInvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CANonMigratedInvoice",
+            "schema_name": "Stage",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, PrimaryCollectionAgencyDate, SecondaryCollectionagencyDate, NoOfTimesSentToPrimary, NoOfTimesSentToSecondary, CASE when PrimaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PrimaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PrimaryCollectionAgency, CASE when SecondaryCollectionAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SecondaryCollectionAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SecondaryCollectionAgency from Stage.CANonMigratedInvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "migrateddimissedvtoll",
+            "schema_name": "Stage",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, TotalTxnCnt, VTollTxnCnt, UnassignedTxnCnt, UnassignedVtolledTxnCnt, VTollPaidTxnCnt, FirstPaymentDate, LastPaymentDate, PBMTollAmount, AVITollAmount, PremiumAmount, Tolls, [PaidAmount_VT], TollsAdjusted, TollsAdjustedAfterVtoll, [AdjustedAmount_Excused], ClassAdj, OutstandingAmount, PaidTnxs, VtollFlag, CASE when VtollFlagDescription is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VtollFlagDescription, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VtollFlagDescription, CAST(EDW_Update_Date AS datetime2(6)) AS EDW_Update_Date from Stage.migrateddimissedvtoll",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nonmiginvoice",
+            "schema_name": "Stage",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [RN_MAX], CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, InvoiceID, CustomerID, AgestageID, VehicleID, CollectionStatus, CASE when InvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceStatus, InvoiceDate, CASE when LND_UpdateType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LND_UpdateType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LND_UpdateType from Stage.nonmiginvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "dismissedvtoll",
+            "schema_name": "Stage",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, TotalTxnCnt, VTollTxnCnt, UnassignedTxnCnt, UnassignedVtolledTxnCnt, VTollPaidTxnCnt, FirstPaymentDate, LastPaymentDate, Tolls, PBMTollAmount, AVITollAmount, PremiumAmount, [PaidAmount_VT], TollsAdjusted, TollsAdjustedAfterVtoll, [AdjustedAmount_Excused], ClassAdj, OutstandingAmount, PaidTnxs, VtollFlag, CASE when VtollFlagDescription is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VtollFlagDescription, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VtollFlagDescription, CAST(EDW_Update_Date AS datetime2(6)) AS EDW_Update_Date from Stage.dismissedvtoll",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "MigratedUnassignedInvoice",
+            "schema_name": "Stage",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when InvoiceNumber_Unass is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber_Unass, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber_Unass, UnassignedTxnCnt, CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, TotalTxnCnt, Tolls, UnassignedFlag from Stage.MigratedUnassignedInvoice",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

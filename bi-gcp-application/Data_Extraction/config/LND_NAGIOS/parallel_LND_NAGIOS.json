@@ -1,0 +1,1021 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.7.45,17001",
+        "database": "LND_NAGIOS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS3_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-nagios-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_NAGIOS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\lnd_nagios",
+    "log_folder_path": "E:\\bcp_logs\\lnd_nagios",
+    "max_process_count": 15,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_RITE": {
+            "dbo": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "stage": {
+                "bq_dataset": "EDW_RITE_STAGE",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_TER": {
+            "dbo": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_TER": {
+            "dbo": {
+                "bq_dataset": "LND_TER",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_DMV": {
+            "dbo": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": ""
+            },
+            "DMVLD": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_HOST": {
+            "dbo": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TSA_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TXNOWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "HAS_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_ICRS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": ""
+            },
+            "ICRS_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_IOP": {
+            "dbo": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": ""
+            },
+            "IOP_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_TS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": ""
+            },
+            "TAG_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TIM_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "OLR": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_VPS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": ""
+            },
+            "VP_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "HV_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_NAGIOS": {
+            "dbo": {
+                "bq_dataset": "EDW_NAGIOS",
+                "table_name_prefix": ""
+            },
+            "Old": {
+                "bq_dataset": "EDW_NAGIOS",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_NAGIOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_NAGIOS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Temp": {
+                "bq_dataset": "EDW_NAGIOS_DELETE",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_NAGIOS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_NAGIOS": {
+            "dbo": {
+                "bq_dataset": "LND_NAGIOS",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "LND_NAGIOS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "Host_Event",
+            "schema_name": "dbo",
+            "id_field": "Host_Object_ID",
+            "row_chunk_size": "500",
+            "chunk_flag": "True",
+            "query": "select Host_Event_ID, Host_Object_ID, Event_Date, Host_State, CASE when Host is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host, CASE when Event_Info is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Event_Info, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Event_Info, CASE when Perf_Data is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Perf_Data, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Perf_Data, CASE when Metric_String is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Metric_String, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Metric_String, Metric_Count, LND_UpdateDate from dbo.Host_Event",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Nagios_acknowledgements",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select acknowledgement_id, instance_id, entry_time, entry_time_usec, acknowledgement_type, object_id, state, author_name, comment_data, is_sticky, persistent_comment, notify_contacts, LND_UpdateDate from dbo.Nagios_acknowledgements",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_commands",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select command_id, instance_id, config_type, object_id, command_line, LND_UpdateDate from dbo.nagios_commands",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_commands_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select command_id, instance_id, config_type, object_id, LND_UpdateDate from dbo.nagios_commands_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_commenthistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select commenthistory_id, instance_id, entry_time, entry_time_usec, comment_type, entry_type, object_id, comment_time, internal_comment_id, author_name, comment_data, is_persistent, comment_source, expires, expiration_time, deletion_time, deletion_time_usec, LND_UpdateDate from dbo.nagios_commenthistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_comments",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select comment_id, instance_id, entry_time, entry_time_usec, comment_type, entry_type, object_id, comment_time, internal_comment_id, author_name, comment_data, is_persistent, comment_source, expires, expiration_time, LND_UpdateDate from dbo.nagios_comments",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_configfiles",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select configfile_id, instance_id, configfile_type, configfile_path, LND_UpdateDate from dbo.nagios_configfiles",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_configfiles_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select configfile_id, instance_id, configfile_type, configfile_path, LND_UpdateDate from dbo.nagios_configfiles_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_configfilevariables",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select configfilevariable_id, instance_id, configfile_id, varname, varvalue, LND_UpdateDate from dbo.nagios_configfilevariables",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_conninfo",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select conninfo_id, instance_id, agent_name, agent_version, disposition, connect_source, connect_type, connect_time, disconnect_time, last_checkin_time, data_start_time, data_end_time, bytes_processed, lines_processed, entries_processed, LND_UpdateDate from dbo.nagios_conninfo",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contact_addresses",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contact_address_id, instance_id, contact_id, address_number, address, LND_UpdateDate from dbo.nagios_contact_addresses",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contact_notificationcommands",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contact_notificationcommand_id, instance_id, contact_id, notification_type, command_object_id, command_args, LND_UpdateDate from dbo.nagios_contact_notificationcommands",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contactgroup_members",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contactgroup_member_id, instance_id, contactgroup_id, contact_object_id, LND_UpdateDate from dbo.nagios_contactgroup_members",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contactgroups",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contactgroup_id, instance_id, config_type, contactgroup_object_id, alias, LND_UpdateDate from dbo.nagios_contactgroups",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contactgroups_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contactgroup_id, instance_id, config_type, contactgroup_object_id, LND_UpdateDate from dbo.nagios_contactgroups_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contactnotificationmethods",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contactnotificationmethod_id, instance_id, contactnotification_id, start_time, start_time_usec, end_time, end_time_usec, command_object_id, command_args, LND_UpdateDate from dbo.nagios_contactnotificationmethods",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contactnotifications",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contactnotification_id, instance_id, notification_id, contact_object_id, start_time, start_time_usec, end_time, end_time_usec, LND_UpdateDate from dbo.nagios_contactnotifications",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contacts",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contact_id, instance_id, config_type, contact_object_id, alias, email_address, pager_address, minimum_importance, host_timeperiod_object_id, service_timeperiod_object_id, host_notifications_enabled, service_notifications_enabled, can_submit_commands, notify_service_recovery, notify_service_warning, notify_service_unknown, notify_service_critical, notify_service_flapping, notify_service_downtime, notify_host_recovery, notify_host_down, notify_host_unreachable, notify_host_flapping, notify_host_downtime, LND_UpdateDate from dbo.nagios_contacts",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contacts_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contact_id, instance_id, config_type, contact_object_id, LND_UpdateDate from dbo.nagios_contacts_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_contactstatus",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select contactstatus_id, instance_id, contact_object_id, status_update_time, host_notifications_enabled, service_notifications_enabled, last_host_notification, last_service_notification, modified_attributes, modified_host_attributes, modified_service_attributes, LND_UpdateDate from dbo.nagios_contactstatus",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_customvariables",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select customvariable_id, instance_id, object_id, config_type, has_been_modified, varname, varvalue, LND_UpdateDate from dbo.nagios_customvariables",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_customvariables_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select customvariable_id, instance_id, object_id, config_type, varname, LND_UpdateDate from dbo.nagios_customvariables_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_customvariablestatus",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select customvariablestatus_id, instance_id, object_id, status_update_time, has_been_modified, varname, varvalue, LND_UpdateDate from dbo.nagios_customvariablestatus",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_dbversion",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select name, version, LND_UpdateDate from dbo.nagios_dbversion",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_downtimehistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select downtimehistory_id, instance_id, downtime_type, object_id, entry_time, author_name, comment_data, internal_downtime_id, triggered_by_id, is_fixed, duration, scheduled_start_time, scheduled_end_time, was_started, actual_start_time, actual_start_time_usec, actual_end_time, actual_end_time_usec, was_cancelled, LND_UpdateDate from dbo.nagios_downtimehistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_eventhandlers",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select eventhandler_id, instance_id, eventhandler_type, object_id, state, state_type, start_time, start_time_usec, end_time, end_time_usec, command_object_id, command_args, command_line, timeout, early_timeout, execution_time, return_code, output, long_output, LND_UpdateDate from dbo.nagios_eventhandlers",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_externalcommands",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select externalcommand_id, instance_id, entry_time, command_type, command_name, command_args, LND_UpdateDate from dbo.nagios_externalcommands",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_flappinghistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select flappinghistory_id, instance_id, event_time, event_time_usec, event_type, reason_type, flapping_type, object_id, percent_state_change, low_threshold, high_threshold, comment_time, internal_comment_id, LND_UpdateDate from dbo.nagios_flappinghistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_host_contactgroups",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select host_contactgroup_id, instance_id, host_id, contactgroup_object_id, LND_UpdateDate from dbo.nagios_host_contactgroups",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_host_contacts",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select host_contact_id, instance_id, host_id, contact_object_id, LND_UpdateDate from dbo.nagios_host_contacts",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_host_parenthosts",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select host_parenthost_id, instance_id, host_id, parent_host_object_id, LND_UpdateDate from dbo.nagios_host_parenthosts",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostchecks",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostcheck_id, instance_id, host_object_id, check_type, is_raw_check, current_check_attempt, max_check_attempts, state, state_type, start_time, start_time_usec, end_time, end_time_usec, command_object_id, command_args, command_line, timeout, early_timeout, execution_time, latency, return_code, output, long_output, perfdata, LND_UpdateDate from dbo.nagios_hostchecks",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostdependencies",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostdependency_id, instance_id, config_type, host_object_id, dependent_host_object_id, dependency_type, inherits_parent, timeperiod_object_id, fail_on_up, fail_on_down, fail_on_unreachable, LND_UpdateDate from dbo.nagios_hostdependencies",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostescalation_contactgroups",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostescalation_contactgroup_id, instance_id, hostescalation_id, contactgroup_object_id, LND_UpdateDate from dbo.nagios_hostescalation_contactgroups",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostescalation_contacts",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostescalation_contact_id, instance_id, hostescalation_id, contact_object_id, LND_UpdateDate from dbo.nagios_hostescalation_contacts",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostescalations",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostescalation_id, instance_id, config_type, host_object_id, timeperiod_object_id, first_notification, last_notification, notification_interval, escalate_on_recovery, escalate_on_down, escalate_on_unreachable, LND_UpdateDate from dbo.nagios_hostescalations",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostgroup_members",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostgroup_member_id, instance_id, hostgroup_id, host_object_id, LND_UpdateDate from dbo.nagios_hostgroup_members",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostgroup_members_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostgroup_member_id, instance_id, hostgroup_id, host_object_id, LND_UpdateDate from dbo.nagios_hostgroup_members_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostgroups",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostgroup_id, instance_id, config_type, hostgroup_object_id, alias, LND_UpdateDate from dbo.nagios_hostgroups",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostgroups_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostgroup_id, instance_id, config_type, hostgroup_object_id, LND_UpdateDate from dbo.nagios_hostgroups_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hostgroups_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hostgroup_id, instance_id, config_type, hostgroup_object_id, alias, LND_UpdateDate from dbo.nagios_hostgroups_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hosts",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select host_id, instance_id, config_type, host_object_id, alias, display_name, address, importance, check_command_object_id, check_command_args, eventhandler_command_object_id, eventhandler_command_args, notification_timeperiod_object_id, check_timeperiod_object_id, failure_prediction_options, check_interval, retry_interval, max_check_attempts, first_notification_delay, notification_interval, notify_on_down, notify_on_unreachable, notify_on_recovery, notify_on_flapping, notify_on_downtime, stalk_on_up, stalk_on_down, stalk_on_unreachable, flap_detection_enabled, flap_detection_on_up, flap_detection_on_down, flap_detection_on_unreachable, low_flap_threshold, high_flap_threshold, process_performance_data, freshness_checks_enabled, freshness_threshold, passive_checks_enabled, event_handler_enabled, active_checks_enabled, retain_status_information, retain_nonstatus_information, notifications_enabled, obsess_over_host, failure_prediction_enabled, notes, notes_url, action_url, icon_image, icon_image_alt, vrml_image, statusmap_image, have_2d_coords, x_2d, y_2d, have_3d_coords, x_3d, y_3d, z_3d, LND_UpdateDate from dbo.nagios_hosts",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hosts_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select host_id, instance_id, config_type, host_object_id, LND_UpdateDate from dbo.nagios_hosts_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hosts_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select host_id, instance_id, config_type, host_object_id, alias, display_name, address, importance, check_command_object_id, check_command_args, eventhandler_command_object_id, eventhandler_command_args, notification_timeperiod_object_id, check_timeperiod_object_id, failure_prediction_options, check_interval, retry_interval, max_check_attempts, first_notification_delay, notification_interval, notify_on_down, notify_on_unreachable, notify_on_recovery, notify_on_flapping, notify_on_downtime, stalk_on_up, stalk_on_down, stalk_on_unreachable, flap_detection_enabled, flap_detection_on_up, flap_detection_on_down, flap_detection_on_unreachable, low_flap_threshold, high_flap_threshold, process_performance_data, freshness_checks_enabled, freshness_threshold, passive_checks_enabled, event_handler_enabled, active_checks_enabled, retain_status_information, retain_nonstatus_information, notifications_enabled, obsess_over_host, failure_prediction_enabled, notes, notes_url, action_url, icon_image, icon_image_alt, vrml_image, statusmap_image, have_2d_coords, x_2d, y_2d, have_3d_coords, x_3d, y_3d, z_3d, LND_UpdateDate from dbo.nagios_hosts_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hoststatus",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select hoststatus_id, instance_id, host_object_id, status_update_time, output, long_output, perfdata, current_state, has_been_checked, should_be_scheduled, current_check_attempt, max_check_attempts, last_check, next_check, check_type, last_state_change, last_hard_state_change, last_hard_state, last_time_up, last_time_down, last_time_unreachable, state_type, last_notification, next_notification, no_more_notifications, notifications_enabled, problem_has_been_acknowledged, acknowledgement_type, current_notification_number, passive_checks_enabled, active_checks_enabled, event_handler_enabled, flap_detection_enabled, is_flapping, percent_state_change, latency, execution_time, scheduled_downtime_depth, failure_prediction_enabled, process_performance_data, obsess_over_host, modified_host_attributes, event_handler, check_command, normal_check_interval, retry_check_interval, check_timeperiod_object_id, LND_UpdateDate from dbo.nagios_hoststatus",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hoststatus_HIST",
+            "schema_name": "dbo",
+            "id_field": "host_object_id",
+            "row_chunk_size": "500",
+            "chunk_flag": "True",
+            "query": "select hoststatus_id, instance_id, host_object_id, status_update_time, CASE when output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as output, CASE when long_output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(long_output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as long_output, CASE when perfdata is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(perfdata, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as perfdata, current_state, has_been_checked, should_be_scheduled, current_check_attempt, max_check_attempts, last_check, next_check, check_type, last_state_change, last_hard_state_change, last_hard_state, last_time_up, last_time_down, last_time_unreachable, state_type, last_notification, next_notification, no_more_notifications, notifications_enabled, problem_has_been_acknowledged, acknowledgement_type, current_notification_number, passive_checks_enabled, active_checks_enabled, event_handler_enabled, flap_detection_enabled, is_flapping, percent_state_change, latency, execution_time, scheduled_downtime_depth, failure_prediction_enabled, process_performance_data, obsess_over_host, modified_host_attributes, CASE when event_handler is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(event_handler, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as event_handler, CASE when check_command is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(check_command, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as check_command, normal_check_interval, retry_check_interval, check_timeperiod_object_id, LND_UpdateDate from dbo.nagios_hoststatus_HIST",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_hoststatus_STAGE",
+            "schema_name": "dbo",
+            "id_field": "host_object_id",
+            "row_chunk_size": "500",
+            "chunk_flag": "True",
+            "query": "select hoststatus_id, instance_id, host_object_id, status_update_time, CASE when output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as output, CASE when long_output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(long_output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as long_output, CASE when perfdata is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(perfdata, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as perfdata, current_state, has_been_checked, should_be_scheduled, current_check_attempt, max_check_attempts, last_check, next_check, check_type, last_state_change, last_hard_state_change, last_hard_state, last_time_up, last_time_down, last_time_unreachable, state_type, last_notification, next_notification, no_more_notifications, notifications_enabled, problem_has_been_acknowledged, acknowledgement_type, current_notification_number, passive_checks_enabled, active_checks_enabled, event_handler_enabled, flap_detection_enabled, is_flapping, percent_state_change, latency, execution_time, scheduled_downtime_depth, failure_prediction_enabled, process_performance_data, obsess_over_host, modified_host_attributes, CASE when event_handler is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(event_handler, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as event_handler, CASE when check_command is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(check_command, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as check_command, normal_check_interval, retry_check_interval, check_timeperiod_object_id, LND_UpdateDate from dbo.nagios_hoststatus_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_instances",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select instance_id, instance_name, instance_description, LND_UpdateDate from dbo.nagios_instances",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_logentries",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select logentry_id, instance_id, logentry_time, entry_time, entry_time_usec, logentry_type, logentry_data, realtime_data, inferred_data_extracted, LND_UpdateDate from dbo.nagios_logentries",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_notifications",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select notification_id, instance_id, notification_type, notification_reason, object_id, start_time, start_time_usec, end_time, end_time_usec, state, output, long_output, escalated, contacts_notified, LND_UpdateDate from dbo.nagios_notifications",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_objects",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select object_id, instance_id, objecttype_id, CASE when name1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(name1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as name1, CASE when name2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(name2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as name2, is_active, LND_UpdateDate from dbo.nagios_objects",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_objects_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select object_id, instance_id, objecttype_id, CASE when name1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(name1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as name1, CASE when name2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(name2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as name2, is_active, LND_UpdateDate from dbo.nagios_objects_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_processevents",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select processevent_id, instance_id, event_type, event_time, event_time_usec, process_id, program_name, program_version, program_date, LND_UpdateDate from dbo.nagios_processevents",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_programstatus",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select programstatus_id, instance_id, status_update_time, program_start_time, program_end_time, is_currently_running, process_id, daemon_mode, last_command_check, last_log_rotation, notifications_enabled, active_service_checks_enabled, passive_service_checks_enabled, active_host_checks_enabled, passive_host_checks_enabled, event_handlers_enabled, flap_detection_enabled, failure_prediction_enabled, process_performance_data, obsess_over_hosts, obsess_over_services, modified_host_attributes, modified_service_attributes, global_host_event_handler, global_service_event_handler, LND_UpdateDate from dbo.nagios_programstatus",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_runtimevariables",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select runtimevariable_id, instance_id, varname, varvalue, LND_UpdateDate from dbo.nagios_runtimevariables",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_runtimevariables_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select runtimevariable_id, instance_id, varname, LND_UpdateDate from dbo.nagios_runtimevariables_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_scheduleddowntime",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select scheduleddowntime_id, instance_id, downtime_type, object_id, entry_time, author_name, comment_data, internal_downtime_id, triggered_by_id, is_fixed, duration, scheduled_start_time, scheduled_end_time, was_started, actual_start_time, actual_start_time_usec, LND_UpdateDate from dbo.nagios_scheduleddowntime",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_service_contactgroups",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select service_contactgroup_id, instance_id, service_id, contactgroup_object_id, LND_UpdateDate from dbo.nagios_service_contactgroups",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_service_contacts",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select service_contact_id, instance_id, service_id, contact_object_id, LND_UpdateDate from dbo.nagios_service_contacts",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_service_parentservices",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select service_parentservice_id, instance_id, service_id, parent_service_object_id, LND_UpdateDate from dbo.nagios_service_parentservices",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_servicechecks",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select instance_id, service_object_id, check_type, current_check_attempt, max_check_attempts, state, state_type, start_time, start_time_usec, end_time, end_time_usec, command_object_id, command_args, command_line, timeout, early_timeout, execution_time, latency, return_code, output, long_output, perfdata, servicecheck_id, LND_UpdateDate from dbo.nagios_servicechecks",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_servicedependencies",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select servicedependency_id, instance_id, config_type, service_object_id, dependent_service_object_id, dependency_type, inherits_parent, timeperiod_object_id, fail_on_ok, fail_on_warning, fail_on_unknown, fail_on_critical, LND_UpdateDate from dbo.nagios_servicedependencies",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_serviceescalation_contactgroups",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select serviceescalation_contactgroup_id, instance_id, serviceescalation_id, contactgroup_object_id, LND_UpdateDate from dbo.nagios_serviceescalation_contactgroups",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_serviceescalation_contacts",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select serviceescalation_contact_id, instance_id, serviceescalation_id, contact_object_id, LND_UpdateDate from dbo.nagios_serviceescalation_contacts",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_serviceescalations",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select serviceescalation_id, instance_id, config_type, service_object_id, timeperiod_object_id, first_notification, last_notification, notification_interval, escalate_on_recovery, escalate_on_warning, escalate_on_unknown, escalate_on_critical, LND_UpdateDate from dbo.nagios_serviceescalations",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_servicegroup_members",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select servicegroup_member_id, instance_id, servicegroup_id, service_object_id, LND_UpdateDate from dbo.nagios_servicegroup_members",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_servicegroups",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select servicegroup_id, instance_id, config_type, servicegroup_object_id, alias, LND_UpdateDate from dbo.nagios_servicegroups",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_services",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select service_id, instance_id, config_type, host_object_id, service_object_id, display_name, importance, check_command_object_id, check_command_args, eventhandler_command_object_id, eventhandler_command_args, notification_timeperiod_object_id, check_timeperiod_object_id, failure_prediction_options, check_interval, retry_interval, max_check_attempts, first_notification_delay, notification_interval, notify_on_warning, notify_on_unknown, notify_on_critical, notify_on_recovery, notify_on_flapping, notify_on_downtime, stalk_on_ok, stalk_on_warning, stalk_on_unknown, stalk_on_critical, is_volatile, flap_detection_enabled, flap_detection_on_ok, flap_detection_on_warning, flap_detection_on_unknown, flap_detection_on_critical, low_flap_threshold, high_flap_threshold, process_performance_data, freshness_checks_enabled, freshness_threshold, passive_checks_enabled, event_handler_enabled, active_checks_enabled, retain_status_information, retain_nonstatus_information, notifications_enabled, obsess_over_service, failure_prediction_enabled, notes, notes_url, action_url, icon_image, icon_image_alt, LND_UpdateDate from dbo.nagios_services",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_services_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select service_id, instance_id, config_type, service_object_id, LND_UpdateDate from dbo.nagios_services_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_services_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select service_id, instance_id, config_type, host_object_id, service_object_id, display_name, importance, check_command_object_id, check_command_args, eventhandler_command_object_id, eventhandler_command_args, notification_timeperiod_object_id, check_timeperiod_object_id, failure_prediction_options, check_interval, retry_interval, max_check_attempts, first_notification_delay, notification_interval, notify_on_warning, notify_on_unknown, notify_on_critical, notify_on_recovery, notify_on_flapping, notify_on_downtime, stalk_on_ok, stalk_on_warning, stalk_on_unknown, stalk_on_critical, is_volatile, flap_detection_enabled, flap_detection_on_ok, flap_detection_on_warning, flap_detection_on_unknown, flap_detection_on_critical, low_flap_threshold, high_flap_threshold, process_performance_data, freshness_checks_enabled, freshness_threshold, passive_checks_enabled, event_handler_enabled, active_checks_enabled, retain_status_information, retain_nonstatus_information, notifications_enabled, obsess_over_service, failure_prediction_enabled, notes, notes_url, action_url, icon_image, icon_image_alt, LND_UpdateDate from dbo.nagios_services_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_ServiceStatus",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select servicestatus_id, instance_id, service_object_id, status_update_time, output, long_output, perfdata, current_state, has_been_checked, should_be_scheduled, current_check_attempt, max_check_attempts, last_check, next_check, check_type, last_state_change, last_hard_state_change, last_hard_state, last_time_ok, last_time_warning, last_time_unknown, last_time_critical, state_type, last_notification, next_notification, no_more_notifications, notifications_enabled, problem_has_been_acknowledged, acknowledgement_type, current_notification_number, passive_checks_enabled, active_checks_enabled, event_handler_enabled, flap_detection_enabled, is_flapping, percent_state_change, latency, execution_time, scheduled_downtime_depth, failure_prediction_enabled, process_performance_data, obsess_over_service, modified_service_attributes, event_handler, check_command, normal_check_interval, retry_check_interval, check_timeperiod_object_id, LND_UpdateDate from dbo.nagios_ServiceStatus",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_servicestatus_hist",
+            "schema_name": "dbo",
+            "id_field": "service_object_id",
+            "row_chunk_size": "500",
+            "chunk_flag": "True",
+            "query": "select servicestatus_id, instance_id, service_object_id, status_update_time, CASE when output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as output, CASE when long_output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(long_output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as long_output, CASE when perfdata is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(perfdata, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as perfdata, current_state, has_been_checked, should_be_scheduled, current_check_attempt, max_check_attempts, last_check, next_check, check_type, last_state_change, last_hard_state_change, last_hard_state, last_time_ok, last_time_warning, last_time_unknown, last_time_critical, state_type, last_notification, next_notification, no_more_notifications, notifications_enabled, problem_has_been_acknowledged, acknowledgement_type, current_notification_number, passive_checks_enabled, active_checks_enabled, event_handler_enabled, flap_detection_enabled, is_flapping, percent_state_change, latency, execution_time, scheduled_downtime_depth, failure_prediction_enabled, process_performance_data, obsess_over_service, modified_service_attributes, CASE when event_handler is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(event_handler, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as event_handler, CASE when check_command is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(check_command, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as check_command, normal_check_interval, retry_check_interval, check_timeperiod_object_id, LND_UpdateDate from dbo.nagios_servicestatus_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_servicestatus_STAGE",
+            "schema_name": "dbo",
+            "id_field": "service_object_id",
+            "row_chunk_size": "500",
+            "chunk_flag": "True",
+            "query": "select servicestatus_id, instance_id, service_object_id, status_update_time, CASE when output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as output, CASE when long_output is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(long_output, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as long_output, CASE when perfdata is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(perfdata, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as perfdata, current_state, has_been_checked, should_be_scheduled, current_check_attempt, max_check_attempts, last_check, next_check, check_type, last_state_change, last_hard_state_change, last_hard_state, last_time_ok, last_time_warning, last_time_unknown, last_time_critical, state_type, last_notification, next_notification, no_more_notifications, notifications_enabled, problem_has_been_acknowledged, acknowledgement_type, current_notification_number, passive_checks_enabled, active_checks_enabled, event_handler_enabled, flap_detection_enabled, is_flapping, percent_state_change, latency, execution_time, scheduled_downtime_depth, failure_prediction_enabled, process_performance_data, obsess_over_service, modified_service_attributes, CASE when event_handler is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(event_handler, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as event_handler, CASE when check_command is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(check_command, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as check_command, normal_check_interval, retry_check_interval, check_timeperiod_object_id, LND_UpdateDate from dbo.nagios_servicestatus_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_statehistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select statehistory_id, instance_id, state_time, state_time_usec, object_id, state_change, state, state_type, current_check_attempt, max_check_attempts, last_state, last_hard_state, output, long_output, LND_UpdateDate from dbo.nagios_statehistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_systemcommands",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select systemcommand_id, instance_id, start_time, start_time_usec, end_time, end_time_usec, command_line, timeout, early_timeout, execution_time, return_code, output, long_output, LND_UpdateDate from dbo.nagios_systemcommands",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_timedeventqueue",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select timedeventqueue_id, instance_id, event_type, queued_time, queued_time_usec, scheduled_time, recurring_event, object_id, LND_UpdateDate from dbo.nagios_timedeventqueue",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_timedevents",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select timedevent_id, instance_id, event_type, queued_time, queued_time_usec, event_time, event_time_usec, scheduled_time, recurring_event, object_id, deletion_time, deletion_time_usec, LND_UpdateDate from dbo.nagios_timedevents",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_timeperiod_timeranges",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select timeperiod_timerange_id, instance_id, timeperiod_id, day, start_sec, end_sec, LND_UpdateDate from dbo.nagios_timeperiod_timeranges",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_timeperiods",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select timeperiod_id, instance_id, config_type, timeperiod_object_id, alias, LND_UpdateDate from dbo.nagios_timeperiods",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "nagios_timeperiods_hist",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select timeperiod_id, instance_id, config_type, timeperiod_object_id, LND_UpdateDate from dbo.nagios_timeperiods_hist",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Service_Event",
+            "schema_name": "dbo",
+            "id_field": "Service_Object_ID",
+            "row_chunk_size": "500",
+            "chunk_flag": "True",
+            "query": "select Service_Event_ID, Service_Object_ID, Event_Date, Service_State, CASE when Host is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host, CASE when Service is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Service, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Service, CASE when Event_Info is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Event_Info, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Event_Info, CASE when Perf_Data is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Perf_Data, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Perf_Data, CASE when Metric_String is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Metric_String, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Metric_String, Metric_Count, LND_UpdateDate from dbo.Service_Event",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ProcessLog",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LogDate, CASE when LogSource is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LogSource, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LogSource, CASE when LogMessage is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LogMessage, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LogMessage, CASE when LogType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LogType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LogType, Row_Count, CASE when ProcTime is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ProcTime, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ProcTime, CASE when QueryTime is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(QueryTime, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as QueryTime, ProcTimeInSec, QueryTimeInSec, ProcStartDate, QuerySubmitDate, QueryEndDate, CASE when SessionID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SessionID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SessionID, CASE when QueryID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(QueryID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as QueryID, CASE when Query is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Query, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Query, CASE when ResourceClass is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ResourceClass, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ResourceClass from Utility.ProcessLog",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

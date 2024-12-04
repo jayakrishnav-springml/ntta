@@ -1,0 +1,296 @@
+#This Workflow includes the Orchestration Steps for Package EDW_NAGIOS_Dim_Fact_Run
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:EDW_NAGIOS_Dim_Fact_Run
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {}  # logging payload variable declaration
+
+
+    #Step to call child workflow with id "EDW_NAGIOS_Dim_Host_Service_Load"
+    #ProcessId: 4000
+    #ProcessName: EDW_NAGIOS.Dim_Host_Service_Load()
+    #Run Mode: Sequential
+    - EDW_NAGIOS_Dim_Host_Service_Load:
+        try:
+            steps: 
+              # Call the child workflow for loading dimension host service
+              - call_dim_host_service_load:
+                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                  args:
+                      workflow_id: EDW_NAGIOS_Dim_Host_Service_Load 
+                      connector_params:
+                          timeout: 21600  # Set timeout to 6 hours
+                  result: execution_result
+              # Assign success result to execution results
+              - assign_4000_result:
+                  assign:
+                      - execution_results.success["EDW_NAGIOS_Dim_Host_Service_Load"]: ${execution_result}
+                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Dim_Host_Service_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["result"]: ${execution_result}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture log time
+              # Log the success result
+              - log_4000_result:
+                  call: sys.log
+                  args:
+                      json: ${payload}
+                      severity: "INFO"
+        except:
+            as: e
+            steps:
+              # Assign failure result to execution results
+              - assign_4000_error:
+                  assign:
+                      - execution_results.failure["EDW_NAGIOS_Dim_Host_Service_Load"]: ${e}
+                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_NAGIOS_Dim_Host_Service_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["error"]:  ${json.encode_to_string(e)}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture error time
+              # Log the failure result
+              - log_4000_error:
+                  call: sys.log 
+                  args:
+                      json: ${payload}
+                      severity: "CRITICAL"
+
+    # Step to call child workflow with id "EDW_NAGIOS_Dim_Host_Service_Metric_Load"
+    # ProcessId: 4002
+    # ProcessName: EDW_NAGIOS.Dim_Host_Service_Metric_Load()
+    # Run Mode: Sequential
+    - EDW_NAGIOS_Dim_Host_Service_Metric_Load:
+        try:
+            steps: 
+              # Call the child workflow for loading dimension host service metrics
+              - call_dim_host_service_metric_load:
+                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                  args:
+                      workflow_id: EDW_NAGIOS_Dim_Host_Service_Metric_Load 
+                      connector_params:
+                          timeout: 21600  # Set timeout to 6 hours
+                  result: execution_result
+              # Assign success result to execution results
+              - assign_4002_result:
+                  assign:
+                      - execution_results.success["EDW_NAGIOS_Dim_Host_Service_Metric_Load"]: ${execution_result}
+                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Dim_Host_Service_Metric_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["result"]: ${execution_result}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture log time
+              # Log the success result
+              - log_4002_result:
+                  call: sys.log
+                  args:
+                      json: ${payload}
+                      severity: "INFO"
+        except:
+            as: e
+            steps:
+              # Assign failure result to execution results
+              - assign_4002_error:
+                  assign:
+                      - execution_results.failure["EDW_NAGIOS_Dim_Host_Service_Metric_Load"]: ${e}
+                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_NAGIOS_Dim_Host_Service_Metric_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["error"]:  ${json.encode_to_string(e)} 
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture error time
+              # Log the failure result
+              - log_4002_error:
+                  call: sys.log 
+                  args:
+                      json: ${payload}
+                      severity: "CRITICAL"
+
+    # Step to call child workflow with id "EDW_NAGIOS_Fact_Host_Service_Event_Load"
+    # ProcessId: 4004
+    # ProcessName: EDW_NAGIOS.Fact_Host_Service_Event_Load()
+    # Run Mode: Sequential
+    - EDW_NAGIOS_Fact_Host_Service_Event_Load:
+        try:
+          steps: 
+              # Call the child workflow for loading fact host service events
+              - call_fact_host_service_event_load:
+                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                  args:
+                      workflow_id: EDW_NAGIOS_Fact_Host_Service_Event_Load 
+                      connector_params:
+                          timeout: 21600  # Set timeout to 6 hours
+                  result: execution_result
+              # Assign success result to execution results
+              - assign_4004_result:
+                  assign:
+                      - execution_results.success["EDW_NAGIOS_Fact_Host_Service_Event_Load"]: ${execution_result}
+                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["result"]: ${execution_result}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture log time
+              # Log the success result
+              - log_4004_result:
+                  call: sys.log
+                  args:
+                      json: ${payload}
+                      severity: "INFO"
+        except:
+            as: e
+            steps:
+              # Assign failure result to execution results
+              - assign_4004_error:
+                  assign:
+                      - execution_results.failure["EDW_NAGIOS_Fact_Host_Service_Event_Load"]: ${e}
+                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["error"]:  ${json.encode_to_string(e)}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture error time
+              # Log the failure result
+              - log_4004_error:
+                  call: sys.log 
+                  args:
+                      json: ${payload}
+                      severity: "CRITICAL"
+
+    #Step to call child workflow with id "EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load"
+    #ProcessId: 4006
+    #ProcessName: EDW_NAGIOS.Fact_Host_Service_Event_Metric_Load()
+    #Run Mode: Sequential
+    
+    - EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load:
+        try:
+            steps:
+              # Step to call the child workflow EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load
+              - call_fact_host_service_event_metric_load:
+                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                  args:
+                      workflow_id: EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load
+                      connector_params:
+                          timeout: 21600
+                  result: execution_result
+              # Step to assign the execution result and payload for the workflow
+              - assign_4006_result:
+                  assign:
+                      - execution_results.success["EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load"]: ${execution_result}
+                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["result"]: ${execution_result}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+              # Step to log the success result
+              - log_4006_result:
+                  call: sys.log
+                  args:
+                      json: ${payload}
+                      severity: "INFO"
+        except:
+            as: e
+            steps:
+              # Step to assign the error result and payload for the workflow
+              - assign_4006_error:
+                  assign:
+                      - execution_results.failure["EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load"]: ${e}
+                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["error"]:  ${json.encode_to_string(e)}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+              # Step to log the error result
+              - log_4006_error:
+                  call: sys.log
+                  args:
+                      json: ${payload}
+                      severity: "CRITICAL"
+
+    # Step to call multiple child workflows in parallel with help of branches
+    - Run_Steps_in_Parallel:
+        parallel:
+            shared: [execution_results, payload]
+            branches:
+              # Branch to call Process 4008 - EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load
+              - EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load:
+                  steps:
+                    - start_fact_host_service_event_summary_load:
+                        try:
+                            steps:
+                              # Step to call the child workflow EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load
+                              - call_fact_host_service_event_summary_load:
+                                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                  args:
+                                      workflow_id: EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load
+                                      connector_params:
+                                          timeout: 21600
+                                  result: wf_execution_result
+                              # Step to assign the execution result and payload for the workflow
+                              - assign_4008_result:
+                                  assign:
+                                      - execution_results.success["EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load"]: ${wf_execution_result}
+                                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                      - payload["result"]: ${execution_result}
+                                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                              # Step to log the success result
+                              - log_4008_result:
+                                  call: sys.log
+                                  args:
+                                      json: ${payload}
+                                      severity: "INFO"
+                        except:
+                            as: e
+                            steps:
+                              # Step to assign the error result and payload for the workflow
+                              - assign_4008_error:
+                                  assign:
+                                      - execution_results.failure["EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load"]: ${e}
+                                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                      - payload["error"]:  ${json.encode_to_string(e)}
+                                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                              # Step to log the error result
+                              - log_4008_error:
+                                  call: sys.log
+                                  args:
+                                      json: ${payload}
+                                      severity: "CRITICAL"
+
+              # Branch to call Process 4010 - EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load
+              - EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load:
+                  steps:
+                    - start_fact_host_service_event_metric_summary_load:
+                        try:
+                            steps:
+                              # Step to call the child workflow EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load
+                              - call_fact_host_service_event_metric_summary_load:
+                                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                  args:
+                                      workflow_id: EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load
+                                      connector_params:
+                                          timeout: 21600
+                                  result: wf_execution_result
+                              # Step to assign the execution result and payload for the workflow
+                              - assign_4010_result:
+                                  assign:
+                                      - execution_results.success["EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load"]: ${wf_execution_result}
+                                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                      - payload["result"]: ${execution_result}
+                                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                              # Step to log the success result
+                              - log_4010_result:
+                                  call: sys.log
+                                  args:
+                                      json: ${payload}
+                                      severity: "INFO"
+                        except:
+                            as: e
+                            steps:
+                              # Step to assign the error result and payload for the workflow
+                              - assign_4010_error:
+                                  assign:
+                                      - execution_results.failure["EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load"]: ${e}
+                                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                      - payload["error"]:  ${json.encode_to_string(e)}
+                                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                              # Step to log the error result
+                              - log_4010_error:
+                                  call: sys.log
+                                  args:
+                                      json: ${payload}
+                                      severity: "CRITICAL"
+
+    # Step to return the execution results
+    - return_execution_results:
+        return: ${execution_results}
+

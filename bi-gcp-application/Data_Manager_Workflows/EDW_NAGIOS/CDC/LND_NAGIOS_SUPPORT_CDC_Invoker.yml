@@ -1,0 +1,85 @@
+# Child Workflow for Process LND_NAGIOS_SUPPORT_CDC_Invoker
+# Process Name - LND_NAGIOS_SUPPORT_CDC_Invoker
+# Calls a stored procedure - LND_NAGIOS_SUPPORT.CDC_Invoker(batchname,fullday_changedata_flag)
+
+
+# labels
+# workflow:child
+# callout:sql
+
+main:
+    params: [args]
+    steps:
+    - init:
+        assign:
+          - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - fullday_changedata_flag: ${default(map.get(args,"fullday_changedata_flag"),"N")}
+          - batchname: ${default(map.get(args,"batchname"),"NAGIOS")} 
+          - cutoff_date: ${default(map.get(args,"cutoff_date"),NULL)}
+          
+    - LND_NAGIOS_SUPPORT_CDC_Invoker:
+        try:
+            call: googleapis.bigquery.v2.jobs.query
+            args:
+                projectId: ${project_id}
+                body:
+                    useLegacySql: false
+                    useQueryCache: false 
+                    query: "CALL LND_NAGIOS_SUPPORT.CDC_Invoker(@batchname,@fullday_changedata_flag,@cutoff_date)"
+                    parameterMode: "NAMED"
+                    queryParameters: 
+                            - {"name":"batchname","parameterType":{"type":"STRING"},"parameterValue":{"value":"${batchname}"}}
+                            - {"name":"fullday_changedata_flag","parameterType":{"type":"STRING"},"parameterValue":{"value":"${fullday_changedata_flag}" } } 
+                            - {"name":"cutoff_date","parameterType":{"type":"DATETIME"},"parameterValue":{"value":"${cutoff_date}"}} 
+            result: query_result    
+        except:
+            as: e
+            steps:
+                - raise_query_error:
+                    raise: ${e}   
+    - Set_Job_Id:
+        assign:
+          - sp_job_id : ${query_result.jobReference.jobId}
+          - location : ${query_result.jobReference.location}
+
+    - Get_Job_Info:
+        try:
+            call: googleapis.bigquery.v2.jobs.get
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: job_info   #Storing result into variable job_info
+        except:
+            as: e
+            steps:
+                - raise_job_error:
+                    raise: ${e}  
+
+    - Check_Job_State:
+        switch:
+          - condition: ${job_info.status.state != "DONE"}
+            steps: 
+              - wait_30_s:
+                  call: sys.sleep # Polling through sleep
+                  args:
+                    seconds: 30
+                  next: Get_Job_Info
+
+    - Get_Sp_Job_Result:
+        try:
+            call: googleapis.bigquery.v2.jobs.getQueryResults
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: sp_result
+        except:
+            as: e
+            steps:
+                - raise_sp_error:
+                    raise: ${e}
+
+    - returnOutput:
+            return: '${sp_result}'
+

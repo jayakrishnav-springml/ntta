@@ -1,0 +1,119 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=EDW_TRIPS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "EDW_TRIPS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadMediumRC",
+        "password_secret_id": "APS2_MEDUIM_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-stage-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_TRIPS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\edw_trips",
+    "log_folder_path": "E:\\bcp_logs\\edw_trips",
+    "max_process_count": 5,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "RitemigratedInvoices",
+            "schema_name": "Ref",
+            "id_field": "InvoiceNumber",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, ZipCashDate, UnassignedFlag, CASE when InvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceStatus, TollAmount, AdjustedAmount, PaidTxns from Ref.RitemigratedInvoices",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "RitemigratedTxnInvoices",
+            "schema_name": "Ref",
+            "id_field": "InvoiceNumber",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, CASE when InvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceStatus, [VBI_INVOICE_ID], ZipcashDate, FirstNoticeDate, SecondNoticeDate, CASE when [VBI_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([VBI_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [VBI_STATUS], [VIOL_INVOICE_ID], ViolInvoiceDate, CASE when [VIOL_INV_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([VIOL_INV_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [VIOL_INV_STATUS], [VIOLATION_ID], CASE when FinalViolStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(FinalViolStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as FinalViolStatus, CASE when [VB_VIOL_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([VB_VIOL_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [VB_VIOL_STATUS], CASE when [VIV_VIOL_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([VIV_VIOL_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [VIV_VIOL_STATUS], [INVOICE_STAGE_ID], FinalTollAmount, [VB_TollDue], [VIV_TollDue], [VB_REUNASSIGNED_EXCUSED_AMT], [VIOL_REUNASSIGNED_EXCUSED_AMT], [VB_REUNASSIGNED_EXCUSED_TXNCNT], [VIOL_REUNASSIGNED_EXCUSED_TXNCNT], TotalTxns from Ref.RitemigratedTxnInvoices",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

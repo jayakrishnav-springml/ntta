@@ -1,0 +1,171 @@
+{
+    "EDW_TRIPS_Dim_Daily_Run":{
+        "labels":"workflow=parent,process_id=9001,callout=childworkflows",
+        "description":"This Workflow includes the Orchestration Steps to execute all Dim SPs"
+    },
+    "EDW_TRIPS_Fact_Daily_Run":{
+      "labels":"workflow=parent,process_id=9001,callout=childworkflows",
+      "description":"This Workflow includes the Orchestration Steps to execute Fact SPs "
+  },
+    "EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load": {
+      "labels": "workflow=child,process_id=8018,callout=sql",
+      "description": "Child workflow for Process 8018,  \\nProcess name - EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load"
+      },
+    "EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load": {
+      "labels": "workflow=child,process_id=8024,callout=sql",
+      "description": "Child workflow for Process 8024,  \\nProcess name - EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load"
+      },
+    "EDW_TRIPS_Dim_BusinessProcesses_Full_Load": {
+      "labels": "workflow=child,process_id=8011,callout=sql",
+      "description": "Child workflow for Process 8011,  \\nProcess name - EDW_TRIPS_Dim_BusinessProcesses_Full_Load"
+      },
+    "EDW_TRIPS_Dim_Channel_Full_Load": {
+      "labels": "workflow=child,process_id=8012,callout=sql",
+      "description": "Child workflow for Process 8012,  \\nProcess name - EDW_TRIPS_Dim_Channel_Full_Load"
+      },
+    "EDW_TRIPS_Dim_ChartOfAccounts_Full_Load": {
+      "labels": "workflow=child,process_id=8013,callout=sql",
+      "description": "Child workflow for Process 8013,  \\nProcess name - EDW_TRIPS_Dim_ChartOfAccounts_Full_Load"
+      },
+    "EDW_TRIPS_Dim_Customer_Full_Load": {
+      "labels": "workflow=child,process_id=8014,callout=sql",
+      "description": "Child workflow for Process 8014,  \\nProcess name - EDW_TRIPS_Dim_Customer_Full_Load"
+      },
+    "EDW_TRIPS_Dim_GL_TxnType_Full_Load": {
+      "labels": "workflow=child,process_id=8015,callout=sql",
+      "description": "Child workflow for Process 8015,  \\nProcess name - EDW_TRIPS_Dim_GL_TxnType_Full_Load"
+      },
+    "EDW_TRIPS_Dim_InvoiceStage_Full_Load": {
+      "labels": "workflow=child,process_id=8016,callout=sql",
+      "description": "Child workflow for Process 8016,  \\nProcess name - EDW_TRIPS_Dim_InvoiceStage_Full_Load"
+      },
+    "EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load": {
+      "labels": "workflow=child,process_id=8017,callout=sql",
+      "description": "Child workflow for Process 8017,  \\nProcess name - EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load"
+      },
+    "EDW_TRIPS_Dim_AppTxnType_Full_Load": {
+      "labels": "workflow=child,process_id=8010,callout=sql",
+      "description": "Child workflow for Process 8010,  \\nProcess name - EDW_TRIPS_Dim_AppTxnType_Full_Load"
+      },
+    "EDW_TRIPS_Dim_CitationStage_Full_Load": {
+      "labels": "workflow=child,process_id=8020,callout=sql",
+      "description": "Child workflow for Process 8020,  \\nProcess name - EDW_TRIPS_Dim_CitationStage_Full_Load"
+      },
+    "EDW_TRIPS_Dim_PlateType_Load": {
+      "labels": "workflow=child,process_id=8021,callout=sql",
+      "description": "Child workflow for Process 8021,  \\nProcess name - EDW_TRIPS_Dim_PlateType_Load"
+      },
+    "EDW_TRIPS_Dim_POSLocation_Full_Load": {
+      "labels": "workflow=child,process_id=8025,callout=sql",
+      "description": "Child workflow for Process 8025,  \\nProcess name - EDW_TRIPS_Dim_POSLocation_Full_Load"
+      },
+    "EDW_TRIPS_Dim_VehicleTag_Load_Full": {
+      "labels": "workflow=child,process_id=8026,callout=sql",
+      "description": "Child workflow for Process 8026,  \\nProcess name - EDW_TRIPS_Dim_VehicleTag_Load_Full"
+      },
+    "EDW_TRIPS_Dim_CustomerTag_Load_Full": {
+      "labels": "workflow=child,process_id=8028,callout=sql",
+      "description": "Child workflow for Process 8028,  \\nProcess name - EDW_TRIPS_Dim_CustomerTag_Load_Full"
+      },
+    "EDW_TRIPS_Dim_Vehicle_Load_Full": {
+      "labels": "workflow=child,process_id=8030,callout=sql",
+      "description": "Child workflow for Process 8030,  \\nProcess name - EDW_TRIPS_Dim_Vehicle_Load_Full"
+      },
+    "EDW_TRIPS_Dim_ReasonCode_Incr_Load": {
+      "labels": "workflow=child,process_id=8032,callout=sql",
+      "description": "Child workflow for Process 8032,  \\nProcess name - EDW_TRIPS_Dim_ReasonCode_Incr_Load"
+      },
+    "EDW_TRIPS_Dim_HabitualViolator_Full_Load": {
+      "labels": "workflow=child,process_id=8039,callout=sql",
+      "description": "Child workflow for Process 8039,  \\nProcess name - EDW_TRIPS_Dim_HabitualViolator_Full_Load"
+      },
+    "EDW_TRIPS_Dim_TERStatus_Full_Load": {
+      "labels": "workflow=child,process_id=8040,callout=sql",
+      "description": "Child workflow for Process 8040,  \\nProcess name - EDW_TRIPS_Dim_TERStatus_Full_Load"
+      },
+    "EDW_TRIPS_Fact_PaymentPlan_Full_Load": {
+      "labels": "workflow=child,process_id=8038,callout=sql",
+      "description": "Child workflow for Process 8038,  \\nProcess name - EDW_TRIPS_Fact_PaymentPlan_Full_Load"
+      },
+    "EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load": {
+      "labels": "workflow=child,process_id=8500,callout=sql",
+      "description": "Child workflow for Process 8500,  \\nProcess name - EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load"
+      },
+    "EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load": {
+      "labels": "workflow=child,process_id=8522,callout=sql",
+      "description": "Child workflow for Process 8522,  \\nProcess name - EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load"
+      },
+    "EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load": {
+      "labels": "workflow=child,process_id=8518,callout=sql",
+      "description": "Child workflow for Process 8518,  \\nProcess name - EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load"
+      },
+    "EDW_TRIPS_Fact_VRB_Full_Load": {
+      "labels": "workflow=child,process_id=8543,callout=sql",
+      "description": "Child workflow for Process 8543,  \\nProcess name - EDW_TRIPS_Fact_VRB_Full_Load"
+      },
+    "EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load": {
+      "labels": "workflow=child,process_id=8544,callout=sql",
+      "description": "Child workflow for Process 8544,  \\nProcess name - EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load"
+      },
+    "EDW_TRIPS_Fact_VehicleBan_Full_Load": {
+      "labels": "workflow=child,process_id=8545,callout=sql",
+      "description": "Child workflow for Process 8545,  \\nProcess name - EDW_TRIPS_Fact_VehicleBan_Full_Load"
+      },
+    "EDW_TRIPS_Fact_CustomerDailyBalance_Load": {
+      "labels": "workflow=child,process_id=8665,callout=sql",
+      "description": "Child workflow for Process 8665,  \\nProcess name - EDW_TRIPS_Fact_CustomerDailyBalance_Load"
+      },
+    "EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load": {
+      "labels": "workflow=child,process_id=8514,callout=sql",
+      "description": "Child workflow for Process 8514,  \\nProcess name - EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load"
+      },
+    "EDW_TRIPS_Fact_PaymentDetail_Full_Load": {
+      "labels": "workflow=child,process_id=8507,callout=sql",
+      "description": "Child workflow for Process 8507,  \\nProcess name - EDW_TRIPS_Fact_PaymentDetail_Full_Load"
+      },
+    "EDW_TRIPS_Fact_InvoiceDetail_Full_Load": {
+      "labels": "workflow=child,process_id=8505,callout=sql",
+      "description": "Child workflow for Process 8505,  \\nProcess name - EDW_TRIPS_Fact_InvoiceDetail_Full_Load"
+      },
+    "EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load": {
+      "labels": "workflow=child,process_id=8509,callout=sql",
+      "description": "Child workflow for Process 8509,  \\nProcess name - EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load"
+      },
+    "EDW_TRIPS_Fact_MisClass_Load": {
+      "labels": "workflow=child,process_id=8524,callout=sql",
+      "description": "Child workflow for Process 8524,  \\nProcess name - EDW_TRIPS_Fact_MisClass_Load"
+      },
+    "EDW_TRIPS_Fact_Violation_Load": {
+      "labels": "workflow=child,process_id=8511,callout=sql",
+      "description": "Child workflow for Process 8511,  \\nProcess name - EDW_TRIPS_Fact_Violation_Load"
+      },
+    "EDW_TRIPS_Fact_Transaction_Load": {
+      "labels": "workflow=child,process_id=8513,callout=sql",
+      "description": "Child workflow for Process 8513,  \\nProcess name - EDW_TRIPS_Fact_Transaction_Load"
+      },
+    "EDW_TRIPS_Fact_TollTransaction_Load": {
+      "labels": "workflow=child,process_id=8510,callout=sql",
+      "description": "Child workflow for Process 8510,  \\nProcess name - EDW_TRIPS_Fact_TollTransaction_Load"
+    },
+    "EDW_TRIPS_Fact_CustomerTagDetail_Load": {
+      "labels": "workflow=child,callout=sql",
+      "description": "Child workflow for Process  - EDW_TRIPS_Fact_CustomerTagDetail_Load"
+    },
+    "EDW_TRIPS_Fact_OCR_Full_Load": {
+      "labels": "workflow=child,callout=sql",
+      "description": "Child workflow for Process - EDW_TRIPS_Fact_OCR_Full_Load"
+    },
+    "EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load": {
+      "labels": "workflow=child,callout=sql",
+      "description": "Child workflow for Process- EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load"
+    },
+    "EDW_TRIPS_Dim_Day_Hierarchy_Full_Load": {
+      "labels": "workflow=child,callout=sql",
+      "description": "Child workflow for Process- EDW_TRIPS.Dim_Day_Hierarchy_Full_Load()"
+    },
+    "EDW_TRIPS_Dim_ZipCode_Full_Load":{
+      "labels": "workflow=child,callout=sql",
+      "description": "Child workflow for Process- EDW_TRIPS.Dim_ZipCode_Full_Load()"
+    }
+    
+}

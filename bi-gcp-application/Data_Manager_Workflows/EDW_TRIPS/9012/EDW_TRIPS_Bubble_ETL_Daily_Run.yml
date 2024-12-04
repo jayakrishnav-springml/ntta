@@ -1,0 +1,271 @@
+#This Workflow includes the Orchestration Steps for Package 9012 - EDW_TRIPS: Bubble ETL Daily Run
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:9012
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {} # logging payload variable declaration
+
+    #Step to call child workflows with ids mentioned below in parallel
+    # "EDW_TRIPS_STAGE_NTTARawTransactions_Load"
+    # "EDW_TRIPS_Stage_TSATripAttributes_Full_Load"
+    # "EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load"
+    #ProcessIds: 8526, 8529, 8528
+    #Run Mode: Parallel
+
+    - Run_Steps_in_Parallel:   
+        #Call children workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results, payload]
+            branches:
+                # Call Process 8526 - EDW_TRIPS_Stage.NTTARawTransactions_Load()
+                - EDW_TRIPS_Stage_NTTARawTransactions_Load:
+                    steps:
+                        - start_stage_nttarawtransactions_load:
+                            try:
+                                steps:
+                                    - call_stage_nttarawtransactions_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Stage_NTTARawTransactions_Load
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: execution_result
+                                    - assign_8526_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_STAGE_NTTARawTransactions_Load"]: ${execution_result}
+                                            - payload: { 'status': 'Success', 'child_workflow_id': 'EDW_TRIPS_STAGE_NTTARawTransactions_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8526_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    - save_8526_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_STAGE_NTTARawTransactions_Load"]: ${e}
+                                            - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_STAGE_NTTARawTransactions_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} 
+                                    - log_8526_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL" 
+                # Call Process 8529 - EDW_TRIPS_Stage.TSATripAttributes_Full_Load()
+                - EDW_TRIPS_Stage_TSATripAttributes_Full_Load:
+                    steps:
+                        - start_stage_tsatripattributes_full_load:
+                            try:
+                                steps:
+                                    - call_stage_tsatripattributes_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Stage_TSATripAttributes_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: execution_result
+                                    - assign_8529_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Stage_TSATripAttributes_Full_Load"]: ${execution_result}
+                                            - payload: { 'status': 'Success', 'child_workflow_id': 'EDW_TRIPS_Stage_TSATripAttributes_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8529_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    - save_8529_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Stage_TSATripAttributes_Full_Load"]: ${e}
+                                            - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_Stage_TSATripAttributes_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8529_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+ 
+
+                # Call Process 8528 - EDW_TRIPS.Fact_AdjExpectedAmountDetail_Load()
+                - EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load:
+                    steps:
+                        - start_fact_adjexpectedamountdetail_load:
+                            try:
+                                steps:
+                                    - call_fact_adjexpectedamountdetail_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: execution_result
+                                    - assign_8528_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load"]: ${execution_result}
+                                            - payload: { 'status': 'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8528_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    - save_8528_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load"]: ${e}
+                                            - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8528_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"  
+  
+    #Step to call child workflow with id "EDW_TRIPS_Fact_UnifiedTransaction_Full_Load"
+    #ProcessId: 8519
+    #ProcessName: EDW_TRIPS.Fact_UnifiedTransaction_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_UnifiedTransaction_Full_Load:        
+        try:
+            steps:
+                - call_fact_unifiedtransaction_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_UnifiedTransaction_Full_Load   
+                        connector_params:
+                            timeout: 3600  
+                    result: execution_result
+                - assign_8519_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_UnifiedTransaction_Full_Load"]: ${execution_result}
+                        - payload: { 'status': 'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_UnifiedTransaction_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8519_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - save_8519_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_UnifiedTransaction_Full_Load"]: ${e}
+                        - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_UnifiedTransaction_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8519_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load"
+    #ProcessId: 8520
+    #ProcessName: EDW_TRIPS.Fact_UnifiedTransaction_Summary_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load:        
+        try:
+            steps:
+                - call_fact_unifiedtansaction_summary_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load    
+                        connector_params:
+                            timeout: 3600     
+                    result: execution_result
+                - assign_8520_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load"]: ${execution_result}
+                        - payload: { 'status': 'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8520_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - save_8520_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load"]: ${e}
+                        - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8520_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load"
+    #ProcessId: 8521
+    #ProcessName: EDW_TRIPS.Fact_UnifiedTransaction_SummarySnapshot_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load:        
+        try:
+            steps:
+                #TODO: Add logging here 
+                - call_fact_unifiedtransaction_summarysnapshot_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load 
+                        connector_params:
+                            timeout: 3600    
+                    result: execution_result
+                - assign_8521_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load"]: ${execution_result}
+                        - payload: { 'status': 'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8521_result:
+                    call: sys.log
+                    args:  
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - save_8521_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load"]: ${e}
+                        - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8521_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    - return_execution:
+        return: ${execution_results}

@@ -1,0 +1,749 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.7.45,17001",
+        "database": "LND_TER",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS3_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-raw-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_TER",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\lnd_ter",
+    "log_folder_path": "E:\\bcp_logs\\lnd_ter",
+    "max_process_count": 4,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_RITE": {
+            "dbo": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_"
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_perm_"
+            },
+            "stage": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "stage_"
+            }
+        },
+        "EDW_TER": {
+            "dbo": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": ""
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "land_perm_"
+            },
+            "dto": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "dto_"
+            },
+            "stage": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "stage_"
+            },
+            "land": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "land_"
+            }
+        },
+        "LND_TER": {
+            "dbo": {
+                "bq_dataset": "LND_TER",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_DMV": {
+            "dbo": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": ""
+            },
+            "DMVLD": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": "DMVLD_"
+            }
+        },
+        "LND_LG_HOST": {
+            "dbo": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TSA_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "TSA_OWNER_"
+            },
+            "TXNOWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "TXNOWNER_"
+            },
+            "HAS_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "HAS_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_ICRS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": ""
+            },
+            "ICRS_OWNER": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": "ICRS_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_IOP": {
+            "dbo": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": ""
+            },
+            "IOP_OWNER": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": "IOP_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_TS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": ""
+            },
+            "TAG_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "TAG_OWNER_"
+            },
+            "TIM_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "TIM_OWNER_"
+            },
+            "OLR": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "OLR_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_VPS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": ""
+            },
+            "VP_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "VP_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "FPL_OWNER_"
+            },
+            "HV_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "HV_OWNER_"
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "ViolatorAgencyLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorAgencyLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorAgencyLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbAgencyLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbAgencyLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbAgencyLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbRequestHeaderLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbRequestHeaderLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbRequestHeaderLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbResponseDallasActiveDisposedLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbResponseDallasActiveDisposedLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbResponseDallasActiveDisposedLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BanImpoundServiceLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select BanImpoundServiceLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.BanImpoundServiceLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorAddressStatusLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorAddressStatusLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorAddressStatusLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentPlanRemedySourceLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentPlanRemedySourceLookupID, CASE when Descr is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as UpdatedBy from dbo.PaymentPlanRemedySourceLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorAddressSourceLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorAddressSourceLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorAddressSourceLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusLetterBan2ndLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusLetterBan2ndLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusLetterBan2ndLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusLetterDeterminationLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusLetterDeterminationLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusLetterDeterminationLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusLetterTermLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusLetterTermLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusLetterTermLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusLetterVrbLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusLetterVrbLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusLetterVrbLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusLetterBanLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusLetterBanLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusLetterBanLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbResponseHeaderLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbResponseHeaderLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbResponseHeaderLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusEligRmdyLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusEligRmdyLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusEligRmdyLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BanActionLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select BanActionLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActionSequenceNbr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.BanActionLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentPlanStatusLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentPlanStatusLookupID, CASE when Descr is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as UpdatedBy from dbo.PaymentPlanStatusLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbRejectLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbRejectLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbRejectLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BanLocationLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select BanLocationLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.BanLocationLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BatchProcessConfig",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select BatchProcessConfigID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, Value, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.BatchProcessConfig",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbRemovalLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbRemovalLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbRemovalLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbStatusLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbStatusLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbStatusLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusTermLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusTermLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusTermLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCallLogLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorCallLogLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorCallLogLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentPlanContactSourceLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentPlanContactSourceLookupID, CASE when Descr is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as Descr, ActiveFlag, CourtLookupFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as UpdatedBy from dbo.PaymentPlanContactSourceLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "StateLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select StateLookupID, StateCode, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.StateLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BanOfficerLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select BanOfficerLookupID, CASE when LastName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastName, CASE when FirstName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FirstName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FirstName, CASE when PhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PhoneNbr, CASE when RadioNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RadioNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RadioNbr, CASE when Unit is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Unit, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Unit, CASE when Registration is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Registration, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Registration, CASE when PatrolCar is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PatrolCar, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PatrolCar, CASE when Area is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Area, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Area, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.BanOfficerLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CountyLookup",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CountyLookupID, CASE when Descr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Descr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Descr, ParticipatingCounty, ActiveFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.CountyLookup",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCallLogHistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorCallLogHistoryID, ViolatorCallLogID, ViolatorID, VidSeq, ViolatorCallLogLookupID, DeletedFlag, CallDate, OutgoingCallFlag, CASE when PhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PhoneNbr, ConnectedFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorCallLogHistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LetterQuestMarkRequestHeader",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LetterQuestMarkRequestHeaderID, CASE when LetterType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LetterType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LetterType, LetterDate, LetterCount, CASE when DataFileName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DataFileName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DataFileName, DataFileSize, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.LetterQuestMarkRequestHeader",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Ban",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select BanID, ViolatorID, VidSeq, ActiveFlag, BanActionLookupID, ActionDate, BanStartDate, BanLocationLookupID, BanOfficerLookupID, BanImpoundServiceLookupID, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.Ban",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Bankruptcy",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [Violator ID], SeqNbr, BankruptcyInstanceNbr, CASE when [Last Name] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Last Name], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Last Name], CASE when [First Name] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([First Name], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [First Name], CASE when [Last Name2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Last Name2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Last Name2], CASE when [First Name2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([First Name2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [First Name2], CASE when [License Plate] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([License Plate], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [License Plate], CASE when [Case Number] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Case Number], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Case Number], [Date Notified], [Filing Date], [Conversion Date], [Excused Amount], [Collectable Amount], CASE when [Phone Number] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Phone Number], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Phone Number], CASE when [Discharge / Dismissed] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Discharge / Dismissed], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Discharge / Dismissed], [Discharge / Dismissed Date], Assets, [Collection Accounts], CASE when [Law Firm] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Law Firm], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Law Firm], CASE when [Attorney Name] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Attorney Name], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Attorney Name], [Claim Filled], CASE when Comments is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Comments, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Comments, CASE when [Filing Status] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Filing Status], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Filing Status], CASE when [Discharge/Dismissed] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Discharge/Dismissed], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Discharge/Dismissed], ViolatorID2, SeqNbr2, ViolatorID3, SeqNbr3, ViolatorID4, SeqNbr4, InsertDateTime, CASE when InsertByUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(InsertByUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as InsertByUser, LastUpdateDateTime, CASE when LastUpdateByUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastUpdateByUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastUpdateByUser, LAST_UPDATE_TYPE, LAST_UPDATE_DATE, Tolls, AdminFees, CASE when Citation is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Citation, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Citation from dbo.Bankruptcy",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentAgreement",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [Violator ID], SeqNbr, PaymentPlanInstanceNbr, CASE when [Last Name] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Last Name], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Last Name], CASE when [First Name] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([First Name], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [First Name], CASE when [Phone Number] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Phone Number], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Phone Number], CASE when [License Plate] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([License Plate], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [License Plate], CASE when State is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(State, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as State, [Agent ID], CASE when Indicator is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Indicator, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Indicator, [Settlement Amount], [Down Payment], [Due Date], CASE when [Agreement Type] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Agreement Type], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Agreement Type], [Todays Date], Collections, CASE when [Remaining Balance Due] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Remaining Balance Due], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Remaining Balance Due], [Payment Plan Due Date], CASE when [Check Number] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Check Number], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Check Number], CASE when [Paid in Full] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Paid in Full], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Paid in Full], CASE when [Default] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([Default], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [Default], [Spanish Only], [Amnesty Account], CASE when Comments is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Comments, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Comments, Tolltag_Acct_Id, AdminFees, CitationFees, [Monthly Payment Amount], DefaultDate, CASE when MaintenanceAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MaintenanceAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MaintenanceAgency, ViolatorID2, SeqNbr2, ViolatorID3, SeqNbr3, ViolatorID4, SeqNbr4, BalanceDue, NTTA_Collections, InsertDateTime, CASE when InsertByUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(InsertByUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as InsertByUser, LastUpdateDateTime, CASE when LastUpdateByUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastUpdateByUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastUpdateByUser, CASE when Address1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address1, CASE when Address2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address2, AdminFeeCount, CitationCount, CASE when City is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(City, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as City, CASE when Email is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Email, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Email, HvFlag1, HvFlag2, HvFlag3, HvFlag4, HvFlag5, HvFlag6, HvFlag7, HvFlag8, CASE when LastInvoiceNbr1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr1, CASE when LastInvoiceNbr2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr2, CASE when LastInvoiceNbr3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr3, CASE when LastInvoiceNbr4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr4, CASE when LastInvoiceNbr5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr5, CASE when LastInvoiceNbr6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr6, CASE when LastInvoiceNbr7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr7, CASE when LastInvoiceNbr8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastInvoiceNbr8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastInvoiceNbr8, LastPayment, CASE when LicensePlateNbr2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateNbr2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateNbr2, CASE when LicensePlateNbr3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateNbr3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateNbr3, CASE when LicensePlateNbr4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateNbr4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateNbr4, CASE when LicensePlateNbr5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateNbr5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateNbr5, CASE when LicensePlateNbr6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateNbr6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateNbr6, CASE when LicensePlateNbr7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateNbr7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateNbr7, CASE when LicensePlateNbr8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateNbr8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateNbr8, CASE when LicPlateState1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState1, CASE when LicPlateState2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState2, CASE when LicPlateState3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState3, CASE when LicPlateState4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState4, CASE when LicPlateState5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState5, CASE when LicPlateState6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState6, CASE when LicPlateState7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState7, CASE when LicPlateState8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState8, CASE when OtherPhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OtherPhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OtherPhoneNbr, SeqNbr5, SeqNbr6, SeqNbr7, SeqNbr8, CASE when TollTagNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TollTagNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TollTagNbr, TotalNoOfMonths, TotalReceived, TotalViolationAmt, TotalZipCashAmt, CASE when VehicleMake1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake1, CASE when VehicleMake2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake2, CASE when VehicleMake3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake3, CASE when VehicleMake4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake4, CASE when VehicleMake5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake5, CASE when VehicleMake6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake6, CASE when VehicleMake7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake7, CASE when VehicleMake8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake8, CASE when VehicleModel1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel1, CASE when VehicleModel2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel2, CASE when VehicleModel3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel3, CASE when VehicleModel4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel4, CASE when VehicleModel5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel5, CASE when VehicleModel6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel6, CASE when VehicleModel7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel7, CASE when VehicleModel8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel8, VehicleYear1, VehicleYear2, VehicleYear3, VehicleYear4, VehicleYear5, VehicleYear6, VehicleYear7, VehicleYear8, ViolatorID5, ViolatorID6, ViolatorID7, ViolatorID8, CASE when Zip is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Zip, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Zip, CASE when ContactSource is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ContactSource, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ContactSource, CASE when PaymentPlanStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PaymentPlanStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PaymentPlanStatus, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.PaymentAgreement",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentPlanViolator",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentPlanViolatorID, ViolatorID, VidSeq, PaymentPlanID, PaymentPlanViolatorSeq, HvFlag, CASE when VehicleMake is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(VehicleMake, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as VehicleMake, CASE when VehicleModel is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(VehicleModel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as VehicleModel, CASE when VehicleYear is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(VehicleYear, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as VehicleYear, CASE when LicensePlateNbr is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(LicensePlateNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as LicensePlateNbr, StateLookupID, LastInvoiceNbr, ViolationAmt, ZipCashAmt, AdminFeeCount, CitationCount, CollectionsReceived, DeletedFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as UpdatedBy from dbo.PaymentPlanViolator",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCallLog",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorCallLogID, ViolatorID, VidSeq, ViolatorCallLogLookupID, DeletedFlag, CallDate, OutgoingCallFlag, CASE when PhoneNbr is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(PhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as PhoneNbr, ConnectedFlag, CASE when Comment is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(Comment, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as Comment, CreatedDate, CASE when CreatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as UpdatedBy from dbo.ViolatorCallLog",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbResponseDallasActiveDisposed",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbResponseDallasActiveDisposedID, VrbResponseDallasActiveDisposedLookupID, VrbResponseHeaderID, VrbID, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdateDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbResponseDallasActiveDisposed",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Violator",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorID, VidSeq, CASE when LicPlateNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateNbr, LicPlateStateLookupID, CASE when VehicleMake is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleMake, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleMake, CASE when VehicleModel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleModel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleModel, CASE when VehicleYear is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleYear, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleYear, CASE when DocNum is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DocNum, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DocNum, CASE when Vin is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Vin, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Vin, CASE when PrimaryViolatorFname is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PrimaryViolatorFname, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PrimaryViolatorFname, CASE when PrimaryViolatorLname is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PrimaryViolatorLname, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PrimaryViolatorLname, CASE when SecondaryViolatorFname is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SecondaryViolatorFname, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SecondaryViolatorFname, CASE when SecondaryViolatorLname is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SecondaryViolatorLname, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SecondaryViolatorLname, CASE when DriversLicense is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DriversLicense, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DriversLicense, DriversLicenseStateLookupID, CASE when SecondaryDriversLicense is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SecondaryDriversLicense, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SecondaryDriversLicense, SecondaryDriversLicenseStateLookupID, EarliestHvTranDate, LatestHvTranDate, AdminCountyLookupID, RegistrationCountyLookupID, RegistrationDateNextMonth, RegistrationDateNextYear, ViolatorAgencyLookupID, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.Violator",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorAmountsSummary",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorAmountsSummaryID, ViolatorID, VidSeq, HvQAmountDue, HvQTollsDue, HvQTransactions, HvQFeesDue, TotalAmountDue, TotalTollsDue, TotalFeesDue, TotalCitationCount, TotalTransactionsCount, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorAmountsSummary",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorContact",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorContactID, ViolatorID, VidSeq, CASE when PhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PhoneNbr, CASE when WorkPhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(WorkPhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as WorkPhoneNbr, CASE when OtherPhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OtherPhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OtherPhoneNbr, CASE when EmailAddress is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(EmailAddress, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as EmailAddress, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorContact",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatus",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusID, ViolatorID, VidSeq, HvFlag, HvDate, ViolatorStatusLookupID, HvExemptFlag, HvExemptDate, ViolatorStatusTermLookupID, TermFlag, TermDate, ViolatorStatusEligRmdyLookupID, EligRmdyFlag, EligRmdyDate, BanFlag, BanDate, BanStartDate, BanCiteWarnFlag, BanCiteWarnDate, BanCiteWarnCount, BanImpoundFlag, BanImpoundDate, VrbFlag, VrbDate, ViolatorStatusLetterDeterminationLookupID, DeterminationLetterFlag, DeterminationLetterDate, ViolatorStatusLetterBanLookupID, BanLetterFlag, BanLetterDate, ViolatorStatusLetterTermLookupID, TermLetterFlag, TermLetterDate, Ban2ndLetterDate, Ban2ndLetterFlag, BankruptcyDate, BankruptcyFlag, ViolatorStatusLetterBan2ndLookupID, ViolatorStatusLetterVrbLookupID, VrbLetterDate, VrbLetterFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatus",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Vrb",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbID, ViolatorID, VidSeq, ActiveFlag, VrbStatusLookupID, AppliedDate, VrbAgencyLookupID, SentDate, AcknowledgedDate, RejectionDate, VrbRejectLookupID, RemovedDate, VrbRemovalLookupID, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.Vrb",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorAddress",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorAddressID, ViolatorID, VidSeq, ViolatorAddressSourceLookupID, ViolatorAddressStatusLookupID, ActiveFlag, ConfirmedFlag, CASE when Address1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address1, CASE when Address2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address2, CASE when City is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(City, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as City, StateLookupID, CASE when ZipCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZipCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZipCode, CASE when Plus4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Plus4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Plus4, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorAddress",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LetterQuestMarkRequest",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LetterQuestMarkRequestID, ViolatorId, VidSeq, LetterQuestMarkRequestHeaderID, ProcessedFlag, ProcessedDate, ConfirmedFlag, ConfirmedDate, CreatedDate, CASE when CreatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CHAR(34) + REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"') + CHAR(34) end as UpdatedBy from dbo.LetterQuestMarkRequest",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbHistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbHistoryID, VrbID, ViolatorID, VidSeq, ActiveFlag, VrbStatusLookupID, AppliedDate, VrbAgencyLookupID, SentDate, AcknowledgedDate, RejectionDate, VrbRejectLookupID, RemovedDate, VrbRemovalLookupID, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_DATE, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from dbo.VrbHistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LetterQuestMarkResponseHeader",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LetterQuestMarkResponseHeaderID, CASE when LetterType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LetterType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LetterType, LetterDate, LetterCount, DataFileSize, CASE when DataFileContentType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DataFileContentType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DataFileContentType, CountFileSize, CASE when CountFileContentType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CountFileContentType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CountFileContentType, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.LetterQuestMarkResponseHeader",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbRequest",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbRequestID, VrbID, VrbRequestHeaderID, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdateDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbRequest",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbResponseDallasAdds",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbResponseDallasAddsID, VrbResponseHeaderID, VrbID, CASE when Code is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Code, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Code, TimeStamp, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdateDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbResponseDallasAdds",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbTransmitalsHistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbTransmitalsHistoryID, VrbTransmitalsID, VrbID, ViolatorID, VidSeq, SentDate, CASE when Reason is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Reason, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Reason, VrbAgencyLookupID, CASE when ProcessName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ProcessName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ProcessName, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, CASE when LicPlateNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateNbr, CASE when DocNum is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DocNum, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DocNum, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbTransmitalsHistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LetterQuestMarkResponse",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LetterQuestMarkResponseID, LetterQuestMarkRequestID, ViolatorId, VidSeq, LetterQuestMarkResponseHeaderID, CASE when TypeNotice is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TypeNotice, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TypeNotice, CASE when Mailed is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Mailed, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Mailed, CASE when NotMailedReason is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NotMailedReason, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NotMailedReason, MailDate, CASE when FirstName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FirstName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FirstName, CASE when LastName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastName, NCOADate, CASE when Address1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address1, CASE when Address2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address2, CASE when City is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(City, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as City, StateLookupID, CASE when ZipCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZipCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZipCode, CASE when Plus4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Plus4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Plus4, CASE when County is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(County, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as County, CASE when Country is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Country, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Country, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.LetterQuestMarkResponse",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentPlan",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentPlanID, PaymentPlanStatusLookupID, ActiveAgreementFlag, ActiveAgreementDate, DefaultedFlag, DefaultedDate, PaidInFullFlag, PaidInFullDate, BankruptcyFlag, BankruptcyDate, ViolationAmt, ZipCashAmt, SettlementAmt, AdminFeeCount, AdminFeeTotal, CitationCount, CitationFeeTotal, CollectionsReceived, CustomDownPaymentReceivedFlag, DownPaymentReceived, TotalReceived, RemainingBalanceDue, MonthlyPayment, LastPayment, CustomNoOfMonthsFlag, TotalNoOfMonths, FirstNoOfMonths, PlanStartDate, FirstPaymentDate, LastPaymentDate, PaymentPlanRemedySourceLookupID, PaymentPlanContactSourceLookupID, SpanishFlag, CASE when LastName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastName, CASE when FirstName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FirstName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FirstName, CASE when LastName2nd is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastName2nd, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastName2nd, CASE when FirstName2nd is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FirstName2nd, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FirstName2nd, CASE when Address1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address1, CASE when Address2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address2, CASE when City is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(City, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as City, StateLookupID, CASE when ZipCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZipCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZipCode, CASE when Plus4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Plus4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Plus4, CASE when PhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PhoneNbr, CASE when OtherPhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OtherPhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OtherPhoneNbr, CASE when Email is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Email, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Email, CASE when TollTagNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TollTagNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TollTagNbr, TotalPaymentsAmt, BalanceDue, TotalNoOfPayments, DeletedFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.PaymentPlan",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentPlanHistory",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentPlanHistoryID, PaymentPlanID, PaymentPlanStatusLookupID, ActiveAgreementFlag, ActiveAgreementDate, DefaultedFlag, DefaultedDate, PaidInFullFlag, PaidInFullDate, BankruptcyFlag, BankruptcyDate, ViolationAmt, ZipCashAmt, SettlementAmt, AdminFeeCount, AdminFeeTotal, CitationCount, CitationFeeTotal, CollectionsReceived, CustomDownPaymentReceivedFlag, DownPaymentReceived, TotalReceived, RemainingBalanceDue, MonthlyPayment, LastPayment, CustomNoOfMonthsFlag, TotalNoOfMonths, FirstNoOfMonths, PlanStartDate, FirstPaymentDate, LastPaymentDate, PaymentPlanRemedySourceLookupID, PaymentPlanContactSourceLookupID, SpanishFlag, CASE when LastName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastName, CASE when FirstName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FirstName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FirstName, CASE when LastName2nd is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastName2nd, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastName2nd, CASE when FirstName2nd is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FirstName2nd, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FirstName2nd, CASE when Address1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address1, CASE when Address2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Address2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Address2, CASE when City is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(City, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as City, StateLookupID, CASE when ZipCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZipCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZipCode, CASE when Plus4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Plus4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Plus4, CASE when PhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PhoneNbr, CASE when OtherPhoneNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OtherPhoneNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OtherPhoneNbr, CASE when Email is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Email, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Email, CASE when TollTagNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TollTagNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TollTagNbr, CASE when Note is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Note, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Note, TotalPaymentsAmt, BalanceDue, TotalNoOfPayments, DeletedFlag, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.PaymentPlanHistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VrbTransmitals",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VrbTransmitalsID, VrbID, ViolatorID, VidSeq, SentDate, CASE when Reason is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Reason, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Reason, VrbAgencyLookupID, CASE when ProcessName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ProcessName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ProcessName, CASE when LicPlateNbr is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateNbr, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateNbr, CASE when DocNum is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DocNum, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DocNum, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VrbTransmitals",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorStatusHistory",
+            "schema_name": "dbo",
+            "id_field": "ViolatorID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorStatusHistoryID, ViolatorStatusID, ViolatorID, VidSeq, HvFlag, HvDate, ViolatorStatusLookupID, HvExemptFlag, HvExemptDate, ViolatorStatusTermLookupID, TermFlag, TermDate, ViolatorStatusEligRmdyLookupID, EligRmdyFlag, EligRmdyDate, BankruptcyFlag, BankruptcyDate, PaymentPlanDefaultCount, BanFlag, BanDate, BanStartDate, BanCiteWarnFlag, BanCiteWarnDate, BanCiteWarnCount, BanImpoundFlag, BanImpoundDate, VrbFlag, VrbDate, ViolatorStatusLetterDeterminationLookupID, DeterminationLetterFlag, DeterminationLetterDate, ViolatorStatusLetterBanLookupID, BanLetterFlag, BanLetterDate, ViolatorStatusLetterBan2ndLookupID, Ban2ndLetterFlag, Ban2ndLetterDate, ViolatorStatusProcessServerLookupID, ProcessServerFlag, ProcessServerDate, ViolatorStatusLetterVrbLookupID, VrbLetterFlag, VrbLetterDate, ViolatorStatusLetterTermLookupID, TermLetterFlag, TermLetterDate, CreatedDate, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, UpdatedDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.ViolatorStatusHistory",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

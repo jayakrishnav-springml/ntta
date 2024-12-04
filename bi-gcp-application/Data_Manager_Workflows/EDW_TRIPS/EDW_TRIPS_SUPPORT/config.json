@@ -1,0 +1,5 @@
+{
+    "EDW_TRIPS_SUPPORT_RiteMigratedInvoice_Full_Load":{
+        "labels":"workflow=child,callout=sql",
+        "description":"Child workflow for Process  - EDW_TRIPS_SUPPORT.RiteMigratedInvoice_Full_Load()"}
+}

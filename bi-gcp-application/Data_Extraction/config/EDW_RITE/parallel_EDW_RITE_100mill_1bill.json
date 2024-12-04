@@ -1,0 +1,567 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.9.26,17001",
+        "database": "EDW_RITE",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadMediumRC",
+        "password_secret_id": "APS_DEV_MEDUIM_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-raw-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_RITE",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\priority_tables",
+    "log_folder_path": "E:\\bcp_logs\\priority_tables",
+    "max_process_count": 8,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_RITE": {
+            "dbo": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_"
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_perm_"
+            },
+            "stage": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "stage_"
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "FACT_VIOLATIONS_SUMMARY_PURSUED_LEVEL",
+            "schema_name": "dbo",
+            "id_field": "DAY_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, Cal_WeekID, Cal_MonthID, Cal_QuarterID, Cal_YearID, LANE_ID, CASE when LANE_ABBREV is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LANE_ABBREV, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LANE_ABBREV, VCLY_ID, CASE when LEVEL_0 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_0, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_0, CASE when LEVEL_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_1, CASE when LEVEL_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_2, CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, CASE when STATUS_DESCR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS_DESCR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS_DESCR, TXN_CNT, POS_REV, ACT_REV, ADJ_REV from dbo.FACT_VIOLATIONS_SUMMARY_PURSUED_LEVEL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICES_DATA",
+            "schema_name": "dbo",
+            "id_field": "LAST_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LAST_INVOICE_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VIOLATOR_ID, VIOLATOR_ADDR_SEQ, TRANSACTIONS_CNT, TOLL_AMOUNT, FEES_AMOUNT, LEGACY_TRANSACTIONS_CNT, LEGACY_TOLL_AMOUNT, LEGACY_FEES_AMOUNT, CASE when VBI_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VBI_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VBI_STATUS, VB_INVOICE_DATE, VB_INVOICE_AMT, VB_INVOICE_AMT_DISC, VB_LATE_FEE_AMOUNT, VB_PAST_DUE_AMOUNT, VB_INVOICE_AMT_PAID, VBB_LN_BATCH_ID, VBB_BATCH_ID, VB_DATE_EXCUSED, CASE when VB_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_EXCUSED_BY, CASE when VB_EXCUSED_REASON is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_EXCUSED_REASON, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_EXCUSED_REASON, VB_DUE_DATE, VB_CLOSED_DATE, VB_DATE_CREATED, VB_DATE_MODIFIED, VB_CONVERSION_DATE, CASE when VB_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_SOURCE_CODE, VB_MAIL_DATE, CASE when VIOL_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_STATUS, VIOL_INVOICE_DATE, VIOL_INVOICE_AMT, VIOL_INVOICE_AMT_PAID, VIOL_INVOICE_AMT_DISC, VIOL_INV_ADMIN_FEE, VIOL_INV_ADMIN_FEE2, VIOL_FINE_AMOUNT, VIOL_INV_BATCH_ID, VIOL_INV_DATE_EXCUSED, CASE when VIOL_INV_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_EXCUSED_BY, CASE when VIOL_INV_EXCUSED_REASON is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_EXCUSED_REASON, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_EXCUSED_REASON, VIOL_INV_CURR_DUE_DATE, VIOL_INV_STATUS_DATE, VIOL_INV_DATE_MODIFIED, VIOL_INV_CLOSED_DATE, CASE when VIOL_INV_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_SOURCE_CODE, VIOL_INV_DPS_DATE, VIOL_INV_DPS_REJECT_DATE, VIOL_INV_DATE_CREATED, VIOL_INV_GL_STATUS, VIOL_INV_IS_VTOLL, CASE when VIOL_INV_IS_VEA is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_IS_VEA, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_IS_VEA, CASE when CA_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_INV_STATUS, CASE when DPS_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DPS_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DPS_INV_STATUS, CLOSE_OUT_ELIGIBILITY_DATE, CASE when CLOSE_OUT_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_STATUS, CLOSE_OUT_DATE, CASE when CLOSE_OUT_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_TYPE from dbo.FACT_INVOICES_DATA",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICES_DATA_OLD",
+            "schema_name": "dbo",
+            "id_field": "LAST_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LAST_INVOICE_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VIOLATOR_ID, VIOLATOR_ADDR_SEQ, TRANSACTIONS_CNT, TOLL_AMOUNT, FEES_AMOUNT, LEGACY_TRANSACTIONS_CNT, LEGACY_TOLL_AMOUNT, LEGACY_FEES_AMOUNT, CASE when VBI_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VBI_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VBI_STATUS, VB_INVOICE_DATE, VB_INVOICE_AMT, VB_INVOICE_AMT_DISC, VB_LATE_FEE_AMOUNT, VB_PAST_DUE_AMOUNT, VB_INVOICE_AMT_PAID, VBB_LN_BATCH_ID, VBB_BATCH_ID, VB_DATE_EXCUSED, CASE when VB_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_EXCUSED_BY, CASE when VB_EXCUSED_REASON is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_EXCUSED_REASON, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_EXCUSED_REASON, VB_DUE_DATE, VB_CLOSED_DATE, VB_DATE_CREATED, VB_DATE_MODIFIED, VB_CONVERSION_DATE, CASE when VB_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_SOURCE_CODE, VB_MAIL_DATE, CASE when VIOL_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_STATUS, VIOL_INVOICE_DATE, VIOL_INVOICE_AMT, VIOL_INVOICE_AMT_PAID, VIOL_INVOICE_AMT_DISC, VIOL_INV_ADMIN_FEE, VIOL_INV_ADMIN_FEE2, VIOL_FINE_AMOUNT, VIOL_INV_BATCH_ID, VIOL_INV_DATE_EXCUSED, CASE when VIOL_INV_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_EXCUSED_BY, CASE when VIOL_INV_EXCUSED_REASON is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_EXCUSED_REASON, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_EXCUSED_REASON, VIOL_INV_CURR_DUE_DATE, VIOL_INV_STATUS_DATE, VIOL_INV_DATE_MODIFIED, VIOL_INV_CLOSED_DATE, CASE when VIOL_INV_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_SOURCE_CODE, VIOL_INV_DPS_DATE, VIOL_INV_DPS_REJECT_DATE, VIOL_INV_DATE_CREATED, VIOL_INV_GL_STATUS, VIOL_INV_IS_VTOLL, CASE when VIOL_INV_IS_VEA is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_IS_VEA, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_IS_VEA, CASE when CA_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_INV_STATUS, CASE when DPS_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DPS_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DPS_INV_STATUS, CLOSE_OUT_ELIGIBILITY_DATE, CASE when CLOSE_OUT_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_STATUS, CLOSE_OUT_DATE, CASE when CLOSE_OUT_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_TYPE from dbo.FACT_INVOICES_DATA_OLD",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_VB_VIOL_INVOICES",
+            "schema_name": "dbo",
+            "id_field": "LAST_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LAST_INVOICE_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VIOLATOR_ID, VIOLATOR_ADDR_SEQ, TOLL_AMOUNT, FEES_AMOUNT, LEGACY_TOLL_AMOUNT, LEGACY_FEES_AMOUNT, PAID_AMOUNT, TOLL_PAID, FEES_PAID, PAID_DATE, VB_INVOICE_DAYS_TO_PAID, CASE when VBI_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VBI_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VBI_STATUS, VB_INVOICE_DATE, VB_INVOICE_AMT, VB_INVOICE_AMT_DISC, VB_LATE_FEE_AMOUNT, VB_PAST_DUE_AMOUNT, VB_INVOICE_AMT_PAID, VBB_LN_BATCH_ID, VB_DATE_EXCUSED, CASE when VB_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_EXCUSED_BY, VB_INVOICE_DAYS_TO_EXCUSED, VB_DUE_DATE, VB_MAIL_DATE, CASE when VIOL_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_STATUS, VIOL_INVOICE_DATE, VIOL_INVOICE_AMT, VIOL_INVOICE_AMT_PAID, VIOL_INVOICE_AMT_DISC, VIOL_INV_ADMIN_FEE, VIOL_INV_ADMIN_FEE2, VIOL_FINE_AMOUNT, VIOL_INV_DATE_EXCUSED, CASE when VIOL_INV_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_EXCUSED_BY, VIOL_INV_CURR_DUE_DATE, VIOL_INVOICE_DAYS_TO_EXCUSED, VIOL_INV_STATUS_DATE, VIOL_INV_DATE_MODIFIED, CASE when CA_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_INV_STATUS, CASE when DPS_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DPS_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DPS_INV_STATUS, CLOSE_OUT_ELIGIBILITY_DATE, CASE when CLOSE_OUT_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_STATUS, CLOSE_OUT_DATE, CASE when CLOSE_OUT_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_TYPE, HV_FLAG, PP_FLAG from dbo.FACT_VB_VIOL_INVOICES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VB_INVOICE_BATCHES",
+            "schema_name": "dbo",
+            "id_field": "VBB_BATCH_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VBB_BATCH_ID, DATE_PRODUCED, CASE when VB_INV_BATCH_TYPE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_INV_BATCH_TYPE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_INV_BATCH_TYPE_CODE, LAST_UPDATE_DATE from dbo.VB_INVOICE_BATCHES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_UNIFIED_VIOLATION_PAYMENT",
+            "schema_name": "dbo",
+            "id_field": "VIOLATION_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATION_ID, VIOLATOR_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, TOLL_DUE, PAYMENT_DATE, SPLIT_AMOUNT, FEES_PAID, TOLL_PAID from dbo.FACT_UNIFIED_VIOLATION_PAYMENT",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TRIP_ANALYSIS_PART",
+            "schema_name": "dbo",
+            "id_field": "TRIP_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRIP_ID, CASE when TXN_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TXN_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TXN_TYPE, ACCT_ID, CASE when TAG_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_ID, VIOLATOR_ID, LICENSE_PLATE_ID, VEHICLE_CLASS, TRIP_DURATION_MINUTES, TRIP_AMOUNT, START_FACILITY_ID, START_PLAZA_ID, CASE when START_DIRECTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(START_DIRECTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as START_DIRECTION, START_DAY_ID, START_TIME_ID, END_FACILITY_ID, END_PLAZA_ID, CASE when END_DIRECTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(END_DIRECTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as END_DIRECTION, END_DAY_ID, END_TIME_ID from dbo.FACT_TRIP_ANALYSIS_PART",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_VIOLATIONS_SUMMARY_CATEGORY_LEVEL",
+            "schema_name": "dbo",
+            "id_field": "DAY_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, CAL_WEEKID, CAL_MONTHID, CAL_QUARTERID, CAL_YEARID, LANE_ID, CASE when LANE_ABBREV is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LANE_ABBREV, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LANE_ABBREV, VCLY_ID, CASE when LEVEL_0 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_0, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_0, CASE when LEVEL_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_1, CASE when LEVEL_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_2, CASE when LEVEL_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_3, CASE when LEVEL_4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_4, CASE when LEVEL_5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_5, CASE when LEVEL_6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_6, CASE when LEVEL_7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_7, CASE when LEVEL_8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_8, CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, CASE when STATUS_DESCR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS_DESCR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS_DESCR, TXN_CNT, POS_REV, ACT_REV, ADJ_REV, AVI_HANDSHAKE from dbo.FACT_VIOLATIONS_SUMMARY_CATEGORY_LEVEL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_SINGLE_STAGE",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID from dbo.FACT_INVOICE_SINGLE_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_VIOLATIONS_SUMMARY_HIST_STAGE",
+            "schema_name": "dbo",
+            "id_field": "DAY_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PARTITION_DATE, DAY_ID, LANE_ID, VCLY_ID, CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, CASE when STATUS_DESCR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS_DESCR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS_DESCR, TXN_CNT, POS_REV, ACT_REV from dbo.FACT_VIOLATIONS_SUMMARY_HIST_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_VIOLATIONS_SUMMARY_STAGE",
+            "schema_name": "dbo",
+            "id_field": "DAY_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, LANE_ID, VCLY_ID, CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, CASE when STATUS_DESCR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS_DESCR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS_DESCR, TXN_CNT, POS_REV, ACT_REV from dbo.FACT_VIOLATIONS_SUMMARY_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_VIOLATIONS_SUMMARY",
+            "schema_name": "dbo",
+            "id_field": "DAY_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, LANE_ID, VCLY_ID, CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, CASE when STATUS_DESCR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS_DESCR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS_DESCR, TXN_CNT, POS_REV, ACT_REV from dbo.FACT_VIOLATIONS_SUMMARY",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_STAGE_FINAL",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, CA_FILE_GEN_DATE, CA_ACCT_ID, CASE when CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITATION_NBR, PAID_DATE, POS_ID, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, INVOICE_BREAK_ROWNUM, CURRENT_INVOICE_LEVEL_FLAG from dbo.FACT_INVOICE_STAGE_FINAL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_ANALYSIS_STAGE",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, PARTITION_DATE, DATE_BATCH_PRODUCED, VBI_INVOICE_ID, VB_INV_DATE, VB_INV_DUE_DATE, VB_INV_DATE_EXCUSED, CASE when VB_INV_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_INV_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_INV_EXCUSED_BY, VB_INV_DATE_MODIFIED, ZI_STAGE_ID, INVOICE_STAGE_ID, CASE when VBI_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VBI_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VBI_STATUS, CONVERTED_DATE, VIOL_INV_STATUS_DATE, VIOL_INV_DUE_DATE, VIOL_INV_DATE_EXCUSED, CASE when VIOL_INV_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_EXCUSED_BY, VIOL_INV_DATE_MODIFIED, VIOL_INVOICE_ID, CASE when VIOL_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_STATUS, [3NNP_INV_DATE], FIRST_PAID_DATE, LAST_PAID_DATE, CASE when PAID_DATE_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAID_DATE_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAID_DATE_LIST, PAID_DATE_COUNT, FIRST_POS_ID, LAST_POS_ID, CASE when POS_NAME_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(POS_NAME_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as POS_NAME_LIST, POS_COUNT, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, CASE when PAYMENT_FORM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_FORM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_FORM, CASE when PAYMENT_CREATED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_CREATED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_CREATED_BY, CASE when CA_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_INV_STATUS, FIRST_CA_COMPANY_ID, LAST_CA_COMPANY_ID, CASE when CA_COMPANY_NAME_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_COMPANY_NAME_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_COMPANY_NAME_LIST, CA_COMPANY_COUNT, FIRST_CA_FILE_GEN_DATE, LAST_CA_FILE_GEN_DATE, CASE when CA_FILE_GEN_DATE_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_FILE_GEN_DATE_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_FILE_GEN_DATE_LIST, CA_FILE_GEN_DATE_COUNT, CASE when FIRST_CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FIRST_CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FIRST_CITATION_NBR, CASE when LAST_CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_CITATION_NBR, CASE when CITATION_NBR_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITATION_NBR_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITATION_NBR_LIST, CITATION_NBR_COUNT, FIRST_CA_ACCT_ID, LAST_CA_ACCT_ID, CASE when CA_ACCT_ID_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_ACCT_ID_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_ACCT_ID_LIST, CA_ACCT_ID_COUNT, COURT_ACTION_MAIL_DATE, CASE when DPS_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DPS_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DPS_INV_STATUS, INVOICE_AMT, INVOICE_AMT_DISC, INVOICE_TOLLS_PAID_CALC, TOLL_DUE, ZI_LATE_FEES, VI_LATE_FEES, ADMIN_FEE, ADMIN_FEE2, AMT_PAID, VIOL_COUNT, CLOSE_OUT_ELIGIBILITY_DATE, CASE when CLOSE_OUT_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_STATUS, CLOSE_OUT_DATE, CASE when CLOSE_OUT_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_TYPE, CURRENT_INVOICE_FLAG, TOLL_DUE_LEFT_ON_INV, TXN_CNT_LEFT_ON_INV, INSERT_DATE from dbo.FACT_INVOICE_ANALYSIS_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_VIOL_LEFT_ON_INV_STAGE",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, CURRENT_INVOICE_LEVEL_FLAG, TOLL_DUE_LEFT_ON_INV, TXN_CNT_LEFT_ON_INV, TOLLS_PAID_ON_TXN from dbo.FACT_INVOICE_VIOL_LEFT_ON_INV_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_VTOLL_AMOUNT_PAID_STAGE",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VTOLL_AMT_PAID from dbo.FACT_INVOICE_VTOLL_AMOUNT_PAID_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TRIP_HISTORY_PART",
+            "schema_name": "dbo",
+            "id_field": "TRIP_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRHL_ID, TART_ID, TRIP_ID, SECOND_ID, DAY_ID, TIME_ID, CASE when TXN_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TXN_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TXN_TYPE, ACCT_ID, CASE when TAG_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_ID, VIOLATOR_ID, LICENSE_PLATE_ID, VEHICLE_CLASS, LANE_ID, PLAZA_ID, FACILITY_ID, CASE when DIRECTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIRECTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIRECTION, DURATION_MINUTES, AMOUNT from dbo.FACT_TRIP_HISTORY_PART",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VB_STATEMENTS",
+            "schema_name": "dbo",
+            "id_field": "VBS_STATEMENT_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VBS_STATEMENT_ID, VBS_STATEMENT_DATE, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VB_STATEMENTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_STAGE",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select INVOICE_ANALYSIS_CATEGORY_ID, DATE_BATCH_PRODUCED, VBI_INVOICE_ID, VB_INV_DATE, VB_INV_DATE_EXCUSED, ZI_STAGE_ID, INVOICE_STAGE_ID, VIOLATOR_ID, VB_INV_AMT, VB_INVOICE_AMT_DISC, VB_INV_LATE_FEES, VB_INV_AMT_PAID, CONVERTED_DATE, VIOL_INV_DATE_EXCUSED, VIOL_INVOICE_ID, vi_inv_amt, VI_INVOICE_AMT_DISC, PAID_DATE, POS_ID, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, CASE when PAYMENT_FORM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_FORM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_FORM, CASE when PAYMENT_CREATED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_CREATED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_CREATED_BY, VIOL_INV_FEES, VIOL_INV_ADMIN_FEE, VIOL_INV_ADMIN_FEE2, VIOL_INV_AMT_PAID, CASE when CA_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_INV_STATUS, CA_COMPANY_ID, CA_ACCT_ID, CA_FILE_GEN_DATE, CASE when CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITATION_NBR, COURT_ACTION_MAIL_DATE, CASE when DPS_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DPS_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DPS_INV_STATUS, ZC_TXN_COUNT, VIOL_TXN_COUNT, ZC_TOLLS_DUE, VIOL_TOLLS_DUE from dbo.FACT_INVOICE_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_ANALYSIS_FINAL",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, PARTITION_DATE, DATE_BATCH_PRODUCED, VBI_INVOICE_ID, VB_INV_DATE, VB_INV_DUE_DATE, VB_INV_DATE_EXCUSED, CASE when VB_INV_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_INV_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_INV_EXCUSED_BY, VB_INV_DATE_MODIFIED, ZI_STAGE_ID, INVOICE_STAGE_ID, CASE when VBI_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VBI_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VBI_STATUS, CONVERTED_DATE, VIOL_INV_STATUS_DATE, VIOL_INV_DUE_DATE, VIOL_INV_DATE_EXCUSED, CASE when VIOL_INV_EXCUSED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_EXCUSED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_EXCUSED_BY, VIOL_INV_DATE_MODIFIED, VIOL_INVOICE_ID, CASE when VIOL_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_STATUS, [3NNP_INV_DATE], FIRST_PAID_DATE, LAST_PAID_DATE, CASE when PAID_DATE_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAID_DATE_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAID_DATE_LIST, PAID_DATE_COUNT, FIRST_POS_ID, LAST_POS_ID, CASE when POS_NAME_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(POS_NAME_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as POS_NAME_LIST, POS_COUNT, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, CASE when PAYMENT_FORM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_FORM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_FORM, CASE when PAYMENT_CREATED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_CREATED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_CREATED_BY, CASE when CA_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_INV_STATUS, FIRST_CA_COMPANY_ID, LAST_CA_COMPANY_ID, CASE when CA_COMPANY_NAME_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_COMPANY_NAME_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_COMPANY_NAME_LIST, CA_COMPANY_COUNT, FIRST_CA_FILE_GEN_DATE, LAST_CA_FILE_GEN_DATE, CASE when CA_FILE_GEN_DATE_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_FILE_GEN_DATE_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_FILE_GEN_DATE_LIST, CA_FILE_GEN_DATE_COUNT, CASE when FIRST_CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FIRST_CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FIRST_CITATION_NBR, CASE when LAST_CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_CITATION_NBR, CASE when CITATION_NBR_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITATION_NBR_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITATION_NBR_LIST, CITATION_NBR_COUNT, FIRST_CA_ACCT_ID, LAST_CA_ACCT_ID, CASE when CA_ACCT_ID_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CA_ACCT_ID_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CA_ACCT_ID_LIST, CA_ACCT_ID_COUNT, COURT_ACTION_MAIL_DATE, CASE when DPS_INV_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DPS_INV_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DPS_INV_STATUS, INVOICE_AMT, INVOICE_AMT_DISC, INVOICE_TOLLS_PAID_CALC, TOLL_DUE, ZI_LATE_FEES, VI_LATE_FEES, ADMIN_FEE, ADMIN_FEE2, AMT_PAID, VIOL_COUNT, CLOSE_OUT_ELIGIBILITY_DATE, CASE when CLOSE_OUT_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_STATUS, CLOSE_OUT_DATE, CASE when CLOSE_OUT_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLOSE_OUT_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLOSE_OUT_TYPE, CURRENT_INVOICE_FLAG, TOLL_DUE_LEFT_ON_INV, TXN_CNT_LEFT_ON_INV, CAST(INSERT_DATE AS DATETIME2(6)) AS INSERT_DATE from dbo.FACT_INVOICE_ANALYSIS_FINAL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PAYMENT_XREF_VPS",
+            "schema_name": "dbo",
+            "id_field": "PAYMENT_XREF_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PAYMENT_XREF_ID, PAYMENT_LINE_ITEM_ID, VIOLATION_ID, VIOL_INVOICE_ID, VBI_VBI_INVOICE_ID, CASE when PAYMENT_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_STATUS, CASE when TRANSACTION_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TRANSACTION_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TRANSACTION_TYPE, SPLIT_AMOUNT, INSERT_DATETIME, LAST_UPDATE_DATE from dbo.PAYMENT_XREF_VPS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ACCOUNT_HISTORY",
+            "schema_name": "dbo",
+            "id_field": "ACCT_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ACCT_ID, ACCT_HIST_SEQ, ASSIGNED_DATE, EXPIRED_DATE, CASE when FIRST_NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FIRST_NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FIRST_NAME, CASE when MIDDLE_INITIAL is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MIDDLE_INITIAL, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MIDDLE_INITIAL, CASE when LAST_NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_NAME, CASE when ADDRESS1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADDRESS1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADDRESS1, CASE when ADDRESS2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADDRESS2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADDRESS2, CASE when CITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITY, CASE when STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATE, CASE when ZIP_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP_CODE, CASE when PLUS4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLUS4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLUS4, CASE when HOME_PHO_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(HOME_PHO_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as HOME_PHO_NBR, CASE when WORK_PHO_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(WORK_PHO_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as WORK_PHO_NBR, CASE when WORK_PHO_EXT is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(WORK_PHO_EXT, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as WORK_PHO_EXT, CASE when DRIVER_LIC_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DRIVER_LIC_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DRIVER_LIC_NBR, CASE when DRIVER_LIC_STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DRIVER_LIC_STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DRIVER_LIC_STATE, CASE when COMPANY_NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COMPANY_NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COMPANY_NAME, CASE when COMPANY_TAX_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COMPANY_TAX_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COMPANY_TAX_ID, CASE when EMAIL_ADDRESS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(EMAIL_ADDRESS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as EMAIL_ADDRESS, CASE when MO_STMT_FLAG is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MO_STMT_FLAG, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MO_STMT_FLAG, CASE when BAD_ADDRESS_FLAG is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(BAD_ADDRESS_FLAG, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as BAD_ADDRESS_FLAG, CASE when REBILL_FAILED_FLAG is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REBILL_FAILED_FLAG, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as REBILL_FAILED_FLAG, REBILL_AMT, REBILL_DATE, DEP_AMT, BALANCE_AMT, LOW_BAL_LEVEL, BAL_LAST_UPDATED, CASE when ACCT_STATUS_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ACCT_STATUS_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ACCT_STATUS_CODE, CASE when ACCT_TYPE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ACCT_TYPE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ACCT_TYPE_CODE, CASE when PMT_TYPE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PMT_TYPE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PMT_TYPE_CODE, ADDRESS_MODIFIED, DATE_CREATED, CASE when CREATED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CREATED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CREATED_BY, DATE_APPROVED, CASE when APPROVED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(APPROVED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as APPROVED_BY, DATE_MODIFIED, CASE when MODIFIED_BY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MODIFIED_BY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MODIFIED_BY, MS_ID, CASE when SELECTED_FOR_REBILL is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SELECTED_FOR_REBILL, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SELECTED_FOR_REBILL, CASE when VEA_FLAG is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VEA_FLAG, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VEA_FLAG, VEA_DATE, VEA_EXPIRE_DATE, CASE when COMPANY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COMPANY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COMPANY_CODE, CASE when ADJUST_REBILL_AMT is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADJUST_REBILL_AMT, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADJUST_REBILL_AMT, LAST_UPDATE_DATE, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from dbo.ACCOUNT_HISTORY",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LANE_VIOL_DATE_STAGE_Keep",
+            "schema_name": "dbo",
+            "id_field": "LANE_VIOL_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LANE_VIOL_ID, LANE_ID, SEQUENCE_NBR, VIOL_DATE from dbo.LANE_VIOL_DATE_STAGE_Keep",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_UNIFIED_VIOLATION_BASE_N_PREMIUM",
+            "schema_name": "dbo",
+            "id_field": "TART_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TART_ID, DAY_ID, CASE when LANE_VIOL_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LANE_VIOL_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LANE_VIOL_STATUS, CASE when DISPOSITION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION, CASE when TAG_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_ID, FACILITY_ID, TRANSACTION_FILE_DETAIL_ID, IOP, VIDEO, TRANSACTION_DATE, TOLL_DUE, EAR_REV, AMOUNT, BASE_FEE_TYPE_ID, VARIABLE_FEE_TYPE_ID, IOP_FEE_TYPE_ID, BASE_AMOUNT, BASE_FEE, VARIABLE_FEE, BASE_TRANSACTION_FEE, VARIABLE_TRANSACTION_FEE, IOP_TRANSACTION_FEE from dbo.FACT_UNIFIED_VIOLATION_BASE_N_PREMIUM",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_PAYMENTS_OLD",
+            "schema_name": "dbo",
+            "id_field": "LAST_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LAST_INVOICE_ID, PAYMENT_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VIOLATOR_ID, PAYMENT_DATE, DEPOSIT_DATE, SHIFT_ID, POS_ID, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, CASE when PAYMENT_FORM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_FORM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_FORM, TOLL_DUE, FEES_DUE, VIOL_AMOUNT, VTOLL_AMOUNT, PAID_AMOUNT, INVOICE_VIOL_AMOUNT, INVOICE_VTOLL_AMOUNT, INVOICE_PAID_AMOUNT from dbo.FACT_INVOICE_PAYMENTS_OLD",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_PAYMENTS",
+            "schema_name": "dbo",
+            "id_field": "LAST_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LAST_INVOICE_ID, PAYMENT_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VIOLATOR_ID, PAYMENT_DATE, DEPOSIT_DATE, SHIFT_ID, POS_ID, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, CASE when PAYMENT_FORM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_FORM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_FORM, TOLL_DUE, FEES_DUE, VIOL_AMOUNT, VTOLL_AMOUNT, PAID_AMOUNT, INVOICE_VIOL_AMOUNT, INVOICE_VTOLL_AMOUNT, INVOICE_PAID_AMOUNT from dbo.FACT_INVOICE_PAYMENTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_UNIFIED_VB_PAYMENT",
+            "schema_name": "dbo",
+            "id_field": "VIOLATION_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATION_ID, VIOLATOR_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, TOLL_DUE, PAYMENT_DATE, SPLIT_AMOUNT, FEES_PAID, TOLL_PAID from dbo.FACT_UNIFIED_VB_PAYMENT",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_IOP_TGS",
+            "schema_name": "dbo",
+            "id_field": "SOURCE_TXN_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, MONTH_ID, CASE when TAG_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_ID, TT_ID, TXN_DATE, ENTRY_TXN_DATE, POSTED_DATE, CASE when DISPOSITION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION, CASE when RECON_HOME_AGENCY_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RECON_HOME_AGENCY_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RECON_HOME_AGENCY_ID, CASE when TAG_AGENCY_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_AGENCY_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_AGENCY_ID, CASE when AGENCY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AGENCY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AGENCY_CODE, HIA_AGCY_ID, CASE when SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SOURCE_CODE, SOURCE_TXN_ID, LANE_ID, CASE when TVL_TAG_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TVL_TAG_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TVL_TAG_STATUS, CASE when LIC_PLATE_STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_STATE, CASE when LIC_PLATE_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_NBR, LICENSE_PLATE_ID, EARNED_CLASS, POSTED_CLASS, EARNED_REVENUE, POSTED_REVENUE, TRANSACTION_FILE_DETAIL_ID, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.FACT_IOP_TGS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_ACCT_TAG_DETAIL",
+            "schema_name": "dbo",
+            "id_field": "ACCT_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select MONTH_ID, ACCT_ID, REBILL_AMT_GRP_ID, REBILL_AMT, CASE when ACCT_STATUS_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ACCT_STATUS_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ACCT_STATUS_CODE, CASE when ACCT_TYPE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ACCT_TYPE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ACCT_TYPE_CODE, CASE when PMT_TYPE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PMT_TYPE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PMT_TYPE_CODE, CASE when ZIP_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP_CODE, ACCT_CREATED_DATE, ACCT_CLOSED_DATE, CASE when TAG_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_ID, ACCT_TAG_SEQ, TAG_HISTORY_SEQ, CASE when TAG_COUNTER is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_COUNTER, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_COUNTER, TAG_COUNTER_DATE, MONTH_BEGIN_TAG, OPENED_TAG, CLOSED_TAG, MONTH_END_TAG, LAST_UPDATE_DATE from dbo.FACT_ACCT_TAG_DETAIL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_VIOLATIONS_DMV_STATUS_DETAIL",
+            "schema_name": "dbo",
+            "id_field": "VIOLATION_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATION_ID, DAY_ID, MONTH_ID, LANE_ID, VCLY_ID, VEHICLE_CLASS, CASE when DMV_STS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DMV_STS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DMV_STS, CASE when BUSINESS_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(BUSINESS_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as BUSINESS_TYPE, LICENSE_PLATE_ID, CASE when LIC_PLATE_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_NBR, CASE when LIC_PLATE_STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_STATE, TOLL_DUE, TOLL_PAID from dbo.FACT_VIOLATIONS_DMV_STATUS_DETAIL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_NET_REV_TFC_TRIPS",
+            "schema_name": "dbo",
+            "id_field": "TRANSACTION_FILE_DETAIL_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TART_ID, TRANSACTION_FILE_DETAIL_ID from dbo.FACT_NET_REV_TFC_TRIPS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PAYMENTS_VPS_DETAIL",
+            "schema_name": "dbo",
+            "id_field": "DAY_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, MONTH_ID, PAYMENT_ID, LAST_INVOICE_ID, VIOLATION_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VTOLL, PAYMENT_DATE, DEPOSIT_DATE, RETURN_PAYMENT_DATE, CASE when PAYMENT_FORM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_FORM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_FORM, PAYMENT_TXN_ID, PAYMENT_LINE_ITEM_ID, VIOLATOR_ID, CASE when LIC_PLATE_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_NBR, CASE when LIC_PLATE_STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_STATE, LICENSE_PLATE_ID, CASE when PAYMENT_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_STATUS, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, SHIFT_ID, POS_ID, PAID_AMOUNT, RETURN_AMOUNT, AMOUNT, LAST_UPDATE_DATE from dbo.PAYMENTS_VPS_DETAIL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TRIP_HISTORY_NEW_SET",
+            "schema_name": "dbo",
+            "id_field": "TRIP_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRHL_ID, TART_ID, TRIP_ID, SECOND_ID, DAY_ID, TIME_ID, CASE when TXN_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TXN_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TXN_TYPE, ACCT_ID, CASE when TAG_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TAG_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TAG_ID, VIOLATOR_ID, LICENSE_PLATE_ID, VEHICLE_CLASS, LANE_ID, PLAZA_ID, FACILITY_ID, CASE when DIRECTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIRECTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIRECTION, DURATION_MINUTES, AMOUNT from dbo.FACT_TRIP_HISTORY_NEW_SET",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VB_STATEMENT_INVOICES",
+            "schema_name": "dbo",
+            "id_field": "VBI_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VBSI_STATEMENT_ID, VIOLATOR_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VB_STATEMENT_INVOICES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRANSACTION_FILE_DETAILS",
+            "schema_name": "dbo",
+            "id_field": "TRANSACTION_FILE_DETAIL_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_FILE_DETAIL_ID, CASE when SUBS_TRANS_TYPE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUBS_TRANS_TYPE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUBS_TRANS_TYPE_CODE, TRANSACTION_FILE_HEADER_ID, SUBSCRIBER_UNIQUE_ID, RECEIVED_DATE, RECEIVED_DATE_TIME_ID, INSERT_DATE, LAST_UPDATE_DATE from dbo.TRANSACTION_FILE_DETAILS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "RETAIL_TRANSACTIONS",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, RETAIL_TRANS_ID, PAYMENT_TXN_ID, POS_ID, INSERT_DATETIME, LAST_UPDATE_DATE from dbo.RETAIL_TRANSACTIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TRIP_LV_HISTORY_STAGE",
+            "schema_name": "dbo",
+            "id_field": "TRIP_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRHL_ID, TART_ID, LICENSE_PLATE_ID, TRIP_ID, SECOND_ID, DAY_ID, TIME_ID, VEHICLE_CLASS, CASE when LANE_DIRECTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LANE_DIRECTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LANE_DIRECTION, LANE_ID, PLAZA_ID, FACILITY_ID, MILEAGE, AMOUNT, DURATION_MINUTES, VIOLATOR_ID from dbo.FACT_TRIP_LV_HISTORY_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VIOL_INVOICE_VIOL",
+            "schema_name": "dbo",
+            "id_field": "VIOLATION_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATION_ID, VIOL_INVOICE_ID, CASE when VIOL_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_STATUS, TOLL_DUE_AMOUNT, FINE_AMOUNT, CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from dbo.VIOL_INVOICE_VIOL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VIOLATION_VB_VIOL_INVOICES_VIOL",
+            "schema_name": "dbo",
+            "id_field": "LAST_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PARTITION_VALUES, LAST_INVOICE_ID, VIOL_INVOICE_ID, VIOLATION_ID, VIOL_INVOICE_DATE, CASE when VIOL_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_STATUS, TOLL_DUE, FINE_AMOUNT, DELETE_STATUS from dbo.VIOLATION_VB_VIOL_INVOICES_VIOL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_INVOICE_DETAIL_MISSING_VPS_HOST_TRANS",
+            "schema_name": "dbo",
+            "id_field": "VIOLATOR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, PARTITION_DATE, VIOLATION_ID, CURRENT_INVOICE_LEVEL_FLAG, VBI_INVOICE_ID, CASE when VB_INV_DATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_INV_DATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_INV_DATE, CASE when VB_INV_DATE_EXCUSED is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VB_INV_DATE_EXCUSED, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VB_INV_DATE_EXCUSED, VIOL_INVOICE_ID, CASE when CONVERTED_DATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CONVERTED_DATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CONVERTED_DATE, CASE when VIOL_INV_DATE_EXCUSED is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_INV_DATE_EXCUSED, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_INV_DATE_EXCUSED, VIOL_DATE, VIOL_TIME_ID, CASE when VIOL_POST_DATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_POST_DATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_POST_DATE, CASE when VIOL_PAID_DATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_PAID_DATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_PAID_DATE, CASE when VIOL_STATUS_DATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_STATUS_DATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_STATUS_DATE, CASE when VIOL_DATE_EXCUSED is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_DATE_EXCUSED, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_DATE_EXCUSED, CASE when VIOLATION_OR_ZIPCASH is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOLATION_OR_ZIPCASH, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOLATION_OR_ZIPCASH, LANE_ID, CASE when SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SOURCE_CODE, CASE when INV_DTL_VIOL_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(INV_DTL_VIOL_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as INV_DTL_VIOL_STATUS, CASE when VIOL_STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_STATUS, LAST_VIOLATOR_ID, TRANSACTION_ID, CASE when DISPOSITION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION, VPS_HOST_POSTED_REVENUE, VPS_HOST_POSTED_DATE, CASE when VIOL_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIOL_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIOL_TYPE, TOLL_DUE, AMT_PAID, AMT_PAID_ADJ, AMT_PAID_DISC, CASE when VEHICLE_CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VEHICLE_CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VEHICLE_CLASS, VIOL_LEFT_ON_INV_FLAG, INSERT_DATE from dbo.FACT_INVOICE_DETAIL_MISSING_VPS_HOST_TRANS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_VIOLATION_PAYMENTS_T",
+            "schema_name": "dbo",
+            "id_field": "LAST_INVOICE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select MONTH_ID, DAY_ID, PAYMENT_ID, LAST_INVOICE_ID, VIOLATION_ID, VBI_INVOICE_ID, VIOL_INVOICE_ID, VIOLATOR_ID, IS_VTOLL, PMNT_NBR, SHIFT_ID, POS_ID, PAYMENT_DATE, DEPOSITE_DATE, CASE when DELIVERY_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DELIVERY_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DELIVERY_CODE, CASE when PAYMENT_SOURCE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_SOURCE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_SOURCE_CODE, CASE when PAYMENT_FORM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PAYMENT_FORM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PAYMENT_FORM, TOLL_DUE, FEES_DUE, INV_TOLL_DUE, INV_FEES_DUE, SPLIT_AMOUNT, INV_AMOUNT from dbo.FACT_VIOLATION_PAYMENTS_T",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TRIP_ICRS",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when LIC_PLATE_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_NBR, CASE when LIC_PLATE_STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_STATE, CASE when DAY_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DAY_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DAY_ID, TRIP_AMT, CASE when PLAZA_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_1, CASE when DIR_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_1, TXN_1, CASE when PLAZA_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_2, CASE when DIR_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_2, TXN_2, CASE when PLAZA_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_3, CASE when DIR_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_3, TXN_3, CASE when PLAZA_4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_4, CASE when DIR_4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_4, TXN_4, CASE when PLAZA_5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_5, CASE when DIR_5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_5, TXN_5, CASE when PLAZA_6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_6, CASE when DIR_6 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_6, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_6, TXN_6, CASE when PLAZA_7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_7, CASE when DIR_7 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_7, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_7, TXN_7, CASE when PLAZA_8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_8, CASE when DIR_8 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_8, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_8, TXN_8, CASE when PLAZA_9 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_9, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_9, CASE when DIR_9 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_9, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_9, TXN_9, CASE when PLAZA_10 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLAZA_10, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLAZA_10, CASE when DIR_10 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIR_10, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIR_10, TXN_10 from dbo.FACT_TRIP_ICRS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TOLL_TAG_PENETRATION_PREV",
+            "schema_name": "dbo",
+            "id_field": "LANE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, CASE when ZIP_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP_CODE, LANE_ID, TOLL_TXN_CNT, VIDEO_TXN_CNT, TT_PERCNT from dbo.FACT_TOLL_TAG_PENETRATION_PREV",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TOLL_TRANSACTIONS_ZIPCODE",
+            "schema_name": "dbo",
+            "id_field": "LANE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, CASE when ZIP_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP_CODE, LANE_ID, TOLL_TXN_CNT from dbo.TOLL_TRANSACTIONS_ZIPCODE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TOLL_TAG_PENETRATION_PREV_OLD",
+            "schema_name": "dbo",
+            "id_field": "LANE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, CASE when ZIP_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP_CODE, LANE_ID, TOLL_TXN_CNT, VIDEO_TXN_CNT, TT_PERCNT from dbo.FACT_TOLL_TAG_PENETRATION_PREV_OLD",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LANE_ID_VIOL_DATE_LANE_VIOL_ID",
+            "schema_name": "dbo",
+            "id_field": "LANE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LANE_VIOL_ID, LANE_ID, SEQUENCE_NBR, VIOL_DATE from dbo.LANE_ID_VIOL_DATE_LANE_VIOL_ID",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TOLL_TAG_PENETRATION",
+            "schema_name": "dbo",
+            "id_field": "LANE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, CASE when ZIP_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP_CODE, LANE_ID, TOLL_TXN_CNT, VIDEO_TXN_CNT, TT_PERCNT from dbo.FACT_TOLL_TAG_PENETRATION",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACT_TOLL_TAG_PENETRATION_VERSION_0",
+            "schema_name": "dbo",
+            "id_field": "LANE_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DAY_ID, CASE when ZIP_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP_CODE, LANE_ID, TOLL_TXN_CNT, VIDEO_TXN_CNT, TT_PERCNT from dbo.FACT_TOLL_TAG_PENETRATION_VERSION_0",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

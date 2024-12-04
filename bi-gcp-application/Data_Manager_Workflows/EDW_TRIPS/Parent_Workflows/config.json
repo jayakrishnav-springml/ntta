@@ -1,0 +1,25 @@
+{
+    "EDW_TRIPS_Daily_Run":{
+        "labels":"workflow=parent,callout=parentworkflows",
+        "description":"This Workflow includes the Orchestration Steps for Package EDW_TRIPS_DAILY_RUN"},
+    "EDW_TRIPS_Finance_Gl_Daily_Run":{
+        "labels":"workflow=parent,callout=parentworkflows",
+        "description":"This Workflow includes the Orchestration Steps for Package EDW_TRIPS_FINANCE_GL_DAILY_RUN"},
+    "EDW_TRIPS_Item_26_Monthly_Run":{
+        "labels":"workflow=parent,process_id=9010,callout=childworkflows",
+        "description":"This Workflow includes the Orchestration Steps for EDW_TRIPS_Item_26_Monthly_Run"},
+    "EDW_Dim_Day_Hierarchy_Yearly_Run":{
+        "labels":"workflow=parent,callout=childworkflows",
+        "description":"This Workflow includes the Orchestration Steps for EDW_Dim_Day_Hierarchy_Yearly_Run"},
+    "EDW_TRIPS_GIS_Exports":{"labels":"workflow=parent,callout=gcf",
+    "description":"This Workflow includes the Orchestration Steps for EDW_TRIPS_GIS_Exports"},
+    "EDW_TRIPS_Collections_Export":{
+        "labels":"workflow=parent,callout=gcf",
+	"description":"This Workflow includes the Orchestration Steps for EDW_TRIPS_Collections_Export"},
+	"EDW_TRIPS_Fact_Cpvt_Monthly_Summary_Load":{
+        "labels":"workflow=parent,callout=sql",
+        "description":"This Workflow includes the Orchestration Steps for SP-Fact_Cpvt_Monthly_Summary_Load"
+    }
+
+}
+    

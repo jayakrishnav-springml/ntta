@@ -1,0 +1,16 @@
+{
+    "Data_Loading":[{
+        "job_name": "ExcusalDetailReport_Scheduler",
+        "schedule": "0 21 2 * *",
+        "message_body": "{\"argument\": \"{\\\"instance_id\\\":\\\"<instance_id>\\\", \\\"zone\\\":\\\"<zone>\\\" , \\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}", 
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+    {
+        "job_name": "InvoiceDetail_Tunned_Scheduler",
+        "schedule": "0 21 1 * *",
+        "message_body": "{\"argument\": \"{\\\"instance_id\\\":\\\"<instance_id>\\\", \\\"zone\\\":\\\"<zone>\\\" , \\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}", 
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    }]
+}

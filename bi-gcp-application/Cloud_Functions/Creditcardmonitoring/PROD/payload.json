@@ -1,0 +1,8 @@
+{
+    "project_id":"prj-ntta-ops-bi-prod-svc-01",
+    "bucket_name":"prj-ntta-ops-bi-prod-shared-data",
+    "prefix_folder": "Imports/CreditCardMonitoring",
+    "dest_folder" : "Archive/CreditCardMonitoring/",
+    "main_dataset_id":"EDW_SHARED_DATA",
+    "stage_dataset_id":"LND_SHARED_DATA"
+}

@@ -1,0 +1,128 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "LND_TBOS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS2_DEV_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-landing-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_TBOS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\Archival_tables",
+    "log_folder_path": "E:\\bcp_logs\\Archival_tables",
+    "max_process_count": 8,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "DocMgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "DocMgr_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": ""
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TER_"
+            },
+            "DMV": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "DMV_"
+            },
+            "Parking": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Parking_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "docmgr_"
+            },
+            "EIP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "EIP_"
+            },
+            "MIR": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "MIR_"
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+       
+        {
+            "table_name": "BI_Archive_Reversal_IDS",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query":  "select CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [UniqueID_ColumnName] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([UniqueID_ColumnName], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [UniqueID_ColumnName], UniqueID,ArchiveBatchDate,archivereversaldate,LND_UpdateDate from dbo.BI_Archive_Reversal_IDS",
+            "gcs_upload_flag": "FALSE"
+        }   ]
+}

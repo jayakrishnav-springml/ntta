@@ -1,0 +1,786 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "LND_TBOS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS2_DEV_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-landing-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_TBOS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\Archival_tables",
+    "log_folder_path": "E:\\bcp_logs\\Archival_tables",
+    "max_process_count": 8,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "DocMgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "DocMgr_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": ""
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TER_"
+            },
+            "DMV": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "DMV_"
+            },
+            "Parking": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Parking_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "docmgr_"
+            },
+            "EIP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "EIP_"
+            },
+            "MIR": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "MIR_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+       
+        {
+            "table_name": "BI_Archive_Reversal_IDS",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query":  "select CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [UniqueID_ColumnName] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([UniqueID_ColumnName], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [UniqueID_ColumnName], UniqueID,ArchiveBatchDate,archivereversaldate,LND_UpdateDate from dbo.BI_Archive_Reversal_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_OutboundCommunications_IDS",
+            "schema_name": "DocMgr",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select OutboundCommunicationID, ArchiveBatchDate, LND_UpdateDate from DocMgr.TP_Customer_OutboundCommunications_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Adjustment_LineItems_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select AdjLineItemID, ArchiveBatchDate, LND_UpdateDate from Finance.Adjustment_LineItems_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Adjustments_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select AdjustmentID, ArchiveBatchDate, LND_UpdateDate from Finance.Adjustments_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ChaseTransactions_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ChaseTransactionID, ArchiveBatchDate, LND_UpdateDate from Finance.ChaseTransactions_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ChequePayments_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentID, ArchiveBatchDate, LND_UpdateDate from Finance.ChequePayments_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CustomerPayments_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustPaymentID, ArchiveBatchDate, LND_UpdateDate from Finance.CustomerPayments_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Gl_Transactions_IDS",
+            "schema_name": "Finance",
+            "id_field": "Gl_TxnID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select [Gl_TxnID], ArchiveBatchDate, LND_UpdateDate from Finance.Gl_Transactions_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Gl_Txn_LineItems_IDS",
+            "schema_name": "Finance",
+            "id_field": "PK_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select [PK_ID], ArchiveBatchDate, LND_UpdateDate from Finance.Gl_Txn_LineItems_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Overpayments_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select OverpaymentID, ArchiveBatchDate, LND_UpdateDate from Finance.Overpayments_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentTxn_LineItems_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LineItemID, ArchiveBatchDate, LND_UpdateDate from Finance.PaymentTxn_LineItems_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PaymentTxns_IDS",
+            "schema_name": "Finance",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PaymentID, ArchiveBatchDate, LND_UpdateDate from Finance.PaymentTxns_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Addresses_IDS",
+            "schema_name": "History",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerID, ArchiveBatchDate, LND_UpdateDate from History.TP_Customer_Addresses_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Attributes_IDS",
+            "schema_name": "History",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select HistID, ArchiveBatchDate, LND_UpdateDate from History.TP_Customer_Attributes_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customers_IDS",
+            "schema_name": "History",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select HistID, ArchiveBatchDate, LND_UpdateDate from History.TP_Customers_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BOS_IOP_OutboundTransactions_IDS",
+            "schema_name": "IOP",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select BOSIOPTransactionID, ArchiveBatchDate, LND_UpdateDate from IOP.BOS_IOP_OutboundTransactions_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CustNotifQueueTracker_IDS",
+            "schema_name": "Notifications",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustNotifQueueTrackerID, ArchiveBatchDate, LND_UpdateDate from Notifications.CustNotifQueueTracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CustomerNotificationQueue_IDS",
+            "schema_name": "Notifications",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerNotificationQueueID, ArchiveBatchDate, LND_UpdateDate from Notifications.CustomerNotificationQueue_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "EligibleForCitations_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select EligibleCitationID, ArchiveBatchDate, LND_UpdateDate from TER.EligibleForCitations_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FailureToPayCitations_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select FailureCitationID, ArchiveBatchDate, LND_UpdateDate from TER.FailureToPayCitations_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HVEligibleTransactions_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select HVEligibleTxnID, ArchiveBatchDate, LND_UpdateDate from TER.HVEligibleTransactions_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HabitualViolatorStatusTracker_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select HVStatusID, ArchiveBatchDate, LND_UpdateDate from TER.HabitualViolatorStatusTracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HabitualViolators_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select HVID, ArchiveBatchDate, LND_UpdateDate from TER.HabitualViolators_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VehicleRegBlocks_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VRBID, ArchiveBatchDate, LND_UpdateDate from TER.VehicleRegBlocks_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCollectionsAgencyTracker_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VioCollAgencyTrackerID, ArchiveBatchDate, LND_UpdateDate from TER.ViolatorCollectionsAgencyTracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCollectionsInbound_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VioCollInboundID, ArchiveBatchDate, LND_UpdateDate from TER.ViolatorCollectionsInbound_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCollectionsOutboundStatus_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VioCollOutboundStatusUpdateID, ArchiveBatchDate, LND_UpdateDate from TER.ViolatorCollectionsOutboundStatus_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCollectionsOutboundUpdate_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VioCollOutboundUpdateID, ArchiveBatchDate, LND_UpdateDate from TER.ViolatorCollectionsOutboundUpdate_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ViolatorCollectionsOutbound_IDS",
+            "schema_name": "TER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VioCollOutboundID, ArchiveBatchDate, LND_UpdateDate from TER.ViolatorCollectionsOutbound_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSATripAttributes_IDS",
+            "schema_name": "TSA",
+            "id_field": "ttptripid",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TTpTripID, ArchiveBatchDate, LND_UpdateDate from TSA.TSATripAttributes_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DMVRequestTracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select RequestTrackerID, ArchiveBatchDate, LND_UpdateDate from TollPlus.DMVRequestTracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DMVResponse_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DMVResponseID, ArchiveBatchDate, LND_UpdateDate from TollPlus.DMVResponse_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Invoice_Charges_Tracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceChargeID, ArchiveBatchDate, LND_UpdateDate from TollPlus.Invoice_Charges_Tracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Invoice_Header_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceID, ArchiveBatchDate, LND_UpdateDate from TollPlus.Invoice_Header_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Invoice_LineItems_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvLineItemID, ArchiveBatchDate, LND_UpdateDate from TollPlus.Invoice_LineItems_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "MbsInvoices_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select MbsInvoicesID, ArchiveBatchDate, LND_UpdateDate from TollPlus.MbsInvoices_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Mbsheader_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select MbsID, ArchiveBatchDate, LND_UpdateDate from TollPlus.Mbsheader_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "OverPaymentsLog_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select OverPaymentLogID, ArchiveBatchDate, LND_UpdateDate from TollPlus.OverPaymentsLog_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_CustTxns_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustTxnID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_CustTxns_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_CustomerTrips_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "CustTripID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select CustTripID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_CustomerTrips_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_AccStatus_Tracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select AccStatusHistID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_AccStatus_Tracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Activities_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ActivityID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Activities_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Addresses_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustAddressID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Addresses_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Attributes_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Attributes_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Balance_Alert_Facts_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Balance_Alert_Facts_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Balances_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustbalID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Balances_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Business_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Business_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Contacts_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ContactID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Contacts_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Emails_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustMailID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Emails_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Flags_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerFlagID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Flags_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Internal_Users_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Internal_Users_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Logins_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LoginID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Logins_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Phones_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustPhoneID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Phones_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Plans_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustPlanID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Plans_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Tags_History_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select HistID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Tags_History_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Tags_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustTagID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Tags_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Trip_Charges_Tracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "TripChargeID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TripChargeID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Trip_Charges_Tracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Trip_Receipts_Tracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "TripReceiptID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TripReceiptID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Trip_Receipts_Tracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Vehicle_Tags_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VehicleTagID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Vehicle_Tags_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customer_Vehicles_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VehicleID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customer_Vehicles_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Customers_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CustomerID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Customers_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Image_Review_Results_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ImageReviewResultID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Image_Review_Results_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Invoice_Receipts_Tracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ReceiptID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Invoice_Receipts_Tracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Trips_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "TpTripID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TpTripID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Trips_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_ViolatedTrips_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CitationID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_ViolatedTrips_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Violated_Trip_Charges_Tracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TripChargeID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Violated_Trip_Charges_Tracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TP_Violated_Trip_Receipts_Tracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TripReceiptID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TP_Violated_Trip_Receipts_Tracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TpFileTracker_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select FileID, ArchiveBatchDate, LND_UpdateDate from TollPlus.TpFileTracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "UnRegisteredCustomersMbsSchedules_IDS",
+            "schema_name": "TollPlus",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select UnRegMbsScheduleID, ArchiveBatchDate, LND_UpdateDate from TollPlus.UnRegisteredCustomersMbsSchedules_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "NTTAHostBOSFileTracker_IDS",
+            "schema_name": "TranProcessing",
+            "id_field": "ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select ID, ArchiveBatchDate, LND_UpdateDate from TranProcessing.NTTAHostBOSFileTracker_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "NTTARawTransactions_IDS",
+            "schema_name": "TranProcessing",
+            "id_field": "TxnID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TxnID, ArchiveBatchDate, LND_UpdateDate from TranProcessing.NTTARawTransactions_IDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSARawTransactions_IDS",
+            "schema_name": "TranProcessing",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TxnID, ArchiveBatchDate, LND_UpdateDate from TranProcessing.TSARawTransactions_IDS",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

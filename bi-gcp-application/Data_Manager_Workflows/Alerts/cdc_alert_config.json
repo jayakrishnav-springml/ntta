@@ -1,0 +1,34 @@
+{
+  "displayName": "Alerting Policy For CDC Process Failure",
+  "documentation": {
+    "content": "The CDC process named **${resource.label.workflow_id}** workflow within the project **${project}** encountered an error during execution. This CDC process is failed for **${log.extracted_label.failed_tables_count}** tables.\n\nPlease refer to LND_TBOS_SUPPORT.cdc_batch_load table in Google Cloud Bigquery for this CDC process failure error details.",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "Workflow Failure Condition Check",
+      "conditionMatchedLog": {
+        "filter": "(resource.labels.service=\"workflowexecutions.googleapis.com\" OR resource.labels.service=\"workflows.googleapis.com\") OR resource.type=\"workflows.googleapis.com/Workflow\" severity>=DEFAULT AND jsonPayload.status=\"Failed\" AND jsonPayload.log_source=\"CDC\"",
+        "labelExtractors": {
+          "failed_tables_count": "EXTRACT(jsonPayload.failed_tables_count)",
+          "failed_tables_list": "EXTRACT(jsonPayload.failed_tables)", 
+          "child_workflow_id": "EXTRACT(jsonPayload.child_workflow_id)",
+          "log_source": "EXTRACT(jsonPayload.log_source)",
+          "status": "EXTRACT(jsonPayload.status)",
+          "parent_workflow_id": "EXTRACT(jsonPayload.parent_workflow_id)"
+        }
+      }
+    }
+  ],
+  "combiner": "OR",
+  "alertStrategy": {
+    "notificationRateLimit": {
+      "period": "300s"
+    },
+    "autoClose": "604800s"
+  },
+  "notificationChannels": [
+    
+  ],
+  "severity": "critical"
+}

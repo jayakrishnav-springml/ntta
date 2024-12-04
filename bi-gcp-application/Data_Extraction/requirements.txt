@@ -1,0 +1,8 @@
+pyodbc
+pandas
+google-cloud-storage
+pyarrow
+google.cloud.logging
+multiprocess
+mysql-connector-python
+google-cloud-secret-manager

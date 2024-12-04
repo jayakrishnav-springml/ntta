@@ -1,0 +1,16 @@
+{
+    "LND_TBOS_Cheque_Payments_File_Export":{
+        "labels":"workflow=parent,callout=sql",
+        "description":"This Workflow includes the Orchestration Steps for LND_TBOS_Cheque_Payments_File_Export"},
+    "LND_TBOS_Bankruptcy":{
+        "labels":"workflow=parent,callout=gcf",
+        "description":"This Workflow includes the Orchestration Steps for LND_TBOS_Bankruptcy"},
+    "LND_TBOS_Chargeback":{
+        "labels":"workflow=parent,callout=gcf",
+        "description":"This Workflow includes the Orchestration Steps for LND_TBOS_Chargeback"},
+	"LND_TBOS_Creditcardmonitoring":{
+		"labels":"workflow=parent,callout=gcf",
+		"description":"This Workflow includes the Orchestration Steps for LND_TBOS_Creditcardmonitoring"}
+    
+}
+    

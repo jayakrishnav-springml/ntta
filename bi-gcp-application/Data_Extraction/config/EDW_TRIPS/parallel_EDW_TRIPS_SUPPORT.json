@@ -1,0 +1,146 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=EDW_TRIPS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.7.45,17001",
+        "database": "EDW_TRIPS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS3_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-raw-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_TRIPS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\edw_trips",
+    "log_folder_path": "E:\\bcp_logs\\edw_trips",
+    "max_process_count": 5,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE_APS",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "Dim_Year",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [Cal_YearID], [Fiscal_YearID], [Year_Desc], YearDate, YearDuration, [Cal_PrevYearID], [Cal_Prev2YearID], [Cal_Prev3YearID], [Cal_Prev4YearID], [Cal_Prev5YearID], [Cal_Prev6YearID], Cal_Prev7YearID from Ref.Dim_Year",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_Month",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [Cal_MonthID], [SPS_MonthID], MonthDate, CASE when MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MonthDesc, [Cal_MonthOfYear], [Sps_MonthOfYear], [Cal_QuarterID], [Sps_QuarterID], [Cal_YearID], [Sps_YearID], MonthDuration, PrevMonthID, [Cal_LQMonthID], [Sps_LQMonthID], LYMonthID, CASE when P2MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P2MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P2MonthDesc, P3MonthID, CASE when P3MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P3MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P3MonthDesc, P4MonthID, CASE when P4MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P4MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P4MonthDesc, P5MonthID, CASE when P5MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P5MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P5MonthDesc, P6MonthID, CASE when P6MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P6MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P6MonthDesc, P7MonthID, CASE when P7MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P7MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P7MonthDesc, P8MonthID, CASE when P8MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P8MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P8MonthDesc, P9MonthID, CASE when P9MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P9MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P9MonthDesc, P10MonthID, CASE when P10MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P10MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P10MonthDesc, P11MonthID, CASE when P11MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P11MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P11MonthDesc, P12MonthID, CASE when P12MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(P12MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as P12MonthDesc, PrevLYMonthid, LYP3Monthid, LYP4Monthid, LYP5Monthid, LYP6Monthid, LYP7Monthid, LYP8Monthid, LYP9Monthid, LYP10Monthid, LYP11Monthid, LYP12Monthid from Ref.Dim_Month",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_Day",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DayDate, DayID, PrevDayID, [Cal_MonthID], [Sps_MonthID], [Cal_QuarterID], [Sps_QuarterID], [Cal_YearID], [Sps_YearID], PrevDayDate, LMDayDate, [Cal_LQDayDate], [Sps_LQDayDate], LYDayDate, [Cal_WeekID], [Sps_WeekID], [Cal_LWDayDate], [SPS_LWDayDate], CASE when DayDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DayDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DayDesc, CASE when PrevDayDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PrevDayDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PrevDayDesc, IsWorkDay, IsWeekday, IsWeekend, WorkDaysInMonth, WorkDaysLeftInMonth, WorkDaysUsedInMonth, DaysInMonth, LastModified from Ref.Dim_Day",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_Date",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DATE, CASE when [MONTH_WEEK] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MONTH_WEEK], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MONTH_WEEK], CASE when [DATE_DAY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_DAY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_DAY], CASE when [DATE_FULL] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_FULL], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_FULL], CASE when [DATE_MONTH] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_MONTH], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_MONTH], CASE when [DATE_YEAR_MONTH] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_YEAR_MONTH], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_YEAR_MONTH], CASE when [DATE_QUARTER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_QUARTER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_QUARTER], CASE when [DATE_YEAR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_YEAR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_YEAR], CASE when [DAY_OF_WEEK_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DAY_OF_WEEK_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DAY_OF_WEEK_NAME], CASE when [BUSINESS_DAY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BUSINESS_DAY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BUSINESS_DAY], CASE when WEEKEND is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(WEEKEND, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as WEEKEND, CASE when HOLIDAY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(HOLIDAY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as HOLIDAY, CASE when HOLIDAY_NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(HOLIDAY_NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as HOLIDAY_NAME from Ref.Dim_Date",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_Time",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [TIME_ID], CASE when HOUR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(HOUR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as HOUR, CASE when [12_HOUR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([12_HOUR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [12_HOUR], CASE when [AM_PM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AM_PM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AM_PM], CASE when [30_MINUTE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([30_MINUTE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [30_MINUTE], CASE when [15_MINUTE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([15_MINUTE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [15_MINUTE], CASE when [10_MINUTE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([10_MINUTE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [10_MINUTE], CASE when [5_MINUTE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([5_MINUTE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [5_MINUTE], CASE when MINUTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MINUTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MINUTE, CASE when SECOND is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SECOND, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SECOND from Ref.Dim_Time",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

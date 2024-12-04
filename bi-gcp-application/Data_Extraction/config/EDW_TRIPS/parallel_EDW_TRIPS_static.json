@@ -1,0 +1,353 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=EDW_TRIPS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.9.26,17001",
+        "database": "EDW_TRIPS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "",
+        "password_secret_id": "",
+        "secret_version": ""
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-raw-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_TRIPS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\edw_trips_alltables",
+    "log_folder_path": "E:\\bcp_logs\\edw_trips_alltables",
+    "max_process_count": 10,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "directions",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when DireDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DireDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DireDesc, CASE when Note is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Note, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Note, CASE when CreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedBy, CreationDate, CASE when UpdatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedBy, UpdatedDate, DireID, LastUpdateType, LastUpdateDate from Ref.directions",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "facility_sub_agency",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when FacilityAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FacilityAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FacilityAbbrev, CASE when SubAgencyAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SubAgencyAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SubAgencyAbbrev, CASE when OperationsAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OperationsAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OperationsAgency, CASE when LastUpdateType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LastUpdateType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LastUpdateType, LastUpdateDate from Ref.facility_sub_agency",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "lane_gis_data",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LaneID, CASE when Status is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Status, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Status, CASE when LaneName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneName, CASE when TollLocation is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TollLocation, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TollLocation, CASE when Description is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Description, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Description, CASE when Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Type, PlazaID, ID, CASE when Source is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Source, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Source, CASE when LaneDirection is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneDirection, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneDirection, Zipcode, CASE when PCName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PCName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PCName, CASE when County is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(County, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as County, Latitude, Longitude, PlazaSortOrder from Ref.lane_gis_data",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ntta_toll_locations",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ObjectID, FromStatiion, CASE when Corridor is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Corridor, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Corridor, CASE when RoadwayName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RoadwayName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RoadwayName, CASE when RoadwayType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RoadwayType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RoadwayType, CASE when RoadwayDescription is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RoadwayDescription, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RoadwayDescription, CASE when Name is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Name, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Name, CASE when RiteName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RiteName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RiteName, CASE when Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Type, XCoord, YCoord from Ref.ntta_toll_locations",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "plaza_county_xref",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PlazaID, CASE when PlazaAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PlazaAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PlazaAbbrev, CASE when LaneDirection is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneDirection, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneDirection, FacilityID, CASE when FacilityAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FacilityAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FacilityAbbrev, CASE when SubAgencyAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SubAgencyAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SubAgencyAbbrev, CASE when AgencyAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AgencyAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AgencyAbbrev, CASE when County is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(County, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as County from Ref.plaza_county_xref",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "plaza_mileage",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PlazaID, CASE when LaneDirection is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneDirection, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneDirection, Mileage from Ref.plaza_mileage",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "dim_lane",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LaneID, CASE when LaneAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneAbbrev, CASE when LaneName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneName, CASE when LaneDirection is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneDirection, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneDirection, PlazaID, CASE when PlazaAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PlazaAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PlazaAbbrev, CASE when PlazaName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PlazaName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PlazaName, PlazaLatitude, PlazaLongitude, ZipCode, CASE when County is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(County, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as County, CASE when SubFacilityAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SubFacilityAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SubFacilityAbbrev, FacilityID, CASE when FacilityAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FacilityAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FacilityAbbrev, CASE when FacilityName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FacilityName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FacilityName, FacilityBitmaskID, CASE when SubAgencyAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SubAgencyAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SubAgencyAbbrev, AgencyID, CASE when AgencyAbbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AgencyAbbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AgencyAbbrev, CASE when AgencyName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AgencyName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AgencyName, CASE when AgencyIsIOP is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AgencyIsIOP, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AgencyIsIOP, LanyID, Mileage, PlazaSortOrder, Active, LAstUpdateDate from Ref.dim_lane",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TartTPTrip",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TartID, TPTripID, TripDayID, PMTY_ID, TXID_ID, CASE when LEVEL_0 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LEVEL_0, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LEVEL_0, VIOLATION_ID, TTXN_ID, EarnedRev, ActualRev, EARNED_AXLES, ACTUAL_AXLES, SourceOfEntry, CASE when RecordType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RecordType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RecordType, EDW_UpdateDate from Ref.TartTPTrip",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "RiteMigratedInvoice",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select InvoiceNumber, FirstInvoiceID, CurrentInvoiceID, CustomerID, AgeStageID, CollectionStatusID, CurrMBSID, VehicleID, CASE when LIC_PLATE_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_NBR, CASE when LIC_PLATE_STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_STATE, MigratedFlag, CASE when InvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(InvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as InvoiceStatus, EDW_InvoiceStatusID, ZipCashDate, FirstNoticeDate, vb_inv_date_modified_SecondNoticeDate, SecondNoticeDate, ThirdNoticeDate, CitationDate, LegalActionPendingDate, DueDate, CASE when CurrMBSGeneratedDate is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CurrMBSGeneratedDate, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CurrMBSGeneratedDate, FirstpaymentDate, LastPaymentDate, InvoiceAmount, PBMTollAmount, AVITollAmount, PremiumAmount, TxnCnt, Tolls, FNFees, SNFees, FeesDue, ExpectedAmount, TollsAdjusted, FNFeesAdjusted, SNFeesAdjusted, AdjustedAmount, TollsPaid, FNFeesPaid, SNFeesPaid, PaidAmount, LastCACompanyID, AdjustedExpectedTolls, AdjustedExpectedFNFees, AdjustedExpectedSNFees, AdjustedExpectedAmount, TollOutStandingAmount, FNFeesOutStandingAmount, SNFeesOutStandingAmount, OutstandingAmount from Ref.RiteMigratedInvoice",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LoadProcessControl",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TableName, LastUpdatedDate, EDW_UpdateDate from Utility.LoadProcessControl",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Number",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select N from Utility.Number",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "RITE_AccountStatusHistory",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when DataSource is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DataSource, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DataSource, CASE when TableSource is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TableSource, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TableSource, CustomerID, CASE when Acct_Status_Code is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Acct_Status_Code, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Acct_Status_Code, AccountStatusID, AccountStatusDate, CreatedDate, CASE when CreatedUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedUser, UpdatedDate, CASE when UpdatedUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedUser, RITE_Acct_Hist_Seq, RITE_HistLast_RN from Ref.RITE_AccountStatusHistory",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_UnifiedTransaction_StaticSummary",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TripMonthID, OperationsMappingID, FacilityID, TxnCount, ExpectedAmount, AdjustedExpectedAmount, CalcAdjustedAmount, TripWithAdjustedAmount, TollAmount, ActualPaidAmount, OutstandingAmount, EDW_UpdateDate from Ref.Fact_UnifiedTransaction_StaticSummary",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Citation",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, PARTITION_DATE, DayDate, CASE when FIRST_CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FIRST_CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FIRST_CITATION_NBR, CASE when LAST_CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_CITATION_NBR, CASE when COUNTY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COUNTY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COUNTY, PARTITION_DATE0, DATA_AS_OF_DATE, CASE when ADDRESS1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADDRESS1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADDRESS1, CASE when COUNTY_GROUP is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COUNTY_GROUP, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COUNTY_GROUP, CASE when CITATION_NBR_LIST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITATION_NBR_LIST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITATION_NBR_LIST, VBI_INVOICE_ID, FEESDUE, FEESPAID, TOLLSDUE, TOLLSPAIDADJTXN, TOLLSONPAID from Ref.Citation",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CitationViol",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, VBI_INVOICE_ID, InvoiceNumber, VIOLATION_ID, TpTripID, COURT_ID, CASE when COURT_NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COURT_NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COURT_NAME, CASE when JUDGE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(JUDGE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as JUDGE, CASE when LANE_ABBREV is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LANE_ABBREV, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LANE_ABBREV, CASE when DPS_CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DPS_CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DPS_CITATION_NBR, CASE when CITATION_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITATION_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITATION_NBR, APPEARANCE_DATE, EDW_UpdateDate from Ref.CitationViol",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ban",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorID, VidSeq, HvFlag, CASE when INDICATOR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(INDICATOR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as INDICATOR, DayID, DayDate, CASE when DayDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DayDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DayDesc, ViolatorStatusLetterDeterminationLookupId, CASE when ViolatorStatusLetterDetermination is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ViolatorStatusLetterDetermination, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ViolatorStatusLetterDetermination, DayID0, DayDate0, CASE when DayDesc0 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DayDesc0, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DayDesc0, ViolatorStatusLetterVrbLookupID, CASE when ViolatorStatusLetterVrbLookupDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ViolatorStatusLetterVrbLookupDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ViolatorStatusLetterVrbLookupDesc, ViolatorStatusLetterBanLookupId, CASE when ViolatorStatusLetterBan is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ViolatorStatusLetterBan, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ViolatorStatusLetterBan, DayID1, DayDate1, CASE when DayDesc1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DayDesc1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DayDesc1, DayID2, DayDate2, CASE when DayDesc2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DayDesc2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DayDesc2, LicPlateStateLookupID, CASE when LicPlateStateName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateStateName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateStateName, CASE when LicPlateState is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicPlateState, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicPlateState, Cal_MonthID, CASE when MonthDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MonthDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MonthDesc, DayID3, DayDate3, CASE when DayDesc3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DayDesc3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DayDesc3, ViolatorID0, CASE when Ban is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Ban, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Ban, RegistrationCountyLookupID, CASE when RegistrationCounty is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RegistrationCounty, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RegistrationCounty from Ref.ban",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "plaza_gis_data",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PlazaID, CASE when Corridor is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Corridor, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Corridor, CASE when RoadwayName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RoadwayName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RoadwayName, CASE when RoadwayType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RoadwayType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RoadwayType, CASE when RoadwayDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RoadwayDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RoadwayDesc, Status, CASE when Name is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Name, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Name, CASE when RiteName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RiteName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RiteName, CASE when Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Type, TolledLanes, XCoord, YCoord, PostCode, CASE when City is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(City, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as City, CASE when County is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(County, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as County from Ref.plaza_gis_data",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_ReasonCode",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ReasonCodeID, CASE when ReasonCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ReasonCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ReasonCode, EDW_UpdateDate from dbo.Dim_ReasonCode",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_OperationsMapping",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select OperationsMappingID, CASE when TripIdentMethod is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripIdentMethod, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripIdentMethod, TripWith, CASE when TransactionPostingType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TransactionPostingType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TransactionPostingType, CASE when TripStageCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStageCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStageCode, CASE when TripStatusCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStatusCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStatusCode, CASE when ReasonCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ReasonCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ReasonCode, CASE when CitationStageCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CitationStageCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CitationStageCode, CASE when TripPaymentStatusDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripPaymentStatusDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripPaymentStatusDesc, CASE when SourceName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SourceName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SourceName, CASE when OperationsAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OperationsAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OperationsAgency, BadAddressFlag, NonRevenueFlag, BusinessRuleMatchedFlag, CASE when Mapping is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Mapping, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Mapping, CASE when MappingDetailed is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MappingDetailed, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MappingDetailed, CASE when PursUnpursStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PursUnpursStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PursUnpursStatus, TripIdentMethodID, CASE when TripIdentMethodCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripIdentMethodCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripIdentMethodCode, TransactionPostingTypeID, CASE when TransactionPostingTypeDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TransactionPostingTypeDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TransactionPostingTypeDesc, TripStageID, CASE when TripStageDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStageDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStageDesc, TripStatusID, CASE when TripStatusDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStatusDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStatusDesc, ReasonCodeID, CitationStageID, CASE when CitationStageDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CitationStageDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CitationStageDesc, TripPaymentStatusID, CASE when TripPaymentStatusCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripPaymentStatusCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripPaymentStatusCode, CASE when MSTR_UpdateUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MSTR_UpdateUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MSTR_UpdateUser, MSTR_UpdateDate, EDW_UpdateDate from dbo.Dim_OperationsMapping",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_TransactionPostingType",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TransactionPostingTypeID, CASE when TransactionPostingType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TransactionPostingType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TransactionPostingType, CASE when TransactionPostingTypeDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TransactionPostingTypeDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TransactionPostingTypeDesc, CASE when TransactionPostingTypeGroup is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TransactionPostingTypeGroup, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TransactionPostingTypeGroup, EDW_UpdatedDate from dbo.Dim_TransactionPostingType",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_RecordType",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select RecordTypeID, CASE when RecordType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RecordType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RecordType, CASE when RecordFormat is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RecordFormat, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RecordFormat, SourceOfEntry, LND_UpdateDate, EDW_UpdateDate from dbo.Dim_RecordType",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_TripIdentMethod",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TripIdentMethodID, CASE when TripIdentMethodCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripIdentMethodCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripIdentMethodCode, CASE when TripIdentMethod is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripIdentMethod, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripIdentMethod from dbo.Dim_TripIdentMethod",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_TripStage",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TripStageID, CASE when TripStageCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStageCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStageCode, CASE when TripStageDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStageDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStageDesc, ParentStageID, UpdatedDate, LND_UpdateDate, EDW_UpdateDate from dbo.Dim_TripStage",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_TripStatus",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TripStatusID, CASE when TripStatusCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStatusCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStatusCode, CASE when TripStatusDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripStatusDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripStatusDesc, LND_UpdateDate, EDW_UpdateDate from dbo.Dim_TripStatus",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_Indicator",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select Indicator_ID, CASE when Yes_No_Abbrev is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Yes_No_Abbrev, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Yes_No_Abbrev, CASE when Indicator is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Indicator, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Indicator from dbo.Dim_Indicator",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_InvoiceAgingSnapshot",
+            "schema_name": "dbo",
+            "id_field": "CitationID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select SnapshotDate, SnapshotMonthID, CitationID, CustomerID, AgeStageID, CitationStageID, LaneID, TPTripID, InvoiceNumber, CurrentInvoiceFlag, WriteOffFlag, DeleteFlag, TransactionDate, InvoiceDate, PostedDate, FirstNoticeFeeDate, SecondNoticeFeeDate, WriteOffDate, TollsDue, FirstNoticeFees, SecondNoticeFees, OutstandingAmount, FNFeesOutStandingAmount, SNFeesOutStandingAmount, WriteOffAmount, TxnDate, EDW_UpdateDate from dbo.Fact_InvoiceAgingSnapshot",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_UnifiedTransaction_SummarySnapshot",
+            "schema_name": "dbo",
+            "id_field": "SnapshotMonthID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select SnapshotMonthID, AsOfDayID, RowSeq, TripMonthID, FacilityID, CASE when FacilityCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FacilityCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FacilityCode, CASE when OperationsAgency is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OperationsAgency, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OperationsAgency, OperationsMappingID, CASE when Mapping is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Mapping, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Mapping, CASE when MappingDetailed is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MappingDetailed, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MappingDetailed, CASE when PursUnpursStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PursUnpursStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PursUnpursStatus, TripWith, TripIdentMethodID, RecordTypeID, TransactionPostingTypeID, TripStageID, TripStatusID, ReasonCodeID, CitationStageID, TripPaymentStatusID, CASE when SourceName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SourceName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SourceName, BadAddressFlag, NonRevenueFlag, BusinessRuleMatchedFlag, ManuallyReviewedFlag, OOSPlateFlag, VTollFlag, ClassAdjustmentFlag, FirstPaidMonthID, LastPaidMonthID, CASE when Rpt_PaidvsAEA is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_PaidvsAEA, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_PaidvsAEA, CASE when Rpt_PurUnP is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_PurUnP, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_PurUnP, CASE when Rpt_LPState is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_LPState, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_LPState, CASE when Rpt_InvUnInv is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_InvUnInv, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_InvUnInv, CASE when Rpt_VToll is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_VToll, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_VToll, CASE when Rpt_IRStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_IRStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_IRStatus, CASE when Rpt_ProcessStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_ProcessStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_ProcessStatus, CASE when Rpt_PaidStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_PaidStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_PaidStatus, CASE when Rpt_IRRejectStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Rpt_IRRejectStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Rpt_IRRejectStatus, TxnCount, ExpectedAmount, AdjustedExpectedAmount, CalcAdjustedAmount, TripWithAdjustedAmount, TollAmount, ActualPaidAmount, OutstandingAmount, LND_UpdateDate, EDW_UpdateDate from dbo.Fact_UnifiedTransaction_SummarySnapshot",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_CustomerBalanceSnapshot",
+            "schema_name": "dbo",
+            "id_field": "SnapshotMonthID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select SnapshotMonthID, CustomerID, BalanceDate, TollTxnCount, CreditAmount, DebitAmount, CreditTxnCount, DebitTxnCount, BeginningBalanceAmount, EndingBalanceAmount, CalcEndingBalanceAmount, BalanceDiffAmount, BeginningCustTxnID, EndingCustTxnID, EDW_UpdateDate from dbo.Fact_CustomerBalanceSnapshot",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

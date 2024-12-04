@@ -1,0 +1,119 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.8.26,17001;Database=EDW_TRIPS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "EDW_TRIPS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadMediumRC",
+        "password_secret_id": "APS2_MEDUIM_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-stage-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_TRIPS_DEV",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\edw_trips_newitems",
+    "log_folder_path": "E:\\bcp_logs\\edw_trips_newitems",
+    "max_process_count": 5,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE_APS",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "Dim_Customer",
+            "schema_name": "dbo",
+            "id_field": "CustomerID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select CustomerID, CASE when Title is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Title, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Title, CASE when FirstName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(FirstName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as FirstName, CASE when MiddleInitial is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(MiddleInitial, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as MiddleInitial, CASE when LastName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LastName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LastName, CASE when Suffix is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Suffix, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Suffix, CASE when AddressType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AddressType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AddressType, CASE when AddressLine1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AddressLine1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AddressLine1, CASE when AddressLine2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AddressLine2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AddressLine2, CASE when City is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(City, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as City, CASE when State is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(State, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as State, CASE when County is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(County, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as County, CASE when Country is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Country, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Country, CASE when ZipCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ZipCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ZipCode, CASE when Plus4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Plus4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Plus4, AddressUpdatedDate, CASE when MobilePhoneNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(MobilePhoneNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as MobilePhoneNumber, CASE when HomePhoneNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(HomePhoneNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as HomePhoneNumber, CASE when WorkPhoneNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(WorkPhoneNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as WorkPhoneNumber, CASE when PreferredPhoneType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PreferredPhoneType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PreferredPhoneType, CustomerPlanID, CASE when CustomerPlanDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CustomerPlanDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CustomerPlanDesc, AccountCategoryID, CASE when AccountCategoryDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountCategoryDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountCategoryDesc, AccountTypeID, CASE when AccountTypeCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountTypeCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountTypeCode, CASE when AccountTypeDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountTypeDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountTypeDesc, AccountStatusID, CASE when AccountStatusCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountStatusCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountStatusCode, CASE when AccountStatusDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountStatusDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountStatusDesc, AccountStatusDate, CustomerStatusID, CASE when CustomerStatusCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CustomerStatusCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CustomerStatusCode, CASE when CustomerStatusDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CustomerStatusDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CustomerStatusDesc, RevenueCategoryID, CASE when RevenueCategoryCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RevenueCategoryCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RevenueCategoryCode, CASE when RevenueCategoryDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RevenueCategoryDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RevenueCategoryDesc, RevenueTypeID, CASE when RevenueTypeCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RevenueTypeCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RevenueTypeCode, CASE when RevenueTypeDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RevenueTypeDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RevenueTypeDesc, ChannelID, CASE when ChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ChannelName, CASE when ChannelDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ChannelDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ChannelDesc, RebillAmount, RebillDate, AutoReplenishmentID, CASE when AutoReplenishmentCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AutoReplenishmentCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AutoReplenishmentCode, CASE when AutoReplenishmentDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AutoReplenishmentDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AutoReplenishmentDesc, TollTagAcctBalance, ZipCashCustBalance, RefundBalance, TollTagDepositBalance, FleetAcctBalance, CASE when CompanyCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CompanyCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CompanyCode, CASE when CompanyName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CompanyName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CompanyName, FleetFlag, BadAddressFlag, InCollectionsFlag, HVFlag, AdminHearingScheduledFlag, PaymentPlanEstablishedFlag, VRBFlag, CitationIssuedFlag, BankruptcyFlag, WriteOffFlag, GroundTransportationFlag, AutoRecalcReplAmtFlag, AutoRebillFailedFlag, [AutoRebillFailed_StartDate], ExpiredCreditCardFlag, [ExpiredCreditCard_StartDate], TollTagAcctNegBalanceFlag, TollTagAcctLowBalanceFlag, ThresholdAmount, LowBalanceDate, NegBalanceDate, LinkTollTagCustomerID, ZipCashToTollTagFlag, ZipCashToTollTagDate, TollTagToZipCashFlag, TollTagToZipCashDate, DirectAcctFlag, Seq1, Seq2, [ZC_TollTagAcctCreateDate], ZipCashAcctCount, FirstZipCashCustomerID, FirstZipCashAcctCreateDate, LastZipCashCustomerID, LastZipCashAcctCreateDate, AccountCreateDate, CASE when AccountCreatedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountCreatedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountCreatedBy, AccountCreateChannelID, CASE when AccountCreateChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountCreateChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountCreateChannelName, CASE when AccountCreateChannelDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountCreateChannelDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountCreateChannelDesc, AccountCreatePOSID, AccountOpenDate, CASE when AccountOpenedBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountOpenedBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountOpenedBy, AccountOpenChannelID, CASE when AccountOpenChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountOpenChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountOpenChannelName, CASE when AccountOpenChannelDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountOpenChannelDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountOpenChannelDesc, AccountOpenPOSID, AccountLastActiveDate, CASE when AccountLastActiveBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountLastActiveBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountLastActiveBy, AccountLastActiveChannelID, CASE when AccountLastActiveChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountLastActiveChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountLastActiveChannelName, CASE when AccountLastActiveChannelDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountLastActiveChannelDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountLastActiveChannelDesc, AccountLastActivePOSID, AccountLastCloseDate, CASE when AccountLastCloseBy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountLastCloseBy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountLastCloseBy, AccountLastCloseChannelID, CASE when AccountLastCloseChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountLastCloseChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountLastCloseChannelName, CASE when AccountLastCloseChannelDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AccountLastCloseChannelDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AccountLastCloseChannelDesc, AccountLastClosePOSID, UpdatedDate, [LND_UpdateDate], EDW_UpdateDate from dbo.Dim_Customer",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_OCR",
+            "schema_name": "dbo",
+            "id_field": "TripDayID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TripDayID, CASE when DayNightFlag is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DayNightFlag, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DayNightFlag, LaneID, TripStatusID, TripIdentMethodID, ManuallyReviewedFlag, TollAmount, TxnCount, CAST(EDW_UpdateDate AS datetime2(6)) AS EDW_UpdateDate from dbo.Fact_OCR",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+        "EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load":{
+                "labels":"workflow=child,process_id=8515,callout=sql",
+                "description":"Child Workflow for Process 8515, \nProcess Name - EDW_TRIPS.Fact_CustomerBalanceSnapshot_Load "
+        },
+        "EDW_TRIPS_Item_26_File_Export":{
+                "labels":"workflow=child,process_id=8516,callout=sql",
+                "description":"Child Workflow for Process 8516, \nProcess Name - EDW_TRIPS: Item 26 File Export "
+        },
+        "EDW_TRIPS_ZC_Customer_Negative_balance_File_Export":{
+                "labels":"workflow=child,process_id=8531,callout=sql",
+                "description":"Child Workflow for Process 8531, \nProcess Name - EDW_TRIPS: ZC Customer Negative balance File Export "}
+}

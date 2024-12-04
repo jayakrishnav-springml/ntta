@@ -1,0 +1,113 @@
+# Child Workflow for LND_TBOS_Chargeback
+# Process Name - LND_TBOS_Chargeback
+# Calls a cloud function named - chargeback-import-export
+
+
+# labels
+# package_id - 9016
+# workflow:parent
+# callout:gcf
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+            - workflow_id: ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+            - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+            - bucket_name: "BUCKET_NAME"
+            - prefix_folder : ${"Imports/ChargeBack"}
+            - dest_folder : ${"Archive/ChargeBack/"}
+            - stage_dataset_id : ${"LND_TBOS_STAGE_FULL"}
+            - bad_dataset_id : ${"LND_TBOS"}
+            - main_dataset_id : ${"LND_TBOS"}
+            - location : ${sys.get_env("GOOGLE_CLOUD_LOCATION")}
+            - execution_results: {} # results from each execution
+            - execution_results.success: {} # successful executions saved under 'success' key
+            - execution_results.failure: {} # failed executions saved under 'failure' key
+            - payload: {} # logging payload variable declaration
+            # Initialising email results as Failed
+            - email_alert_payload: {"chargeback":"Failed"}
+    - LND_TBOS_Chargeback:
+        try:
+          steps: 
+            - call_chargeback_cloud_function:
+                call: http.post  #Calling Google Cloud Function Endpoint using http.post 
+                args:
+                  url: ${"https://"+location+"-"+project_id+".cloudfunctions.net/chargeback-import-export"}
+                  timeout: "GCF_TIMEOUT"
+                  body:
+                    "project_id": ${project_id}
+                    "bucket_name": ${bucket_name}
+                    "prefix_folder": ${prefix_folder}
+                    "dest_folder": ${dest_folder}
+                    "stage_dataset_id": ${stage_dataset_id}
+                    "bad_dataset_id": ${bad_dataset_id}
+                    "main_dataset_id": ${main_dataset_id}
+                  auth:
+                    type: OIDC
+                    audience: ${"https://"+location+"-"+project_id+".cloudfunctions.net/chargeback-import-export"}
+                result: execution_result
+            - assign_chargeback_result:
+                assign:
+                    - execution_results.success["LND_TBOS_Chargeback"]: ${execution_result}
+                    - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["result"]: ${execution_result}
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            - log_chargeback_result:
+                call: sys.log
+                args:
+                    json: ${payload}
+                    severity: "INFO" 
+        except:
+          as: e
+          switch:
+            - condition: ${default(map.get(e,"code"),0)==404} #Check for File Not Found Error from GCF
+              steps:
+                - assign_404_error:
+                    assign:
+                      - execution_results.failure["LND_TBOS_Chargeback"]: ${e}
+                      - payload: { 'status':'404', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows'}
+                      - payload["error"]: ${json.encode_to_string(default(map.get(e,"body"),e))} 
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_gcf_404_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+                - raise_404_error:
+                    raise: ${e}
+            - condition: ${default(map.get(e,"code"),0)!=404}
+              steps:
+                - assign_connection_error:
+                    assign:
+                      - execution_results.failure["LND_TBOS_Chargeback"]: ${e}
+                      - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                      - payload["error"]: ${json.encode_to_string(e)} 
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_gcf_execution_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+                - raise_gcf_error:
+                    raise: ${e}   
+    # Step to log success email notification.
+    - check_chargeback_execution_result:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - assign_chargeback_execution_result:
+                    assign:
+                        - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_results}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                        - email_alert_payload["chargeback"]: "Successful"
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${workflow_id}','alert_source':'lnd_tbos_chargeback_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+
+    - return_execution_results:
+        return: ${execution_results}

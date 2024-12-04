@@ -1,0 +1,94 @@
+# Child Workflow for EDW_TRIPS_GIS_Exports
+# Process Name - EDW_TRIPS_GIS_Exports
+# Calls a cloud function named - gis-exports
+
+
+# labels
+# package_id - 9019
+# workflow:parent
+# callout:gcf
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+            - workflow_id: ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+            - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+            - bucket_name: "BUCKET_NAME"
+            - destination_folder_path : ${"Exports/GIS"}
+            - export_dataset_id : "FILES_EXPORT"
+            - customer_data_table_prefix : ${"BI_CUSTOMERDATA"}
+            - txn_data_table_prefix : ${"AADT_Transactions"}
+            - location : ${sys.get_env("GOOGLE_CLOUD_LOCATION")}
+            - execution_results: {} # results from each execution
+            - execution_results.success: {} # successful executions saved under 'success' key
+            - execution_results.failure: {} # failed executions saved under 'failure' key
+            - payload: {} # logging payload variable declaration
+            # Initialising email results as Failed
+            - email_alert_payload: {"gis":"Failed"}
+    - EDW_TRIPS_GIS_Exports:
+        try:
+          steps: 
+            - call_gis_cloud_function:
+                call: http.post  #Calling Google Cloud Function Endpoint using http.post 
+                args:
+                  url: ${"https://"+location+"-"+project_id+".cloudfunctions.net/gis-exports"}
+                  timeout: "GCF_TIMEOUT"
+                  body:
+                    "project_id": ${project_id}
+                    "bucket_name": ${bucket_name}
+                    "export_dataset_id": ${export_dataset_id}
+                    "customer_data_table_prefix": ${customer_data_table_prefix}
+                    "txn_data_table_prefix": ${txn_data_table_prefix}
+                    "destination_folder_path": ${destination_folder_path}
+                  auth:
+                    type: OIDC
+                    audience: ${"https://"+location+"-"+project_id+".cloudfunctions.net/gis-exports"}
+                result: execution_result
+            - assign_gis_result:
+                assign:
+                    - execution_results.success["EDW_TRIPS_GIS_Exports"]: ${execution_result}
+                    - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["result"]: ${execution_result}
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            - log_gis_result:
+                call: sys.log
+                args:
+                    json: ${payload}
+                    severity: "INFO" 
+        except:
+          as: e
+          steps:
+            - assign_connection_error:
+                assign:
+                  - execution_results.failure["EDW_TRIPS_GIS_Exports"]: ${e}
+                  - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                  - payload["error"]: ${json.encode_to_string(e)} 
+                  - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            - log_gcf_execution_error:
+                call: sys.log 
+                args:
+                    json: ${payload}
+                    severity: "CRITICAL" 
+            - raise_query_error:
+                raise: ${e}  
+    # Step to log success email notification.
+    - check_gis_execution_result:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - assign_gis_execution_result:
+                    assign:
+                        - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_results}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                        - email_alert_payload["gis"]: "Successful"
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${workflow_id}','alert_source':'lnd_tbos_gis_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+
+    - return_execution_results:
+        return: ${execution_results}

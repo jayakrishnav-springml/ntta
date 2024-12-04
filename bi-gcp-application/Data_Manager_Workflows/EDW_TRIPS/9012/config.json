@@ -1,0 +1,23 @@
+{
+    "EDW_TRIPS_Bubble_ETL_Daily_Run":{
+        "labels":"workflow=parent,process_id=9012,callout=childworkflows",
+        "description":"Parent workflow of job 9012 EDW_TRIPS: Bubble ETL Daily Run"},
+    "EDW_TRIPS_Stage_NTTARawTransactions_Load":{
+        "labels":"workflow=child,process_id=8526,callout=sql",
+        "description":"Child workflow for Process 8526, \nProcess name - EDW_TRIPS_Stage_NTTARawTransactions_Load"},
+    "EDW_TRIPS_Stage_TSATripAttributes_Full_Load":{
+        "labels":"workflow=child,process_id=8529,callout=sql",
+        "description":"Child workflow for Process 8529, \nProcess name - EDW_TRIPS_Stage_TSATripAttributes_Full_Load"},
+    "EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load":{
+        "labels":"workflow=child,process_id=8528,callout=sql",
+        "description":"Child workflow for Process 8528, \nProcess name - EDW_TRIPS_Fact_AdjExpectedAmountDetail_Load"},
+    "EDW_TRIPS_Fact_UnifiedTransaction_Full_Load":{
+        "labels":"workflow=child,process_id=8519,callout=sql",
+        "description":"Child workflow for Process 8519, \nProcess name - EDW_TRIPS_Fact_UnifiedTransaction_Full_Load"},
+    "EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load":{
+        "labels":"workflow=child,process_id=8520,callout=sql",
+        "description":"Child workflow for Process 8520, \nProcess name - EDW_TRIPS_Fact_UnifiedTransaction_Summary_Full_Load"},
+    "EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full_Load":{
+        "labels":"workflow=child,process_id=8521,callout=sql",
+        "description":"Child workflow for Process 8521, \nProcess name - EDW_TRIPS_Fact_UnifiedTransaction_SummarySnapshot_Full"}
+}

@@ -1,0 +1,371 @@
+#This Workflow includes the Orchestration Steps for EDW_TRIPS_Daily_Run
+
+#labels
+#workflow:parent
+#callout:calling parent workflows using subworkflows (child workflows)
+#package_id: CDC ,  Dim_Daily_Run , Bubble_ETL_Daily_Run ,Item_90_ETL_Daily_Run
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {} # logging payload variable declaration
+          - partial_run: ${default(map.get(args,"partial_run"),false)} 
+          - cdc_start_time: ${time.format(sys.now(),"America/Chicago")}
+          # Initialising email results as Failed
+          - email_alert_payload: {"dim_tables":"Failed","fact_tables":"Failed","bubble_report":"Failed","item_90_report":"Failed"}
+
+
+    #Step to call child workflows with id "LND_TBOS_SUPPORT_CDC_Invoker"
+    #ProcessName: LND_TBOS_SUPPORT_CDC_Invoker
+    #Run Mode: Sequential
+
+    - LND_TBOS_SUPPORT_CDC_Invoker:
+        try:
+            steps: 
+                - call_cdc_invoker:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: LND_TBOS_SUPPORT_CDC_Invoker
+                        argument:
+                          fullday_changedata_flag: ${default(map.get(args,"fullday_changedata_flag"),"Y")}
+                          batchname: ${default(map.get(args,"batchname"),"TRIPS")} 
+                          cutoff_date: ${default(map.get(args,"cutoff_date"),NULL)}
+                        connector_params:
+                            timeout: 21600
+                    result: execution_result
+                - assign_cdc_invoker_result:
+                    assign:
+                        - execution_results.success["LND_TBOS_SUPPORT_CDC_Invoker"]: ${execution_result}                   
+        except:
+            as: e
+            steps:
+                - assign_cdc_invoker_error:
+                    assign:
+                        - execution_results.failure["LND_TBOS_SUPPORT_CDC_Invoker"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_TBOS_SUPPORT_CDC_Invoker', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_cdc_invoker_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+
+    - assign_cdc_end_time: 
+        assign:
+          - cdc_end_time:  ${time.format(sys.now(),"America/Chicago")}
+
+    #Step to call child workflows with id "LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"
+    #ProcessName: LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE - The process log table of CDC is queried and thefailed tabels are logged
+    # to trigger google cloud alerts
+    #Run Mode: Sequential
+
+    - LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE:
+        try:
+            steps: 
+                - call_process_cdc_batch_load_table:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE
+                        argument:
+                          start_time: ${text.substring(cdc_start_time,0,10)}  # Stripping time from timestamp 
+                          end_time: ${text.substring(cdc_end_time,0,len(cdc_end_time)-6)}  # Removing  Z-05:00 from timestamp 
+                        connector_params:
+                            timeout: 21600
+                    result: execution_result
+                - assign_query_result:
+                    assign:
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'CDC' }
+                        - payload["failed_tables"]: ${json.encode_to_string(keys(execution_result))} 
+                        - payload["failed_tables_count"]: ${len(execution_result)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+
+                - log_query_result:
+                    switch:
+                      - condition: ${len(execution_result)!=0}
+                        steps:
+                            - assign_cdc_result:
+                                assign:
+                                    - execution_results.failure["LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result} 
+                            - log_cdc_error_tables:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "CRITICAL" 
+                      - condition: ${len(execution_result)==0}
+                        steps:
+                            - assign_status:
+                                assign:
+                                    - execution_results.success["LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result} 
+                                    - payload["status"]: "Success"  
+                            - log_cdc_result:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "INFO"          
+        except:
+            as: e
+            steps:
+                - assign_process_cdc_table_execution:
+                    assign:
+                        - execution_results.failure["LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${e} 
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_process_cdc_table_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+           
+    
+
+    #Step to call parent workflow with id "EDW_TRIPS_Dim_Daily_Run"
+    #ProcessName: EDW_TRIPS.Dim_Daily_Run
+    #Run Mode: Sequential
+
+    - EDW_TRIPS_Dim_Daily_Run:
+        try:
+            steps: 
+                - call_dim_daily_run:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_Daily_Run  
+                        connector_params:
+                            timeout: 21600
+                    result: execution_result
+                - assign_dim_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_Daily_Run"]: ${map.get(execution_result,"success")} 
+                - check_dims_execution_result:
+                    switch:
+                        - condition: ${len(execution_result.failure)==0}
+                          steps:
+                            - assign_dims_result:
+                                assign:  
+                                    - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                    - payload["result"]: ${execution_result}
+                                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - email_alert_payload["dim_tables"]: "Successful"
+                            - log_dims_result:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "INFO"
+                        - condition: true
+                          steps:
+                            - assign_dims_failed_result:
+                                assign:
+                                    - execution_results.failure["EDW_TRIPS_Dim_Daily_Run"]: ${map.get(execution_result,"failure")}    
+
+        except:
+            as: e
+            steps:
+                - save_9001_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_Daily_Run"]: ${e} 
+                        - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} 
+                - log_9001_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    
+            
+
+    - partial_run_check:
+        switch:
+          - condition: ${partial_run}
+            next: return_execution_results
+    
+    #Step to call parent workflow with id "EDW_TRIPS_Fact_Daily_Run"
+    #ProcessName: EDW_TRIPS_Fact_Daily_Run  
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_Daily_Run:
+        try:
+            steps: 
+                - call_fact_daily_run:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_Daily_Run  
+                        connector_params:
+                            timeout: 21600
+                    result: execution_result
+                - assign_fact_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_Daily_Run"]: ${map.get(execution_result,"success")}        
+                - check_facts_execution_result:
+                    switch:
+                        - condition: ${len(execution_result.failure)==0}
+                          steps:
+                            - assign_facts_result:
+                                assign:
+                                    - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                    - payload["result"]: ${execution_result}
+                                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - email_alert_payload["fact_tables"]: "Successful"
+                            - log_facts_result:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "INFO"
+                        - condition: true
+                          steps:
+                            - assign_facts_failed_result:
+                                assign:
+                                    - execution_results.failure["EDW_TRIPS_Fact_Daily_Run"]: ${map.get(execution_result,"failure")}
+                            
+        except:
+            as: e
+            steps:
+                - assign_facts_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_Daily_Run"]: ${e} 
+                        - payload: { 'status': 'failed', 'child_workflow_id': 'EDW_TRIPS_Fact_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} 
+                - log_facts_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    - Run_Steps_in_Parallel:   
+        #Call workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results,execution_result,payload,email_alert_payload]
+            branches:
+                # Call EDW TRIPS Bublle ETL Daily Run Workflow
+                - EDW_TRIPS_Bubble_ETL_Daily_Run:
+                    steps:
+                        #Step to call parent workflow with id "EDW_TRIPS_Bubble_ETL_Daily_Run"
+                        #ProcessName: EDW_TRIPS_Bubble_ETL_Daily_Run
+                        #Run Mode: Parallel
+                        - start_bubble_etl_daily_run:
+                            try:
+                                steps: 
+                                    - call_bubble_etl_daily_run:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Bubble_ETL_Daily_Run   
+                                            connector_params:
+                                                timeout: 21600
+                                        result: execution_result
+                                    - assign_9012_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Bubble_ETL_Daily_Run"]: ${map.get(execution_result,"success")} 
+                                    - check_bubble_execution_result:
+                                        switch:
+                                            - condition: ${len(execution_result.failure)==0}
+                                              steps:
+                                                - assign_bubble_result:
+                                                    assign:
+                                                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Bubble_ETL_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                                        - payload["result"]: ${execution_result}
+                                                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                                        - email_alert_payload["bubble_report"]: "Successful"
+                                                - log_bubble_result:
+                                                    call: sys.log
+                                                    args:
+                                                        json: ${payload}
+                                                        severity: "INFO"
+                                            - condition: true
+                                              steps:
+                                                - assign_bubble_failed_result:
+                                                    assign:
+                                                        - execution_results.failure["EDW_TRIPS_Bubble_ETL_Daily_Run"]: ${map.get(execution_result,"failure")}
+                            
+                            except:
+                                as: e
+                                steps:                           
+                                    - save_9012_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Bubble_ETL_Daily_Run"]: ${e} 
+                                            - payload: { 'status': 'failed', 'child_workflow_id': 'EDW_TRIPS_Bubble_ETL_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)} 
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} 
+                                    - log_9012_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL" 
+                                
+                # Call EDW TRIPS Item 90 ETL Daily Run Workflow
+                - EDW_TRIPS_Item_90_ETL_Daily_Run:
+                    steps:
+                        #Step to call child workflow with id "EDW_TRIPS_Item_90_ETL_Daily_Run"
+                        #ProcessName: EDW_TRIPS_Item_90_ETL_Daily_Run
+                        #Run Mode: Parallel
+                        - start_item_90_etl_daily_run:
+                            try:
+                                steps: 
+                                    - call_item_90_etl_daily_run:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Item_90_ETL_Daily_Run 
+                                            connector_params:
+                                                timeout: 21600
+                                        result: execution_result
+                                    - assign_9013_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Item_90_ETL_Daily_Run"]: ${map.get(execution_result,"success")}        
+                                    - check_item_90_execution_result:
+                                        switch:
+                                            - condition: ${len(execution_result.failure)==0}
+                                              steps:
+                                                - assign_item_90_result:
+                                                    assign:
+                                                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Item_90_ETL_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                                        - payload["result"]: ${execution_result}
+                                                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                                        - email_alert_payload["item_90_report"]: "Successful"
+                                                - log_item_90_result:
+                                                    call: sys.log
+                                                    args:
+                                                        json: ${payload}
+                                                        severity: "INFO"
+                                            - condition: true
+                                              steps:
+                                                - assign_item_90_failed_result:
+                                                    assign:
+                                                        - execution_results.failure["EDW_TRIPS_Item_90_ETL_Daily_Run"]: ${map.get(execution_result,"failure")}
+                            except:
+                                as: e
+                                steps:                           
+                                    - save_9013_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Item_90_ETL_Daily_Run"]: ${e}   
+                                            - payload: { 'status': 'failed', 'child_workflow_id': 'EDW_TRIPS_Item_90_ETL_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)} 
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} 
+                                    - log_9013_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+
+
+    
+    - success_email_check:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${parent_workflow_id}','alert_source':'edw_trips_daily_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+
+    - return_execution_results:
+        return: ${execution_results}
+

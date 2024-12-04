@@ -1,0 +1,1055 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.7.45,17001",
+        "database": "LND_LG_HOST",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS3_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-raw-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_LG_HOST",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\lnd_lg_host",
+    "log_folder_path": "E:\\bcp_logs\\lnd_lg_host",
+    "max_process_count": 1,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_RITE": {
+            "dbo": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_"
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_perm_"
+            },
+            "stage": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "stage_"
+            }
+        },
+        "EDW_TER": {
+            "dbo": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": ""
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "land_perm_"
+            },
+            "dto": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "dto_"
+            },
+            "stage": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "stage_"
+            },
+            "land": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "land_"
+            }
+        },
+        "LND_TER": {
+            "dbo": {
+                "bq_dataset": "LND_TER",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_DMV": {
+            "dbo": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": ""
+            },
+            "DMVLD": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": "DMVLD_"
+            }
+        },
+        "LND_LG_HOST": {
+            "dbo": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TSA_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "TSA_OWNER_"
+            },
+            "TXNOWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "TXNOWNER_"
+            },
+            "HAS_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "HAS_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_ICRS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": ""
+            },
+            "ICRS_OWNER": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": "ICRS_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_IOP": {
+            "dbo": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": ""
+            },
+            "IOP_OWNER": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": "IOP_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_TS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": ""
+            },
+            "TAG_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "TAG_OWNER_"
+            },
+            "TIM_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "TIM_OWNER_"
+            },
+            "OLR": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "OLR_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_VPS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": ""
+            },
+            "VP_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "VP_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "FPL_OWNER_"
+            },
+            "HV_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "HV_OWNER_"
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "LANDING_CDC_CONTROL",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select APPLY_ALL_CHANGES from dbo.LANDING_CDC_CONTROL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CONTACTS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CONTACT_ID, CASE when [FIRST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FIRST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FIRST_NAME], CASE when [LAST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_NAME], [COMPANY_ID], CASE when [EMAIL_ADDRESS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EMAIL_ADDRESS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EMAIL_ADDRESS], CASE when [IS_SUPPORT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_SUPPORT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_SUPPORT], [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when COMPANY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COMPANY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COMPANY, CASE when [JOB_TITLE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([JOB_TITLE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [JOB_TITLE], CASE when [BADGE_NUMBER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BADGE_NUMBER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BADGE_NUMBER], CASE when [MIDDLE_INITIAL] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MIDDLE_INITIAL], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MIDDLE_INITIAL], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.CONTACTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ACKNOWLEDGEMENT_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ACK_TYPE_ID, CASE when [ACK_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ACK_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ACK_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.ACKNOWLEDGEMENT_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_TYPE_ID, CASE when [DISPOSITION_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], CAST(DATE_CREATED AS datetime2(6)) AS DATE_CREATED, CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CAST(DATE_MODIFIED AS datetime2(6)) AS DATE_MODIFIED, [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.DISPOSITION_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TXN_LOG",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CREATION_DATE, CASE when [APP_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([APP_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [APP_NAME], CASE when MSG is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MSG, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MSG, [TXNL_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.TXN_LOG",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VEH_TYPES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when VEHY_DESC is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VEHY_DESC, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VEHY_DESC, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when HIGHT is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(HIGHT, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as HIGHT, CASE when WIDTH is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(WIDTH, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as WIDTH, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [VEHY_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.VEH_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACILITY_TYPES",
+            "schema_name": "FPL_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when FACY_DESC is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FACY_DESC, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FACY_DESC, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [FACY_ID], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from FPL_OWNER.FACILITY_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_FILE_STATUSES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_FILE_STATUS_ID, CASE when [DISPOSITION_FILE_STATUS_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_FILE_STATUS_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_FILE_STATUS_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], [DISPOSITION_FILE_STATUS_ORDER], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.DISPOSITION_FILE_STATUSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_REASON_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_REASON_TYPE_ID, CASE when [DISPOSITION_REASON_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_REASON_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_REASON_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.DISPOSITION_REASON_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FILE_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select FILE_TYPE_ID, CASE when [FILE_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FILE_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FILE_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.FILE_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HOV_DESIGNATIONS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select HOV_DESIGNATION_ID, CASE when [HOV_DESIGNATION_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([HOV_DESIGNATION_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [HOV_DESIGNATION_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.HOV_DESIGNATIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_CREDITADJ_MULTIPLIER",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUBSCRIBER_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUBSCRIBER_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUBSCRIBER_ID, CASE when [EVENT_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EVENT_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EVENT_NAME], CASE when [DISPOSTION_REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSTION_REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSTION_REASON_CODE], [TOLL_MULTIPLIER], [BASE_MULTIPLIER], [VARIABLE_MULTIPLIER], [IOP_MULTIPLIER], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.TSA_CREDITADJ_MULTIPLIER",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_EXCP_REPROCESS_STATUSES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when TSA_EXCP_REPROCESS_STATUS_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TSA_EXCP_REPROCESS_STATUS_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TSA_EXCP_REPROCESS_STATUS_CODE, CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], [CREATED_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [MODIFIED_DATE], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.TSA_EXCP_REPROCESS_STATUSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_STATUSES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_STATUS_ID, CASE when [DISPOSITION_STATUS_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_STATUS_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_STATUS_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], [DISPOSITION_STATUS_ORDER], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.DISPOSITION_STATUSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "SUBSCRIBER_RECORD_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUBSCRIBER_RECORD_TYPE_ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUBSCRIBER_RECORD_TYPE_ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUBSCRIBER_RECORD_TYPE_ID, CASE when [RECORD_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.SUBSCRIBER_RECORD_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FARE_RULES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select FARE_RULE_ID, CASE when [FARE_RULE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FARE_RULE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FARE_RULE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.FARE_RULES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FEE_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select FEE_TYPE_ID, CASE when [FEE_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FEE_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FEE_TYPE_CODE], CASE when [SHORT_DESC] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESC], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESC], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.FEE_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_DISPOSITION_CODES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_CODE_ID, CASE when [DISPOSITION_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_CODE], CASE when [DISPOSITION_CODE_DESC] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_CODE_DESC], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_CODE_DESC], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.TSA_DISPOSITION_CODES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_CODES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when DISPOSITION_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION_CODE, CASE when [DISPOSITION_DESCR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_DESCR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_DESCR], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], CAST(CREATED_DATE AS datetime2(6)) AS CREATED_DATE, CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CAST(MODIFIED_DATE AS datetime2(6)) AS MODIFIED_DATE, [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.DISPOSITION_CODES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "NTTA_DISPOSITIONS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select NTTA_DISPOSITION_ID, CASE when [NTTA_DISPOSITION_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([NTTA_DISPOSITION_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [NTTA_DISPOSITION_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.NTTA_DISPOSITIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "SUBSCRIBER_TRANSACTION_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select SUBSCRIBER_TRANS_TYPE_ID, CASE when [SUBSCRIBER_TRANS_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_TRANS_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_TRANS_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [PRE_PROCESSING_ORDER], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.SUBSCRIBER_TRANSACTION_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VEH_CLSS_TYPES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when VCLY_DESC is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VCLY_DESC, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VCLY_DESC, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, AXLES, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [VCLY_ID], [VEHY_ID], CASE when DISPLAYED is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPLAYED, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPLAYED, [VCLY_ORDER], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.VEH_CLSS_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DIRECTIONS",
+            "schema_name": "FPL_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when DIRE_DESC is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DIRE_DESC, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DIRE_DESC, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [DIRE_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from FPL_OWNER.DIRECTIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TAG_AUTHORITIES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TA_ID, CASE when [TAG_IDENTIFIER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_IDENTIFIER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_IDENTIFIER], CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when [BARCODE_PREFIX] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BARCODE_PREFIX], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BARCODE_PREFIX], [TA_LC_ID], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.TAG_AUTHORITIES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_TOLL_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_TOLL_TYPE_ID, CASE when [DISPOSITION_TOLL_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_TOLL_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_TOLL_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.DISPOSITION_TOLL_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AVI_TAG_STATUSES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select AVI_TAG_STATUS, CASE when [AVTS_DESC] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVTS_DESC], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVTS_DESC], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [AVTS_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.AVI_TAG_STATUSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PMT_TYPES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when PMTY_DESC is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PMTY_DESC, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PMTY_DESC, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [PMTY_ID], CASE when CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CODE, [EXP_PTC_ID], [EAR_PTC_ID], CASE when [IS_MISCLASSABLE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_MISCLASSABLE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_MISCLASSABLE], CASE when DISPLAYED is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPLAYED, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPLAYED, [PMTY_ORDER], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.PMT_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ACKNOWLEDGEMENT_FILE_STATUSES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ACK_FILE_STATUS_ID, CASE when [ACK_FILE_STATUS_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ACK_FILE_STATUS_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ACK_FILE_STATUS_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], [AKN_FILE_STATUS_ORDER], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.ACKNOWLEDGEMENT_FILE_STATUSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LANE_OPEN_MODES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when MODE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MODE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MODE_CODE, CASE when [OPNM_DESC] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OPNM_DESC], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OPNM_DESC], CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [OPNM_ID], CASE when [IS_ATTENDED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ATTENDED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ATTENDED], CASE when [TSA_LANE_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TSA_LANE_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TSA_LANE_MODE], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.LANE_OPEN_MODES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TOLL_SERV_PROCESSING_FEE",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select FACS_ID, [TXNS_BASE_FEE], [TXNS_PERCENTAGE_FEE], [IOP_PROCESSING_FEE], [EFFECTIVE_DATE], [EXPIRE_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TOLL_SERV_PROCESSING_FEE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "STATUSES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select STATUS_ID, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, CASE when [DATE_CREATED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_CREATED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], CASE when [DATE_MODIFIED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DATE_MODIFIED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], VERSION, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.STATUSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "SUBSCRIBER_LIST",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select SUBSCRIBER_LIST_ID, CASE when [SUBSCRIBER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_ID], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [PROGRAM_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PROGRAM_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PROGRAM_TYPE], CASE when [INCLUDE_PREMIUM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([INCLUDE_PREMIUM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [INCLUDE_PREMIUM], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.SUBSCRIBER_LIST",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_TRANSACTION_STATUSES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TSA_TRANSACTION_STATUS_ID, CASE when [TSA_TRANSACTION_STATUS_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TSA_TRANSACTION_STATUS_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TSA_TRANSACTION_STATUS_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.TSA_TRANSACTION_STATUSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISCOUNT_TYPES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISCOUNT_TYPE_ID, CASE when [DISCOUNT_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISCOUNT_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISCOUNT_TYPE_CODE], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.DISCOUNT_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_REASONS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_REASON_ID, CASE when [DISPOSITION_REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_REASON_CODE], [DISPOSITION_REASON_TYPE_ID], CASE when [SHORT_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHORT_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHORT_DESCRIPTION], CASE when [LONG_DESCRIPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LONG_DESCRIPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LONG_DESCRIPTION], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.DISPOSITION_REASONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRANSACTION_FEES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_FEE_ID, [FEE_TYPE_ID], [FACILITY_ID], [FEE_AMOUNT], CASE when [IS_PERCENTAGE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_PERCENTAGE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_PERCENTAGE], [EFFECTIVE_DATE], [EXPIRY_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.TRANSACTION_FEES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TX_TA_IDENTITIES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when [TXID_DESC] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXID_DESC], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXID_DESC], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [TXID_ID], [TXBE_ID], CASE when [TRANSACTION_RPT_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSACTION_RPT_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSACTION_RPT_NAME], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TX_TA_IDENTITIES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AP_USERS",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select AP_USER_ID, CASE when [DISPLAY_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPLAY_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPLAY_NAME], CASE when [USER_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([USER_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [USER_NAME], [EMPLOYEE_NUMBER], CASE when PASSWORD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PASSWORD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PASSWORD, [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], CASE when [EMAIL_ADDRESS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EMAIL_ADDRESS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EMAIL_ADDRESS], CASE when RESTRICTED is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RESTRICTED, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RESTRICTED, [WORKING_POS_ID], [LAST_LOGIN_DATE], CASE when [USER_SESSION_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([USER_SESSION_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [USER_SESSION_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.AP_USERS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FACILITIES",
+            "schema_name": "FPL_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PLGP_ID, CASE when ABBREV is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ABBREV, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ABBREV, CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [FACS_ID], [FACY_ID], [AGCY_ID], [LOCS_ID], [LOCS_ID_LOCATED_AT], [UPDATED_DATE], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from FPL_OWNER.FACILITIES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_FACILITIES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TSA_FACILITY_ID, CASE when [TSA_FACILITY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TSA_FACILITY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TSA_FACILITY_CODE], [FACS_ID], CASE when [ICD_LOCATION_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ICD_LOCATION_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ICD_LOCATION_CODE], [PLAZ_ID], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [SUBSCRIBER_LANE_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_LANE_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_LANE_ID], CASE when [LANE_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LANE_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LANE_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.TSA_FACILITIES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_SPS_LANES",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select LANE_ID, CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when [REGIONAL_TOLL_AMT_FLAG] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REGIONAL_TOLL_AMT_FLAG], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REGIONAL_TOLL_AMT_FLAG], CASE when REGION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REGION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as REGION, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.TSA_SPS_LANES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CURR_TOLL_REGIONAL_RATE",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PLAZ_ID, [VEHICLE_CLASS], [TOLL_SEQ], [TAG_TOLL], [CASH_TOLL], [TOLL_START_TIME], [TOLL_END_TIME], [REGION_IOP_TOLL], [SYSTEM_IOP_TOLL], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.CURR_TOLL_REGIONAL_RATE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TOLL_SERV_ADJ_SUMM_HOST",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when DATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DATE_TYPE, [TRAN_POST_DATE], [AGENCY_ID], [TTA_NOT_POST_NOT_PURSBLE_CNT], [TTA_NOT_POST_NOT_PURSBLE_TOLL], [TTA_NOT_POST_PURSBLE_CNT], [TTA_NOT_POST_PURSBLE_TOLL], [TTA_DUPLICATE_CNT], [TTA_DUPLICATE_TOLL], [TTA_TAGSTORE_CRDT_CNT], [TTA_TAGSTORE_CRDT_TOLL], [TTA_POST_VIDEO_TRXNS_CNT], [TTA_POST_VIDEO_TRXNS_TOLL], [TTA_POST_VIDEO_TRXNS_TOLL_ALL], [VTA_UNPURSBLE_CNT], [VTA_UNPURSBLE_TOLL], [VTA_USER_DISP_CNT], [VTA_USER_DISP_TOLL], [TTA_CLASS_ADJUSTMENT_CNT], [TTA_CLASS_ADJUSTMENT_EAR], [TTA_CLASS_ADJUSTMENT_POST], [TTA_EXEMPT_COUNT], [TTA_EXEMPT_EARNED_REV], [VTA_DUPLICATE_CNT], [VTA_DUPLICATE_TOLL], [VTA_EXEMPT_COUNT], [VTA_EXEMPT_EARNED_REV], [VTA_CLASS_ADJUSTMENT_COUNT], [VTA_CLASS_ADJUSTMENT_AVI_REV], [VTA_CLASS_ADJUSTMENT_TOLL_REV], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.TOLL_SERV_ADJ_SUMM_HOST",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VETERANS_LIC_PLATE_EXCEPTIONS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select EXCEPTION_ID, CASE when [LIC_PLATE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_STATE], CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], CASE when [START_DATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([START_DATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [START_DATE], CASE when [END_DATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([END_DATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [END_DATE], [VETERANS_EXCEPTION_ID], [CREATED_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [MODIFIED_DATE], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.VETERANS_LIC_PLATE_EXCEPTIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PLAZAS",
+            "schema_name": "FPL_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when ABBREV is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ABBREV, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ABBREV, CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [PLAZ_ID], [PLZY_ID], [FACS_ID], [LOCS_ID], CASE when [OLD_ABBREV] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OLD_ABBREV], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OLD_ABBREV], [LC_PLAZA_NBR], [PLGP_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from FPL_OWNER.PLAZAS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TOLL_REV_VAR_REPORT",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRVR_ID, [BUS_DAY_START], [BUS_DAY_END], COL1, COL2, COL3, COL4, COL5, COL6, COL7, COL8, COL9, COL10, COL11, COL12, COL13, COL14, COL15, COL16, COL17, COL18, COL19, COL20, COL21, COL22, COL23, COL24, COL25, COL26, COL27, COL28, COL29, COL30, COL31, COL32, COL33, COL34, COL35, COL36, COL37, COL38, COL39, COL40, COL41, COL42, COL43, COL44, COL45, COL46, COL47, COL48, COL49, COL50, LAPSED, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TOLL_REV_VAR_REPORT",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "CURR_TOLL_RATE",
+            "schema_name": "FPL_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select PLAZA_ID, [VEHICLE_CLASS], [TOLL_SEQ], [TAG_TOLL], [CASH_TOLL], [TOLL_START_TIME], [TOLL_END_TIME], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from FPL_OWNER.CURR_TOLL_RATE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LANES",
+            "schema_name": "FPL_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, MILEAGE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [LANE_ID], [PLAZ_ID], [DIRE_ID], CASE when ABBREV is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ABBREV, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ABBREV, CASE when [OLD_LANE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OLD_LANE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OLD_LANE_NBR], CASE when [OLD_LANE_ABBREV] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OLD_LANE_ABBREV], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OLD_LANE_ABBREV], [OLD_LOCATION_ID], CASE when [LANE_CUST_DESCR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LANE_CUST_DESCR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LANE_CUST_DESCR], [LC_LANE_NBR], [LC_PLAZA_NBR], CASE when [IS_INTEROP] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_INTEROP], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_INTEROP], [LANY_ID], [PLGR_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from FPL_OWNER.LANES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_FILE_HEADERS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_FILE_HEADER_ID, CASE when [RECORD_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE], CASE when VERSION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VERSION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VERSION, [FILE_DATE], [DISP_FILE_CONTROL_NUMBER], CASE when [SUBSCRIBER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_ID], [RECORD_COUNT], [FILE_SIZE], CASE when CHECKSUM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CHECKSUM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CHECKSUM, [DISPOSITION_FILE_STATUS_ID], CASE when [FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FILE_NAME], CASE when [ADDITIONAL_COMMENTS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ADDITIONAL_COMMENTS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ADDITIONAL_COMMENTS], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [SUBSCRIBER_LIST_ID], [FILE_TYPE_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.DISPOSITION_FILE_HEADERS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_REJECTED_CR_DB_TXNS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_FILE_DETAIL_ID, CASE when [TXN_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXN_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXN_TYPE], [ORIG_TXN_FILE_DETAIL_ID], CASE when [ORIG_TXN_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ORIG_TXN_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ORIG_TXN_TYPE], CASE when [REJECT_REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REJECT_REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REJECT_REASON_CODE], [SUBSCRIBER_UNIQUE_ID], CASE when [FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FILE_NAME], CASE when [LICENSE_PLATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LICENSE_PLATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LICENSE_PLATE], CASE when [LICENSE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LICENSE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LICENSE_STATE], CASE when [TRANSPONDER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSPONDER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSPONDER_ID], [DATE_RECEIVED], [TRANSACTION_DATE], CASE when [HOME_AUTHORITY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([HOME_AUTHORITY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [HOME_AUTHORITY], [LANE_ID], CASE when [LANE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LANE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LANE_NAME], CASE when [FACILITY_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FACILITY_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FACILITY_NAME], CASE when [PLAZA_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PLAZA_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PLAZA_NAME], AMOUNT, [ORG_TXN_DATE_RECEIVED], [ORG_TXN_AMOUNT], [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.TSA_REJECTED_CR_DB_TXNS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_EXCEPTIONS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select EXCEPTION_ID, [TRANSACTION_FILE_HEADER_ID], [TRANSACTION_FILE_DETAIL_ID], CASE when [EXCEPTION_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXCEPTION_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXCEPTION_REASON], CASE when NOTES is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTES, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTES, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [TRANSACTION_EXCEPTION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSACTION_EXCEPTION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSACTION_EXCEPTION], [RECONCILED_DATE], CASE when [RECONCILED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECONCILED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECONCILED_BY], CASE when [TSA_EXCP_REPROCESS_STATUS_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TSA_EXCP_REPROCESS_STATUS_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TSA_EXCP_REPROCESS_STATUS_CODE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.TSA_EXCEPTIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRANSACTION_FILE_HEADERS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_FILE_HEADER_ID, CASE when [RECORD_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE], CASE when VERSION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VERSION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VERSION, [FILE_DATE], CASE when [TRANS_FILE_CONTROL_NUMBER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANS_FILE_CONTROL_NUMBER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANS_FILE_CONTROL_NUMBER], CASE when [SUBSCRIBER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_ID], [RECORD_COUNT], [FILE_SIZE], CASE when CHECKSUM is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CHECKSUM, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CHECKSUM, [FILE_STATUS_ID], CASE when [FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FILE_NAME], CASE when [ADDITIONAL_COMMENTS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ADDITIONAL_COMMENTS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ADDITIONAL_COMMENTS], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [SUBSCRIBER_LIST_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.TRANSACTION_FILE_HEADERS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ACKNOWLEDGEMENT_FILE_HEADERS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ACK_FILE_HEADER_ID, CASE when [RECORD_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE], CASE when VERSION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VERSION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VERSION, [FILE_DATE], [ORIGINAL_FILE_DATE], [ACK_TYPE_ID], [ACK_FILE_STATUS_ID], CASE when [IS_INTERNAL_EMAIL_SENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_INTERNAL_EMAIL_SENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_INTERNAL_EMAIL_SENT], CASE when [IS_EXTERNAL_EMAIL_SENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_EXTERNAL_EMAIL_SENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_EXTERNAL_EMAIL_SENT], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CASE when [ORIGINAL_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ORIGINAL_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ORIGINAL_FILE_NAME], [FILE_TYPE_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.ACKNOWLEDGEMENT_FILE_HEADERS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AVI_TRANSACTIONS_DRK",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_ID, [TRANSACTION_DATE], CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], CASE when [TAG_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_ID], [FACILITY_ID], [PLAZA_ID], [LANE_ID], CASE when DISPOSITION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION, CASE when [REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REASON_CODE], [EARNED_CLASS], [EARNED_REVENUE], [POSTED_CLASS], [POSTED_REVENUE], [POSTED_DATE_TIME], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [TXID_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXID_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXID_ID], [CREATION_DATE], [ACCT_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.AVI_TRANSACTIONS_DRK",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VETERANS_LICENSE_PLATES_EXT",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when LIC_PLATE_STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIC_PLATE_STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIC_PLATE_STATE, CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], [START_DATE], [END_DATE], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.VETERANS_LICENSE_PLATES_EXT",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VETERANS_LICENSE_PLATES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VETERAN_LIC_PLATE_ID, CASE when [LIC_PLATE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_STATE], CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], [START_DATE], [END_DATE], [CREATED_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [MODIFIED_DATE], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TSA_OWNER.VETERANS_LICENSE_PLATES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TOLL_SERV_SUM_TXNS",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DATE_TYPE, [BUS_DAY], [AGENCY_ID], [LANE_ID], [TTA_NOT_POST_NOT_PURSBLE_CNT], [TTA_NOT_POST_NOT_PURSBLE_TOLL], [TTA_NOT_POST_PURSBLE_CNT], [TTA_NOT_POST_PURSBLE_TOLL], [TTA_DUPLICATE_CNT], [TTA_DUPLICATE_TOLL], [TTA_TAGSTORE_CRDT_CNT], [TTA_TAGSTORE_CRDT_TOLL], [TTA_POST_VIDEO_TRXNS_CNT], [TTA_POST_VIDEO_TRXNS_TOLL], [TTA_POST_VIDEO_TRXNS_TOLL_ALL], [VTA_UNPURSBLE_CNT], [VTA_UNPURSBLE_TOLL], [VTA_USER_DISP_CNT], [VTA_USER_DISP_TOLL], [TTA_CLASS_ADJUSTMENT_CNT], [TTA_CLASS_ADJUSTMENT_EAR], [TTA_CLASS_ADJUSTMENT_POST], [TTA_EXEMPT_COUNT], [TTA_EXEMPT_EARNED_REV], [VTA_DUPLICATE_CNT], [VTA_DUPLICATE_TOLL], [VTA_EXEMPT_COUNT], [VTA_EXEMPT_EARNED_REV], [VTA_CLASS_ADJUSTMENT_COUNT], [VTA_CLASS_ADJUSTMENT_AVI_REV], [VTA_CLASS_ADJUSTMENT_TOLL_REV], [CREATION_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [MODIFIED_DATE], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TOLL_SERV_SUM_TXNS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AU_ALL_PARTIAL_SHIFTS",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select APS_ID, [START_TIME], [STOP_TIME], [ATT_BUS_DAY], [AVI_BUS_DAY], [VLT_BUS_DAY], CASE when CATEGORY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CATEGORY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CATEGORY, [APS_FROM_APS_ID], [VPLT_VPLT_ID], [EMPL_EMPL_ID], [LANE_LANE_ID], [AAST1_AAST1_ID], CASE when [LC_FLG] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LC_FLG], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LC_FLG], [CREATION_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [UPDATED_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.AU_ALL_PARTIAL_SHIFTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AVI_TRANSACTIONS_CLR",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_ID, [TRANSACTION_DATE], CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], CASE when [TAG_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_ID], [FACILITY_ID], [PLAZA_ID], [LANE_ID], CASE when DISPOSITION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION, CASE when [REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REASON_CODE], [EARNED_CLASS], [EARNED_REVENUE], [POSTED_CLASS], [POSTED_REVENUE], [POSTED_DATE_TIME], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [TXID_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXID_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXID_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.AVI_TRANSACTIONS_CLR",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TXDOT_REPORT_DATA",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_ID, [SUBSCRIBER_UNIQUE_ID], CASE when [TSA_DISPOSITION_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TSA_DISPOSITION_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TSA_DISPOSITION_CODE], CASE when [TSA_DISPOSITION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TSA_DISPOSITION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TSA_DISPOSITION], CASE when [DISPOSITION_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_TYPE_CODE], CASE when [DISPOSITION_REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_REASON_CODE], CASE when [DISPOSITION_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_REASON], [TRANSACTION_DATE], [RECEIVED_DATE], [DISPOSITION_DATE], [PROCESS_DATE], [PAYMENT_DATE], [ADJUSTED_DATE], CASE when [TRANSACTION_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSACTION_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSACTION_TYPE_CODE], CASE when [TRANSACTION_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSACTION_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSACTION_TYPE], [NTTA_TXN_DISPOSITION_ID], CASE when [NTTA_TXN_DISPOSITION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([NTTA_TXN_DISPOSITION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [NTTA_TXN_DISPOSITION], [DISPOSITION_FILE_DETAIL_ID], [TRANSACTION_FILE_DETAIL_ID], [FACILITY_ID], [PLAZA_ID], [LANE_ID], CASE when [PAID_AUTHORITY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PAID_AUTHORITY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PAID_AUTHORITY], CASE when [PAYMENT_METHOD] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PAYMENT_METHOD], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PAYMENT_METHOD], PAYMENT, [BASE_TXN_FEE], [VARIABLE_TXN_FEE], [IOP_TXN_FEE], [TOTAL_TOLL], [NET_TSA_PAYMENT], CASE when [SUBSCRIBER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_ID], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.TXDOT_REPORT_DATA",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "LANE_TYPES",
+            "schema_name": "FPL_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when LANY_DESC is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LANY_DESC, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LANY_DESC, CASE when NOTE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTE, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [LANY_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from FPL_OWNER.LANE_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_SHIFT_DETAILS_CT_UPD",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [SHIFT_END_TIME], [SHIFT_START_TIME], CASE when [SHIFT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHIFT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHIFT_TYPE], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HSD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [DET_LINK_ID], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_SHIFT_DETAILS_CT_UPD",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_AVI_TXNSES_CT_DEL",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select EARNED_CLASS, [EARNED_REVENUE], [POSTED_CLASS], [POSTED_REVENUE], [BUS_DAY], [HAT_ID], [LANE_LANE_ID], [TXN_COUNT], [START_TIME], [END_TIME], [SUMM_TIME], CASE when [REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REASON_CODE], [HIA_AGCY_ID], [DET_LINK_REV], [DET_LINK_VAR], [POSTED_DAY], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_AVI_TXNSES_CT_DEL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_AVI_TXNSES_CT_INS",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select EARNED_CLASS, [EARNED_REVENUE], [POSTED_CLASS], [POSTED_REVENUE], [BUS_DAY], [HAT_ID], [LANE_LANE_ID], [TXN_COUNT], [START_TIME], [END_TIME], [SUMM_TIME], CASE when [REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REASON_CODE], [HIA_AGCY_ID], [DET_LINK_REV], [DET_LINK_VAR], [POSTED_DAY], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_AVI_TXNSES_CT_INS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_SHIFT_DETAILS_CT_DEL",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [SHIFT_END_TIME], [SHIFT_START_TIME], CASE when [SHIFT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHIFT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHIFT_TYPE], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HSD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [DET_LINK_ID], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_SHIFT_DETAILS_CT_DEL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_SHIFT_DETAILS_CT_INS",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [SHIFT_END_TIME], [SHIFT_START_TIME], CASE when [SHIFT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHIFT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHIFT_TYPE], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HSD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [DET_LINK_ID], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_SHIFT_DETAILS_CT_INS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_REV_TFC_SUM_DETAILS_CT_UPD",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HALD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [HIA_AGCY_ID], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_REV_TFC_SUM_DETAILS_CT_UPD",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_REV_TFC_SUM_DETAILS_CT_DEL",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HALD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [HIA_AGCY_ID], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_REV_TFC_SUM_DETAILS_CT_DEL",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_REV_TFC_SUM_DETAILS_CT_INS",
+            "schema_name": "HAS_OWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HALD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [HIA_AGCY_ID], CAST(INSERT_DATETIME AS datetime2(6)) AS INSERT_DATETIME from HAS_OWNER.HA_REV_TFC_SUM_DETAILS_CT_INS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TA_TXN_RITE_DATAS_MISSING",
+            "schema_name": "TXNOWNER",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VEH_SPEED, CASE when [EVENT_IND] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EVENT_IND], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EVENT_IND], [LOGON_TIME], CASE when [ACTIVE_VLT_CH] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ACTIVE_VLT_CH], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ACTIVE_VLT_CH], [TURD_ID], [TART_TART_ID], [LOGON_MEANS], [EMPL_ID], [VPLT_ID], [REV_LANE_IND], [ISF_SERIAL_NO], [VES_SERIAL_NO], [VES_DATE_TIME], [STANDBY_MODE_STATUS], [ACM_STATUS], [AVI_STATUS], [VEH_AVC_STATUS], [TREADLE_AVC_STATUS], [VES_TRIGGER_STATUS], [VES_STATUS], [ATT_TERM_STATUS], [FAC_SRVR_AVI_STATUS], [FAC_SRVR_UPLOAD_TXNS], [UPS_STATUS], [DIGITAL_IO_STATUS], [NONREV_EMPL_ID], CASE when [LN_STRADDLE_IND] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_STRADDLE_IND], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_STRADDLE_IND], CASE when [ATT_CLASS_ENTERED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATT_CLASS_ENTERED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATT_CLASS_ENTERED], CASE when [VIO_IMAGE_REQ] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIO_IMAGE_REQ], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIO_IMAGE_REQ], CASE when [COIN_REJECTED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([COIN_REJECTED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [COIN_REJECTED], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], [LAST_UPDATE_DATE], VES_DATE_TIME_LOCAL from TXNOWNER.TA_TXN_RITE_DATAS_MISSING",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_ADJ_TFC_SUM_DETAILS",
+            "schema_name": "TXNOWNER",
+            "id_field": "HATSD_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [END_TIME], [SUMM_TIME], [BUS_DAY], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], [MISCLASS_CT], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HATSD_ID], [LANE_LANE_ID], [VCLY_ID], [PMTY_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.HA_ADJ_TFC_SUM_DETAILS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AU_TXN_ADJ_DETAILS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TART_TART_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select ATD_ID, [OPNM_OPNM_ID], [PMTY_PMTY_ID], [VCLY_VCLY_ID], [LANE_LANE_ID], [ATA_ATA_ID], [TART_TART_ID], [DUMMY_TART_ID], [DATE_TIME], [EAR_REV], [EXP_REV], [SIGN_FLG], CASE when LATEST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LATEST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LATEST, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [CREATION_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], [UPDATED_DATE], [REV_AXLE_CT], [ATT_CLASS], [FWD_AXLE_CT], [EXIT_LOOP_CTS], [ATT_FARE], [PRE_CLASS], [MISCLASS_CT], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.AU_TXN_ADJ_DETAILS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TSA_SP_REPORTING_TABLE",
+            "schema_name": "TXNOWNER",
+            "id_field": "TRANSACTION_FILE_DETAIL_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_ID, [RECEIVED_DATE], [TRANSACTION_DATE], [LANE_ID], CASE when [TRANSACTION_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSACTION_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSACTION_TYPE], [EARNED_CLASS], CASE when [HOME_AUTHORITY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([HOME_AUTHORITY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [HOME_AUTHORITY], [SYSTEM_TOLL], [REGIONAL_TOLL], [TOTAL_TOLL], PREMIUM, PAYMENT, CASE when [PAYMENT_METHOD] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PAYMENT_METHOD], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PAYMENT_METHOD], [PAYMENT_DATE], [PAYMENT_VARIANCE], [BASE_TXN_FEE], [VARIABLE_TXN_FEE], [IOP_TXN_FEE], [TOTAL_TXN_FEE], [NET_REGIONAL_TOLL], [NET_TSA_PAYMENT], CASE when [TSA_DISPOSITION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TSA_DISPOSITION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TSA_DISPOSITION], CASE when [NTTA_TXN_DISPOSITION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([NTTA_TXN_DISPOSITION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [NTTA_TXN_DISPOSITION], CASE when [DISPOSITION_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_REASON], CASE when [SOURCE_SYSTEM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_SYSTEM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_SYSTEM], CASE when [TRANSPONDER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSPONDER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSPONDER_ID], [PAYMENT_CONFIRMATION_DATE], CASE when [CONTRACT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CONTRACT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CONTRACT_TYPE], CASE when [LANE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LANE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LANE_NAME], [PAYMENT_TXN_ID], CASE when [TXN_SOURCE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXN_SOURCE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXN_SOURCE], [SUBSCRIBER_UNIQUE_ID], CASE when [DISPOSITION_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_TYPE], [ADJUSTED_DATE], [FACILITY_ID], [PLAZA_ID], CASE when [FACILITY_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FACILITY_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FACILITY_NAME], CASE when [PLAZA_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PLAZA_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PLAZA_NAME], [DISPOSITION_FILE_DETAIL_ID], [TRANSACTION_FILE_DETAIL_ID], [RUN_DATETIME], [VES_SERIAL_NO], CASE when [DISPOSITION_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_FILE_NAME], [DISPOSITION_FILE_DATE], CASE when [RECORD_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TSA_SP_REPORTING_TABLE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_AVI_TXNSES",
+            "schema_name": "HAS_OWNER",
+            "id_field": "HAT_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select EARNED_CLASS, [EARNED_REVENUE], [POSTED_CLASS], [POSTED_REVENUE], [BUS_DAY], [HAT_ID], [LANE_LANE_ID], [TXN_COUNT], [START_TIME], [END_TIME], [SUMM_TIME], CASE when [REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REASON_CODE], [HIA_AGCY_ID], [DET_LINK_REV], [DET_LINK_VAR], [POSTED_DAY], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from HAS_OWNER.HA_AVI_TXNSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "IOP_TRANSACTIONS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TRANSACTION_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_ID, [TRANSACTION_DATE], CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], CASE when [TAG_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_ID], [FACILITY_ID], [PLAZA_ID], [LANE_ID], CASE when DISPOSITION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION, CASE when [REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REASON_CODE], [EARNED_CLASS], [EARNED_REVENUE], [POSTED_CLASS], [POSTED_REVENUE], [POSTED_DATE_TIME], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [TXID_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXID_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXID_ID], [CREATION_DATE], CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], CASE when [LIC_PLATE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_STATE], [HIA_AGCY_ID], CASE when [TXN_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXN_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXN_TYPE], [ENTRY_LANE_ID], [ENTRY_TXN_DATE], CASE when [ENTRY_TVL_TAG_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_TVL_TAG_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_TVL_TAG_STATUS], CASE when [EXIT_TVL_TAG_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_TVL_TAG_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_TVL_TAG_STATUS], [REPOST_ATTEMPTS], CASE when [ATTRIBUTE_1] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_1], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_1], CASE when [ATTRIBUTE_2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_2], CASE when [ATTRIBUTE_3] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_3], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_3], CASE when [ATTRIBUTE_4] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_4], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_4], CASE when [ATTRIBUTE_5] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_5], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_5], CASE when [ATTRIBUTE_6] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_6], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_6], CASE when [ATTRIBUTE_7] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_7], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_7], CASE when [ATTRIBUTE_8] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_8], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_8], CASE when [ATTRIBUTE_9] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_9], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_9], CASE when [ATTRIBUTE_10] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATTRIBUTE_10], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATTRIBUTE_10], [IOP_EARNED_REVENUE], [DET_LINK_ID], [DET_LINK_VTOLL], [TRANSACTION_FILE_DETAIL_ID], [PROC_FEE_FLAT], [PROC_FEE_PCT], CASE when [LIC_PLATE_COUNTRY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_COUNTRY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_COUNTRY], CASE when [LIC_PLATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_TYPE], CASE when [RESUBMIT_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RESUBMIT_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RESUBMIT_REASON], [RESUBMIT_COUNT], [HUB_IOP_TXN_ID], [HOME_TXN_REFERENCE_ID], CASE when [RECON_HOME_AGENCY_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECON_HOME_AGENCY_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECON_HOME_AGENCY_ID], CASE when [IOP_DISPOSITION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IOP_DISPOSITION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IOP_DISPOSITION], CASE when [TAG_AGENCY_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_AGENCY_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_AGENCY_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.IOP_TRANSACTIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_VIOL_TXNSES",
+            "schema_name": "HAS_OWNER",
+            "id_field": "HVT_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select EARNED_REVENUE, [POSTED_REVENUE], [BUS_DAY], [HVT_ID], [TXN_COUNT], [LANE_LANE_ID], [START_TIME], [END_TIME], [SUMM_TIME], [VEH_NO_FUND_COUNT], [VEH_PART_VIO_PMT_CNT], [VEH_VIO_CNT], [VEH_VIO_REV], [TOT_VIO_SENT_CNT], [TOT_VIO_SENT_REV], [TOT_VIO_POSTED_CNT], [TOT_VIO_POSTED_REV], [TOT_VIO_PROCESSED_CNT], [TOT_VIO_PROCESSED_REV], [VEH_ZERO_VIO_CNT], [VEH_AVI_VIO_CNT], CASE when [SUMMARY_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUMMARY_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUMMARY_TYPE], [HIA_AGCY_ID], [POSTED_DAY], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from HAS_OWNER.HA_VIOL_TXNSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRANSACTION_FILE_DETAILS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "TRANSACTION_FILE_DETAIL_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_FILE_DETAIL_ID, CASE when [SUBS_TRANS_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBS_TRANS_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBS_TRANS_TYPE_CODE], [TRANSACTION_FILE_HEADER_ID], [TRANSACTION_SEQUENCE], CASE when [RECORD_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE], [SUBSCRIBER_UNIQUE_ID], [REVENUE_DATE], [RECEIVED_DATE], CASE when [RESUBMITTAL_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RESUBMITTAL_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RESUBMITTAL_REASON], CASE when [RESUBMITTAL_COUNT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RESUBMITTAL_COUNT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RESUBMITTAL_COUNT], CASE when [TRANSACTION_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSACTION_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSACTION_STATUS], CASE when [AUTHORITY_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AUTHORITY_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AUTHORITY_ID], CASE when [LOCATION_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LOCATION_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LOCATION_TYPE], CASE when FACILITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FACILITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FACILITY, CASE when [SUBSCRIBER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_ID], CASE when [ENTRY_PLAZA] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_PLAZA], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_PLAZA], CASE when [ENTRY_LANE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_LANE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_LANE], CASE when [ENTRY_LANE_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_LANE_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_LANE_MODE], CASE when [ENTRY_TRANSACTION_DATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_TRANSACTION_DATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_TRANSACTION_DATE], CASE when [ENTRY_TRANSACTION_TIME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_TRANSACTION_TIME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_TRANSACTION_TIME], CASE when [ENTRY_TRANSPONDER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_TRANSPONDER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_TRANSPONDER_ID], CASE when [ENTRY_TRANSPONDER_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_TRANSPONDER_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_TRANSPONDER_STATUS], CASE when [ENTRY_TVL_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_TVL_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_TVL_FILE_NAME], CASE when [ENTRY_LVL_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_LVL_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_LVL_FILE_NAME], CASE when [ENTRY_VEHICLE_CLASS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_VEHICLE_CLASS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_VEHICLE_CLASS], CASE when [ENTRY_AXLES_EXPECTED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_AXLES_EXPECTED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_AXLES_EXPECTED], CASE when [ENTRY_AXLES_COUNTED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_AXLES_COUNTED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_AXLES_COUNTED], CASE when [ENTRY_SPEED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_SPEED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_SPEED], CASE when [ENTRY_HOV_DESIGNATION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ENTRY_HOV_DESIGNATION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ENTRY_HOV_DESIGNATION], CASE when [EXIT_PLAZA] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_PLAZA], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_PLAZA], CASE when [EXIT_LANE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_LANE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_LANE], CASE when [EXIT_LANE_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_LANE_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_LANE_MODE], [EXIT_TRANSACTION_DATE], CASE when [EXIT_TRANSACTION_TIME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_TRANSACTION_TIME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_TRANSACTION_TIME], CASE when [EXIT_TRANSPONDER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_TRANSPONDER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_TRANSPONDER_ID], CASE when [EXIT_TRANSPONDER_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_TRANSPONDER_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_TRANSPONDER_STATUS], CASE when [EXIT_TVL_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_TVL_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_TVL_FILE_NAME], CASE when [EXIT_LVL_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_LVL_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_LVL_FILE_NAME], CASE when [EXIT_VEHICLE_CLASS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_VEHICLE_CLASS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_VEHICLE_CLASS], CASE when [EXIT_AXLES_EXPECTED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_AXLES_EXPECTED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_AXLES_EXPECTED], CASE when [EXIT_AXLES_COUNTED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_AXLES_COUNTED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_AXLES_COUNTED], CASE when [EXIT_SPEED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_SPEED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_SPEED], CASE when [EXIT_HOV_DESIGNATION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_HOV_DESIGNATION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_HOV_DESIGNATION], CASE when [COLLECTOR_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([COLLECTOR_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [COLLECTOR_ID], CASE when [VAULT_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VAULT_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VAULT_ID], CASE when [TOLL_DETERMINATION_CLASS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TOLL_DETERMINATION_CLASS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TOLL_DETERMINATION_CLASS], CASE when [TRANSPONDER_TOLL_AMT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSPONDER_TOLL_AMT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSPONDER_TOLL_AMT], CASE when [TRANSPONDER_DISCOUNT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TRANSPONDER_DISCOUNT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TRANSPONDER_DISCOUNT_TYPE], CASE when [DISC_TRANSPONDER_TOLL_AMT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISC_TRANSPONDER_TOLL_AMT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISC_TRANSPONDER_TOLL_AMT], CASE when [VIDEO_TOLL_AMT_WO_PREM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIDEO_TOLL_AMT_WO_PREM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIDEO_TOLL_AMT_WO_PREM], CASE when [VIDEO_TOLL_AMT_W_PREM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIDEO_TOLL_AMT_W_PREM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIDEO_TOLL_AMT_W_PREM], CASE when [VIDEO_DISCOUNT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIDEO_DISCOUNT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIDEO_DISCOUNT_TYPE], CASE when [DISC_VIDEO_TOLL_AMT_WO_PREM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISC_VIDEO_TOLL_AMT_WO_PREM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISC_VIDEO_TOLL_AMT_WO_PREM], CASE when [DISC_VIDEO_TOLL_AMT_W_PREM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISC_VIDEO_TOLL_AMT_W_PREM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISC_VIDEO_TOLL_AMT_W_PREM], CASE when [CASH_TOLL_AMOUNT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CASH_TOLL_AMOUNT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CASH_TOLL_AMOUNT], CASE when [CASH_DISCOUNT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CASH_DISCOUNT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CASH_DISCOUNT_TYPE], CASE when [DISC_CASH_TOLL_AMOUNT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISC_CASH_TOLL_AMOUNT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISC_CASH_TOLL_AMOUNT], CASE when [UNUSUAL_OCCURRENCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UNUSUAL_OCCURRENCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UNUSUAL_OCCURRENCE_CODE], CASE when [NUMBER_OF_IMAGES] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([NUMBER_OF_IMAGES], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [NUMBER_OF_IMAGES], CASE when [AMOUNT_PAID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AMOUNT_PAID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AMOUNT_PAID], [IMAGE_REQUEST_SEND_DATE], [IMAGE_RESPONSE_RECEIVED_DATE], CASE when [IMAGE_REQUEST_STATUS_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IMAGE_REQUEST_STATUS_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IMAGE_REQUEST_STATUS_CODE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [ADDITIONAL_COMMENTS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ADDITIONAL_COMMENTS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ADDITIONAL_COMMENTS], [SUBSCRIBER_LIST_ID], CASE when [PROCESSED_YN] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PROCESSED_YN], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PROCESSED_YN], [LOCKED_TIMESTAMP], CASE when [EXIT_TAG_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXIT_TAG_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXIT_TAG_ID], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.TRANSACTION_FILE_DETAILS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_SHIFT_DETAILS",
+            "schema_name": "HAS_OWNER",
+            "id_field": "HSD_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [SHIFT_END_TIME], [SHIFT_START_TIME], CASE when [SHIFT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SHIFT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SHIFT_TYPE], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HSD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [DET_LINK_ID], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from HAS_OWNER.HA_SHIFT_DETAILS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "HA_REV_TFC_SUM_DETAILS",
+            "schema_name": "HAS_OWNER",
+            "id_field": "HALD_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select CASE when SUMMARY_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(SUMMARY_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as SUMMARY_TYPE, [START_TIME], [END_TIME], [SUMM_TIME], [BUS_DAY], CASE when [PMT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PMT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PMT_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, [AXLE_IND_CNT], [AXLE_EXP_CNT], [AXLE_ACT_CNT], [VEH_TOT_CNT], [VEH_AVI_CNT], [VEH_AVI_NR_CNT], [VEH_AVI_INV_CNT], [VEH_ACM_CNT], [VEH_CASH_ATT_CNT], [VEH_NO_FUND_CNT], [VEH_AT_NR_CNT], [VEH_PART_VIO_PMT_CNT], [VEH_AVI_VIO_CNT], [VEH_VIO_CNT], [REV_TOT_EARNED], [REV_TOT_EXP], [REV_TOT_ACT], [REV_AVI], [REV_AVI_NR], [REV_AVI_INV], [REV_ACM], [REV_CASH_ATT], [REV_NO_FUND], [REV_ATT_NR], [REV_VIO_CNT], [REV_AVI_VIO], [REV_CASH_VIO], [REV_PART_VIO_PMT], CASE when [LN_MODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_MODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_MODE], [MISCLASS_CT], [SHIFT_ID], [VPLT_ID], [ATT_EMPL_ID], [OPNM_ID], [AVG_HSHKS], [EXIT_LOOP], [MID_LOOP], [ENT_LOOP], [FWD_AXLES], [REV_AXLES], [HALD_ID], [LANE_LANE_ID], [PMTY_ID], [VCLY_ID], [GATE_OVERRIDE_CNT], [HIA_AGCY_ID], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from HAS_OWNER.HA_REV_TFC_SUM_DETAILS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DISPOSITION_FILE_DETAILS",
+            "schema_name": "TSA_OWNER",
+            "id_field": "DISPOSITION_FILE_DETAIL_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select DISPOSITION_FILE_DETAIL_ID, CASE when [DISPOSITION_TYPE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_TYPE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_TYPE_CODE], [DISPOSITION_FILE_HEADER_ID], [SUBSCRIBER_UNIQUE_ID], CASE when [DISPOSITION_COUNTER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_COUNTER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_COUNTER], CASE when [SUBSCRIBER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SUBSCRIBER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SUBSCRIBER_ID], CASE when [RECORD_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE], CASE when [RESUBMITTAL_COUNTER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RESUBMITTAL_COUNTER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RESUBMITTAL_COUNTER], [REVENUE_DATE], [PAYMENT_DATE], [RECONCILED_DATE], CASE when [RECONCILED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECONCILED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECONCILED_BY], [TRANSACTION_DATE], [DISPOSITION_DATE], [NTTA_DISPOSITION_ID], CASE when [DISPOSITION_TOLL_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_TOLL_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_TOLL_TYPE], [DISPOSITION_TOLL_AMT], [BASE_TRANSACTION_FEE], [VARIABLE_TRANSACTION_FEE], [IOP_TRANSACTION_FEE], [MISC_FEE1], [MISC_FEE2], [NET_PAYMENT_AMOUNT], CASE when [DISPOSITION_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_CODE], CASE when [DISPOSITION_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_REASON], CASE when [DISPOSITION_TRANSPONDER_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_TRANSPONDER_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_TRANSPONDER_ID], CASE when [DISPOSITION_VEHICLE_CLASS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_VEHICLE_CLASS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_VEHICLE_CLASS], CASE when [DISPOSITION_LICENSE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_LICENSE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_LICENSE_STATE], CASE when [DISPOSITION_LICENSE_PLATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISPOSITION_LICENSE_PLATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISPOSITION_LICENSE_PLATE], [AVI_POSTED_DATE], [AVI_FAILED_DATE], CASE when [FARE_RULE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FARE_RULE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FARE_RULE_CODE], [BASE_FEE_TYPE_ID], [VARIABLE_FEE_TYPE_ID], [IOP_FEE_TYPE_ID], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [TRANSACTION_FILE_DETAIL_ID], [INITIAL_PAYMENT_DATE], CASE when [INITIAL_PAYMENT_METHOD] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([INITIAL_PAYMENT_METHOD], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [INITIAL_PAYMENT_METHOD], [SUBSCRIBER_LIST_ID], CASE when [TXN_SOURCE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXN_SOURCE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXN_SOURCE], CASE when [HOME_AUTHORITY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([HOME_AUTHORITY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [HOME_AUTHORITY], PREMIUM, [INITIAL_PAYMENT_AMOUNT], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.DISPOSITION_FILE_DETAILS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VIOL_TRANSACTIONS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TRANS_REC_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TRANS_REC_ID, [HOST_TRANSACTION_ID], [VIOL_DATE], CASE when [PROCESS_FLAG] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PROCESS_FLAG], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PROCESS_FLAG], [VIOL_SERIAL_NBR], [ISF_SERIAL_NBR], CASE when [LC_FLG] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LC_FLG], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LC_FLG], [VIOLATION_ID], CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], CASE when [TAG_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_ID], CASE when [REASON_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REASON_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REASON_CODE], [EARNED_CLASS], [EARNED_REVENUE], [POSTED_DATE], [POSTED_CLASS], [POSTED_REVENUE], CASE when [TAG_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_STATUS], CASE when [COIN_JAM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([COIN_JAM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [COIN_JAM], CASE when [ACM_OK] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ACM_OK], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ACM_OK], CASE when [AVI_OK] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_OK], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_OK], [TAG_CLASS], [LANE_ID], [VES_TIMESTAMP], [CREATION_DATE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [UPDATED_DATE], CASE when [UPDATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UPDATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UPDATED_BY], CASE when DISPOSITION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISPOSITION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISPOSITION, [HIA_AGCY_ID], CASE when [VIOL_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOL_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOL_STATUS], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.VIOL_TRANSACTIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRANSACTION_IMAGES",
+            "schema_name": "TSA_OWNER",
+            "id_field": "TRANSACTION_IMAGE_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_IMAGE_ID, [TRANSACTION_FILE_DETAIL_ID], CASE when [IMAGE_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IMAGE_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IMAGE_FILE_NAME], CASE when [IMAGE_LOCATION_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IMAGE_LOCATION_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IMAGE_LOCATION_TYPE], CASE when [IMAGE_FACING_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IMAGE_FACING_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IMAGE_FACING_CODE], [IMAGE_SEQUENCE], CASE when [LICENSE_PLATE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LICENSE_PLATE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LICENSE_PLATE_STATE], [LICENSE_PLATE_STATE_CONF], CASE when [LICENSE_PLATE_COUNTRY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LICENSE_PLATE_COUNTRY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LICENSE_PLATE_COUNTRY], [LICENSE_PLATE_COUNTRY_CONF], CASE when [LICENSE_PLATE_VALUE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LICENSE_PLATE_VALUE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LICENSE_PLATE_VALUE], [LICENSE_PLATE_VALUE_CONF], CASE when [LICENSE_PLATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LICENSE_PLATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LICENSE_PLATE_TYPE], [LICENSE_PLATE_TYPE_CONF], CASE when [OCR_ENGINE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OCR_ENGINE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OCR_ENGINE_TYPE], [LICENSE_PLATE_OVERALL_CONF], [ROI_UPPER_LEFT_X], [ROI_UPPER_LEFT_Y], [ROI_LOWER_RIGHT_X], [ROI_LOWER_RIGHT_Y], CASE when [LICENSE_PLATE_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LICENSE_PLATE_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LICENSE_PLATE_STATUS], CASE when [DAC_OCR_PLATE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DAC_OCR_PLATE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DAC_OCR_PLATE_STATE], CASE when [DAC_OCR_PLATE_VALUE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DAC_OCR_PLATE_VALUE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DAC_OCR_PLATE_VALUE], [DAC_OCR_ROI_X1], [DAC_OCR_ROI_Y1], [DAC_OCR_ROI_X2], [DAC_OCR_ROI_Y2], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [IMAGE_LOCATION] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IMAGE_LOCATION], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IMAGE_LOCATION], CASE when [ROI_FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ROI_FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ROI_FILE_NAME], CASE when [OCR_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OCR_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OCR_STATUS], CASE when [FAILURE_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FAILURE_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FAILURE_REASON], [DAC_OCR_LIC_PLATE_OVERALL_CONF], CASE when [OCR_SERVER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OCR_SERVER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OCR_SERVER], CASE when [LAST_UPDATE_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_UPDATE_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TSA_OWNER.TRANSACTION_IMAGES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AVI_TRANSACTIONS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TRANSACTION_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TRANSACTION_ID, [TRANSACTION_DATE], CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], CASE when [TAG_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_ID], [FACILITY_ID], [PLAZA_ID], [LANE_ID], DISPOSITION, [REASON_CODE], [EARNED_CLASS], [EARNED_REVENUE], [POSTED_CLASS], [POSTED_REVENUE], [POSTED_DATE_TIME], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [TXID_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TXID_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TXID_ID], [CREATION_DATE], [ACCT_ID], [TRANSACTION_FILE_DETAIL_ID], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.AVI_TRANSACTIONS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TA_TXN_AVI_DATAS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TART_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select CASE when AVI_READER_NBR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AVI_READER_NBR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AVI_READER_NBR, CASE when [AVI_TAG_CLASS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_TAG_CLASS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_TAG_CLASS], CASE when [AVI_TAG_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_TAG_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_TAG_ID], CASE when [AVI_PLAZA_AND_LN_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_PLAZA_AND_LN_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_PLAZA_AND_LN_ID], CASE when [AVI_TAG_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_TAG_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_TAG_STATUS], CASE when [AVI_HANDSHAKE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_HANDSHAKE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_HANDSHAKE], CASE when [AVI_YEAR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_YEAR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_YEAR], CASE when [AVI_MONTH] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_MONTH], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_MONTH], CASE when [AVI_DAY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_DAY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_DAY], CASE when [AVI_HOUR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_HOUR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_HOUR], CASE when [AVI_MINUTE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_MINUTE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_MINUTE], CASE when [AVI_SECOND] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AVI_SECOND], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AVI_SECOND], [TAD_ID], [TART_ID], CASE when [TAG_AGENCY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([TAG_AGENCY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [TAG_AGENCY], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TA_TXN_AVI_DATAS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TA_TXN_CLASS_DATAS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TART_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select REV_AXLE_CT, [ATT_AXLES], [ATT_CLASS], [ATT_FARE], [PRE_AXLES], [PRE_CLASS], [PRE_FARE], [MID_LOOP_CTS], [ENTRY_LOOP_CTS], [EXIT_LOOP_CTS], CASE when [UNUSUAL_OCC_CD] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UNUSUAL_OCC_CD], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UNUSUAL_OCC_CD], CASE when DISCREPANCY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DISCREPANCY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DISCREPANCY, [CD_ID], [TART_ID], [FWD_AXLE_CT], [FWD_AXLES], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TA_TXN_CLASS_DATAS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TA_TXN_RITE_DATAS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TART_TART_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TURD_ID, [TART_TART_ID], [LOGON_MEANS], [EMPL_ID], [VPLT_ID], [REV_LANE_IND], [ISF_SERIAL_NO], [VES_SERIAL_NO], [VES_DATE_TIME], [STANDBY_MODE_STATUS], [ACM_STATUS], [AVI_STATUS], [VEH_AVC_STATUS], [TREADLE_AVC_STATUS], [VES_TRIGGER_STATUS], [VES_STATUS], [ATT_TERM_STATUS], [FAC_SRVR_AVI_STATUS], [FAC_SRVR_UPLOAD_TXNS], [UPS_STATUS], [DIGITAL_IO_STATUS], [NONREV_EMPL_ID], CASE when [LN_STRADDLE_IND] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LN_STRADDLE_IND], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LN_STRADDLE_IND], CASE when [ATT_CLASS_ENTERED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ATT_CLASS_ENTERED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ATT_CLASS_ENTERED], CASE when [VIO_IMAGE_REQ] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIO_IMAGE_REQ], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIO_IMAGE_REQ], CASE when [COIN_REJECTED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([COIN_REJECTED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [COIN_REJECTED], [VEH_SPEED], CASE when [EVENT_IND] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EVENT_IND], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EVENT_IND], [LOGON_TIME], CASE when [ACTIVE_VLT_CH] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ACTIVE_VLT_CH], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ACTIVE_VLT_CH], [VES_DATE_TIME_LOCAL], [LAST_UPDATE_TYPE], LAST_UPDATE_DATE from TXNOWNER.TA_TXN_RITE_DATAS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TA_REV_TFC_EVTS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TART_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select TXN_ID, [DATE_TIME], [EARNED_REV], [ACTUAL_REV], [ACTUAL_AXLES], [CREATION_DATE], [TART_ID], [OPNM_ID], [TAOC_ID], [FACS_ID], [PLAZ_ID], [LANE_ID], [TAOB_ID], [TXID_ID], [PMTY_ID], [VCLY_ID], [TAUO_ID], [EARNED_AXLES], [TRANSACTION_FILE_DETAIL_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from TXNOWNER.TA_REV_TFC_EVTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TX_IDENT_TXNS",
+            "schema_name": "TXNOWNER",
+            "id_field": "TXII_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [TXN_ID], [RECEIVED_DATE], CASE when STATUS_FLG is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(STATUS_FLG, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as STATUS_FLG, CASE when MSG_CONTENTS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(MSG_CONTENTS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as MSG_CONTENTS, [TXII_ID], [TXID_ID], [DEVN_ID], [TXUF_ID], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LAST_UPDATE_TYPE, LAST_UPDATE_DATE from TXNOWNER.TX_IDENT_TXNS",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

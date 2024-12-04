@@ -1,0 +1,85 @@
+# Package_id: 5001
+# Process_Name: EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load
+# Stored Procedure name: EDW_NAGIOS.Dim_Day_Hierarchy_Nagios_Full_Load()
+
+# labels
+# workflow: child
+# callout: sql
+
+main:
+    steps:
+    - init:
+        # Initialize the project ID from the environment variable
+        assign:
+          - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+
+    - Dim_Day_Hierarchy_Nagios_Full_Load:
+        try:
+            # Call the stored procedure EDW_NAGIOS.Dim_Day_Hierarchy_Nagios_Full_Load() using BigQuery
+            call: googleapis.bigquery.v2.jobs.query
+            args:
+                projectId: ${project_id}
+                body:
+                    useLegacySql: false
+                    useQueryCache: false
+                    query: ${"CALL EDW_NAGIOS.Dim_Day_Hierarchy_Nagios_Full_Load();"}
+            result: query_result
+        except:
+            as: e
+            steps:
+                # Raise an error if the stored procedure call fails
+                - raise_query_error:
+                    raise: ${e}
+
+    - Set_Job_Id:
+        # Assign the job ID and location from the query result
+        assign:
+          - sp_job_id: ${query_result.jobReference.jobId}
+          - location: ${query_result.jobReference.location}
+
+    - Get_Job_Info:
+        try:
+            # Retrieve the job information using the job ID and location
+            call: googleapis.bigquery.v2.jobs.get
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: job_info # Storing result into variable job_info
+        except:
+            as: e
+            steps:
+                # Raise an error if retrieving job information fails
+                - raise_job_error:
+                    raise: ${e}
+
+    - Check_Job_State:
+        # Check if the job is not done, and if so, wait for 30 seconds before checking again
+        switch:
+          - condition: ${job_info.status.state != "DONE"}
+            steps:
+              - wait_30_s:
+                  call: sys.sleep # Polling through sleep
+                  args:
+                    seconds: 30
+                  next: Get_Job_Info
+
+    - Get_Sp_Job_Result:
+        try:
+            # Retrieve the query results using the job ID and location
+            call: googleapis.bigquery.v2.jobs.getQueryResults
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: sp_result
+        except:
+            as: e
+            steps:
+                # Raise an error if retrieving the query results fails
+                - raise_sp_error:
+                    raise: ${e}
+
+    - returnOutput:
+        # Return the stored procedure result
+        return: '${sp_result}'

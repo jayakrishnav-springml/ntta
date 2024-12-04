@@ -1,0 +1,170 @@
+#This Workflow includes the Orchestration Steps for Package 9010 - EDW_TRIPS_Item_26_Monthly_Run
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:9010
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {} # logging payload variable declaration
+          # Initialising email results as Failed
+          - email_alert_payload: {"item_26":"Failed"}
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load"
+    #ProcessId: 8515
+    #ProcessName: EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load
+    #Run Mode: Sequential
+
+    - EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load:
+        try:
+            steps: 
+                - call_fact_customerbalancesnapshot_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load 
+                        connector_params:
+                            timeout: 3600    
+                    result: execution_result
+                - assign_8515_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8515_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"                        
+        except:
+            as: e
+            steps:
+                - save_8515_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerBalanceSnapshot_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8515_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"             
+
+
+    - Run_Steps_in_Parallel:   
+        #Call children workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results,payload]
+            branches:
+                # Call Process 8516_EDW_TRIPS_Item_26_File_Export
+                - EDW_TRIPS_Item_26_File_Export:
+                    steps:
+                        - item_26_file_export:
+                            try:
+                                steps:
+                                    - call_item_26_file_export:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Item_26_File_Export 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    - assign_8516_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Item_26_File_Export"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Item_26_File_Export', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8516_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO"  
+                            except:
+                                as: e
+                                steps:
+                                    - save_8516_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Item_26_File_Export"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Item_26_File_Export', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)} 
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8516_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"      
+
+                # Call Process 8531 - EDW_TRIPS_ZC_Customer_Negative_balance_File_Export
+                - EDW_TRIPS_ZC_Customer_Negative_balance_File_Export:
+                    steps:
+                        - zc_customer_neg_balance_export:
+                            try:
+                                steps:
+                                    - call_zc_customer_neg_balance_export:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_ZC_Customer_Negative_balance_File_Export 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    - assign_8531_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_ZC_Customer_Negative_balance_File_Export"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_ZC_Customer_Negative_balance_File_Export', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8531_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                                                                        
+                
+                            except:
+                                as: e
+                                steps:
+                                    - save_8531_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_ZC_Customer_Negative_balance_File_Export"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_ZC_Customer_Negative_balance_File_Export', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)} 
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - log_8531_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL" 
+
+    - check_item_26_execution_result:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - assign_item_26_result:
+                    assign:
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_GL_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_results}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                        - email_alert_payload["item_26"]: "Successful"
+                - log_item_26_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${parent_workflow_id}','alert_source':'edw_trips_item26_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+    - return_execution_results:
+        return: ${execution_results}
+

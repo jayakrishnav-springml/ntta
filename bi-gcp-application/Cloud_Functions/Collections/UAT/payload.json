@@ -1,0 +1,10 @@
+{
+    "project_id":"prj-ntta-ops-bi-test-svc-01",
+    "bucket_name":"prj-ntta-ops-bi-test-shared-data",
+    "export_dataset_id":"FILES_EXPORT",
+    "table_Lespam":"Primary_Collection_Agency_File_Lespam",
+	"table_Cpa":"Primary_Collection_Agency_File_Cpa",
+	"table_Cmi":"Seconday_Collection_Agency_File_Cmi",
+	"table_Swc":"Seconday_Collection_Agency_File_Swc",
+    "destination_folder_path":"Exports/Collections"
+}

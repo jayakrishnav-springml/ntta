@@ -1,0 +1,8 @@
+{
+    "bucket_name":"prj-ntta-ops-bi-snbxshared-data",
+    "export_dataset_id":"FILES_EXPORT",
+    "project_id":"prj-ntta-ops-bi-snbx-svc-01",
+    "customer_data_table_prefix":"BI_CUSTOMERDATA",
+    "txn_data_table_prefix":"AADT_Transactions",
+    "destination_folder_path":"Exports/GIS"
+}

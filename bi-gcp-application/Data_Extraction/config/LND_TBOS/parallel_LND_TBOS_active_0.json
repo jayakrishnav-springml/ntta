@@ -1,0 +1,304 @@
+{
+    "connection_string": "Driver=ODBC Driver 17 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-raw-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_TBOS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\all_tables_inactive",
+    "max_process_count": 10,
+    "file_type": ".csv",
+    "schema_list": [
+        "Ref",
+        "Stage",
+        "Temp"
+    ],
+    "log": {
+      "log_level": "INFO",
+      "log_name": "data_transfer_log",
+      "labels": {}
+    },
+    "tables": [{
+      "table_name": "TP_ImageReview",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "ImageReviewID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.TP_ImageReview"
+    }, {
+      "table_name": "Collections_Outbound",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "CollOutbound_TxnID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.Collections_Outbound"
+    }, {
+      "table_name": "Collections_Inbound",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "CollInbound_TxnID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.Collections_Inbound"
+    }, {
+      "table_name": "BOS_IOP_InboundTransactions",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "BOSIOPTransactionID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.BOS_IOP_InboundTransactions"
+    }, {
+      "table_name": "PmCase",
+      "schema_name": "CaseManager",
+      "gcs_upload_flag": "False",
+      "id_field": "CaseID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM CaseManager.PmCase"
+    }, {
+      "table_name": "BankPayments",
+      "schema_name": "Finance",
+      "gcs_upload_flag": "False",
+      "id_field": "PaymentID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM Finance.BankPayments"
+    }, {
+      "table_name": "ItemInventoryLocations",
+      "schema_name": "Inventory",
+      "gcs_upload_flag": "False",
+      "id_field": "LocationID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM Inventory.ItemInventoryLocations"
+    }, {
+      "table_name": "Agencies",
+      "schema_name": "IOP",
+      "gcs_upload_flag": "False",
+      "id_field": "AgencyID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM IOP.Agencies"
+    }, {
+      "table_name": "CollectionAgencyCounties",
+      "schema_name": "TER",
+      "gcs_upload_flag": "False",
+      "id_field": "CollAgencyCountyID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TER.CollectionAgencyCounties"
+    }, {
+      "table_name": "CaseLinks",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "CaseLinkID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.CaseLinks"
+    }, {
+      "table_name": "Dispositions",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "DIspID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.Dispositions"
+    }, {
+      "table_name": "DMVExceptionDetails",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "ExceptionDetailsID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.DMVExceptionDetails"
+    }, {
+      "table_name": "Escheatment_Elgible_Customers",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "EscheatmentID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.Escheatment_Elgible_Customers"
+    }, {
+      "table_name": "FleetCustomersFileTracker",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "TrackerID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.FleetCustomersFileTracker"
+    }, {
+      "table_name": "FleetCustomerVehiclesQueue",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "QueueID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.FleetCustomerVehiclesQueue"
+    }, {
+      "table_name": "ICN_Cash",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "ICN_CashID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.ICN_Cash"
+    }, {
+      "table_name": "ICN_Items",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "ICN_ItemID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.ICN_Items"
+    }, {
+      "table_name": "ICN_Txns",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "ICNTxnID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.ICN_Txns"
+    }, {
+      "table_name": "ICN_Variance",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "VarianceID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.ICN_Variance"
+    }, {
+      "table_name": "Merged_Customers",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "MergeID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.Merged_Customers"
+    }, {
+      "table_name": "TP_CustomerTripStatusTracker",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "StatusTrackerID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.TP_CustomerTripStatusTracker"
+    }, {
+      "table_name": "TP_Exempted_Plates",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "QualifiedVeteranID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.TP_Exempted_Plates"
+    }, {
+      "table_name": "TP_FileTracker",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "FileID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.TP_FileTracker"
+    }, {
+      "table_name": "TP_ViolatedTripStatusTracker",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "StatusTrackerID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.TP_ViolatedTripStatusTracker"
+    }, {
+      "table_name": "UnmatchedTxnsQueue",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "QueueID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.UnmatchedTxnsQueue"
+    }, {
+      "table_name": "BulkPayments",
+      "schema_name": "Finance",
+      "gcs_upload_flag": "False",
+      "id_field": "BulkPaymentID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM Finance.BulkPayments"
+    }, {
+      "table_name": "ItemInventory",
+      "schema_name": "Inventory",
+      "gcs_upload_flag": "False",
+      "id_field": "InventoryID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM Inventory.ItemInventory"
+    }, {
+      "table_name": "IOPPlates",
+      "schema_name": "IOP",
+      "gcs_upload_flag": "False",
+      "id_field": "IOPPlatePKID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM IOP.IOPPlates"
+    }, {
+      "table_name": "IOPTags",
+      "schema_name": "IOP",
+      "gcs_upload_flag": "False",
+      "id_field": "IOPPKID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM IOP.IOPTags"
+    }, {
+      "table_name": "ParkingTrips",
+      "schema_name": "Parking",
+      "gcs_upload_flag": "False",
+      "id_field": "TpTripID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM Parking.ParkingTrips"
+    }, {
+      "table_name": "InvoiceAttributes",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "InvAttrID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.InvoiceAttributes"
+    }, {
+      "table_name": "IOPInboundRawTransactions",
+      "schema_name": "TranProcessing",
+      "gcs_upload_flag": "False",
+      "id_field": "TxnID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TranProcessing.IOPInboundRawTransactions"
+    }, {
+      "table_name": "IOPOutboundAndViolationLinking",
+      "schema_name": "dbo",
+      "gcs_upload_flag": "False",
+      "id_field": "OutboundTPTripID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM dbo.IOPOutboundAndViolationLinking"
+    }, {
+      "table_name": "TP_Image_Review_Result_Images",
+      "schema_name": "TollPlus",
+      "gcs_upload_flag": "False",
+      "id_field": "ImageReviewResultImageID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TollPlus.TP_Image_Review_Result_Images"
+    }, {
+      "table_name": "TSAImageRawTransactions",
+      "schema_name": "TranProcessing",
+      "gcs_upload_flag": "False",
+      "id_field": "ImgTxnID",
+      "row_chunk_size": "5000000",
+      "chunk_flag": "True",
+      "query": "SELECT TOP 1000 * FROM TranProcessing.TSAImageRawTransactions"
+    }]
+  }

@@ -1,0 +1,97 @@
+#This Workflow includes the Orchestration Steps for Process Id LND_NAGIOS_PROCESS_CDC_BATCH_LOAD
+#This query will retrieve all failed tables in LND NAGIOS CDC process
+
+main:
+    params: [args]
+    steps:
+    - init:
+        assign:
+          - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - result: {}
+          - failed_tables: {}
+          - i: 0
+        
+    - PROCESS_CDC_BATCH_LOAD_TABLE:
+        try:
+            call: googleapis.bigquery.v2.jobs.query
+            args:
+                projectId: ${project_id}
+                body:
+                    useLegacySql: false
+                    useQueryCache: false
+                    query: ${"  
+                                SELECT 
+                                TO_JSON_STRING(STRUCT(table_name as tablename , comments as error))  
+                                FROM `LND_NAGIOS_SUPPORT.cdc_batch_load` 
+                                WHERE batch_end_date>='"+args.start_time+"' 
+                                and cdc_updatedate<='"+args.end_time +"'and cdc_merge_status = 'E' 
+                                and cdc_runid = (SELECT max(cdc_runid) from `LND_NAGIOS_SUPPORT.cdc_batch_load`)"}
+
+            result: job_result  
+        except:
+            as: e
+            steps:
+                - raise_query_error:
+                    raise: ${e}        
+    
+    - Set_Job_Id:
+        assign:
+          - sp_job_id : ${job_result.jobReference.jobId}
+          - location : ${job_result.jobReference.location}
+
+    - Get_Job_Info:
+        try:
+            call: googleapis.bigquery.v2.jobs.get
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: job_info   #Storing result into variable job_info
+        except:
+            as: e
+            steps:
+                - raise_job_error:
+                    raise: ${e}  
+
+    - Check_Job_State:
+        switch:
+          - condition: ${job_info.status.state != "DONE"}
+            steps: 
+              - wait_30_s:
+                  call: sys.sleep # Polling through sleep
+                  args:
+                    seconds: 30
+                  next: Get_Job_Info
+
+    - Get_Bq_Job_Result:
+        try:
+            call: googleapis.bigquery.v2.jobs.getQueryResults
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: query_result
+        except:
+            as: e
+            steps:
+                - raise_sp_error:
+                    raise: ${e}
+
+
+    - check_error_tables:
+        switch: 
+          - condition: ${"rows" in query_result }
+            steps:
+              - iterate:
+                  switch:
+                    - condition: ${len(query_result.rows)>i}
+                      steps:
+                        - assign_tables:
+                            assign:
+                              - failed_tables[string(i)]: ${json.decode(query_result.rows[i].f[0].v)}
+                              - result[failed_tables[string(i)].tablename]: ${failed_tables[string(i)].error}
+                              - i: ${i+1}
+                            next: iterate
+
+    - returnOutput:
+            return: ${result}

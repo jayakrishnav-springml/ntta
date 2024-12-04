@@ -1,0 +1,146 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "LND_TBOS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS2_DEV_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-landing-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_TBOS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\Archival_tables\\support",
+    "log_folder_path": "E:\\bcp_logs\\Archival_tables\\support",
+    "max_process_count": 8,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "TollPlus_"
+            },
+            "DocMgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "DocMgr_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": ""
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "TER_"
+            },
+            "DMV": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "DMV_"
+            },
+            "Parking": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "Parking_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "docmgr_"
+            },
+            "EIP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "EIP_"
+            },
+            "MIR": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_STAGE_FULL",
+                "table_name_prefix": "MIR_"
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "BI_ArchiveReversalTracker_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ArchiveBatchDate, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, ReversalBatchCount, [First_ArchiveReversalDate], [Last_ArchiveReversalDate], [LND_FirstID_Reversed], [LND_LastID_Reversed], [LND_RowCount_Archived], [IDS_RowCount_Reversed], [Final_RowCount_Archived], ArchiveFlagRowCount, [LND_Reversal_RowCount_Diff], BI_ArchiveReversalStageID from dbo.BI_ArchiveReversalTracker_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Archive_ID_Reconcile_Table_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [UniqueID_ColumnName] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([UniqueID_ColumnName], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [UniqueID_ColumnName], [Actual_RowCount_Archived], [Tracker_RowCount_Archived], RowCount_Diff from dbo.Archive_ID_Reconcile_Table_STAGE",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BI_ArchiveTracker_STAGE",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ArchiveTrackerID, ArchiveBatchDate, CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [UniqueID_ColumnName] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([UniqueID_ColumnName], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [UniqueID_ColumnName], CASE when ArchiveType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ArchiveType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ArchiveType, CASE when LoadType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LoadType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LoadType, [BI_ArchiveSignalDate], [BI_ArchiveStartDate], [BI_ArchiveFinishDate], CASE when [BI_ArchiveDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([BI_ArchiveDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [BI_ArchiveDuration], [BI_ArchiveStageID], [SRC_FirstID_Archived], [SRC_LastID_Archived], [SRC_RowCount_Archived], [LND_FirstID_Archived], [LND_LastID_Archived], [LND_RowCount_Archived], [SRC_LND_RowCount_Diff], [IDS_LoadStartDate], [IDS_LoadFinishDate], CASE when [IDS_LoadDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([IDS_LoadDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [IDS_LoadDuration], FlagUpdateStartDate, FlagUpdateFinishDate, CASE when FlagUpdateDuration is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(FlagUpdateDuration, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as FlagUpdateDuration, FlagUpdateRowCount, [SRC_UPD_RowCount_Diff], [IDS_TransferStartDate], [IDS_TransferFinishDate], CASE when [IDS_TransferDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([IDS_TransferDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [IDS_TransferDuration], [IDS_TransferRowCount], [IDS_TransferRowCount_Diff], ReversalBatchCount, [First_ArchiveReversalDate], [Last_ArchiveReversalDate], [LND_FirstID_Reversed], [LND_LastID_Reversed], [IDS_RowCount_Reversed], ArchiveFlagRowCount, [Final_RowCount_Archived], [LND_Reversal_RowCount_Diff], [SRC_Reversal_RowCount], [SRC_LND_Reversal_RowCount_Diff], [BI_ArchiveReversalStageID], [Last_ReversalLoadDate], LND_UpdateDate from dbo.BI_ArchiveTracker_STAGE",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

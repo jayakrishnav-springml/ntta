@@ -1,0 +1,187 @@
+#This Workflow includes the Orchestration Steps for Data Loading Process
+
+#labels
+#workflow:parent
+#callout:VM instance
+
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          - workflow_id: ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - project: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - zone: ${args.zone}   # The zone where the VM instance is located.
+          - instance_id: ${args.instance_id}  # The name of the VM instance.
+          - start_time: ${sys.now()} # The workflow start time, used to compare against the timeout.
+          - timeout: ${3600} # The maximum duration (in seconds) allowed for the entire data loading process. If exceeded, the workflow will terminate with an error.
+          - payload: {}
+
+    # Start the GCP VM instance.  
+    - start_machine:
+        try:
+          call: googleapis.compute.v1.instances.start
+          args:
+            instance: ${instance_id}
+            project: ${project}  
+            zone: ${zone}
+        except:
+          as: e
+          steps:
+            # assign error result if VM can't able to start.
+            - assign_instances_start_error:
+                assign:
+                  - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                  - payload["error"]: ${json.encode_to_string(e)} 
+                  - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            # log errors.
+            - log_start_error:
+                call: sys.log
+                args:
+                  severity: ERROR
+                  json: ${payload}
+            - raise_start_machine_job_error:
+                raise: ${ "ERROR:Unable to start instance "+instance_id}
+
+    # Retrieve the status of the GCP VM.
+    - get_start_machine_job_info:
+        try:
+            call: googleapis.compute.v1.instances.get
+            args:
+              instance: ${instance_id}
+              project: ${project}
+              zone: ${zone}
+            result: start_machine_result
+        except:
+            as: e
+            steps:
+              # Assign an error result if the workflow fails to retrieve the VM status.
+              - assign_instances_get_error:
+                  assign:
+                    - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["error"]: ${json.encode_to_string(e)} 
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+              # Log error
+              - log_get_info_error:
+                  call: sys.log
+                  args:
+                    severity: ERROR
+                    json: ${payload}
+              - raise_machine_state_job_error:
+                  raise: ${"ERROR:Unable to retrieve instance "+instance_id+" state"}
+
+    # Ensure the VM is in the Running state.
+    - check_start_machine_job_state:
+        switch:
+          - condition: ${start_machine_result.status != "RUNNING"}
+            steps:
+              - check_timeout:
+                  # Check if the elapsed time exceeds the timeout period
+                  switch:
+                    - condition: ${sys.now() - start_time > timeout}
+                      steps:
+                        - assign_running_timeout_error:
+                            assign:
+                              - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                              - payload["error"]: ${"Error:VM did not reach the RUNNING state within the timeout period."} 
+                              - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                        # Log an error message if the timeout period is exceeded
+                        - log_error:
+                            call: sys.log
+                            args:
+                              json: ${payload}
+                              severity: ERROR
+                        - error_out:
+                            raise: "TimeoutError: VM did not reach the RUNNING state within the timeout period."
+                    - condition: ${true}
+                      steps:
+                        # Wait for 30 seconds before retrying
+                        - wait_30_s:
+                            call: sys.sleep
+                            args:
+                              seconds: 30
+                            next: get_start_machine_job_info
+          - condition: ${start_machine_result.status == "RUNNING"}
+            steps:
+              - assign_running_success_status:
+                  assign:
+                    - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["result"]: ${"VM is in the RUNNING state."} 
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+              # Log a success message if the VM is in the RUNNING state
+              - log_success:
+                  call: sys.log
+                  args:
+                    json: ${payload}
+                    severity: INFO
+
+    # Retrieve the status of the GCP VM.
+    - wait_until_machine_stops:
+        try:
+          call: googleapis.compute.v1.instances.get
+          args:
+            instance: ${instance_id}
+            project: ${project}
+            zone: ${zone}
+          result: machine_state_result
+        except:
+          as: e
+          steps:
+            - assign_machine_stop_error:
+                assign:
+                  - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                  - payload["error"]: ${json.encode_to_string(e)} 
+                  - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            # Log error
+            - log_get_state_error:
+                call: sys.log
+                args:
+                  severity: ERROR
+                  json: ${payload}
+            - raise_job_error:
+                raise: ${"ERROR:Unable to retrieve instance "+instance_id+" state"}
+
+    # Ensure the VM is in the TERMINATED state.
+    - check_elapsed_time:
+        switch:
+          # Check if the elapsed time exceeds the timeout period
+          - condition: ${sys.now() - start_time > timeout}
+            steps:
+              - assign_timeout_error:
+                  assign:
+                    - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["error"]: ${"An error occurred:The VM instance was unable to shut down within the timeout "+timeout+"seconds period. Please check the logs for details."}
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+              # Log an error message if the timeout period is exceeded
+              - log_timeout_error:
+                  call: sys.log
+                  args:
+                    severity: ERROR
+                    json: ${payload}
+              - raise_timeout_error:
+                  raise: ${"An error occurred:The VM instance was unable to shut down within the timeout "+timeout+"seconds period. Please check the logs for details."}
+          # Verify VM is TERMINATED
+          - condition: ${machine_state_result.status == "TERMINATED"}
+            steps:
+              - assign_success_status:
+                  assign:
+                    - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["result"]: "The state of the VM instance is terminated."
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+              - end_waiting:
+                  call: sys.log
+                  args:
+                    severity: INFO
+                    json: ${payload}
+          # Wait for 60 seconds before retrying
+          - condition: ${true}
+            steps:
+              - wait_60_s:
+                  call: sys.sleep
+                  args:
+                    seconds: 60
+                  next: wait_until_machine_stops
+
+    - return_result:
+        return: "Data loading process for tables configured in the config file is done. Check the logs for more details."

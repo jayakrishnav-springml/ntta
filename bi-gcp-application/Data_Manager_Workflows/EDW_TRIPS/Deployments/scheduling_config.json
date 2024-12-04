@@ -1,0 +1,56 @@
+{
+    "EDW_TRIPS_Finance_Gl_Daily_Run":{
+        "job_name": "EDW_TRIPS_Finance_Gl_Daily_Run_Scheduler",
+        "schedule": "0 8 * * *",
+        "message_body": "{\"argument\": \"{\\\"batchname\\\":\\\"TRIPS_Finance_GL\\\", \\\"fullday_changedata_flag\\\":\\\"N\\\" , \\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}", 
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+    "EDW_TRIPS_Daily_Run":{
+        "job_name": "EDW_TRIPS_Daily_Run_Scheduler",
+        "schedule": "30 0 * * *",
+        "message_body": "{\"argument\": \"{\\\"batchname\\\":\\\"TRIPS\\\", \\\"fullday_changedata_flag\\\":\\\"Y\\\" ,\\\"partial_run\\\":false, \\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+    "EDW_TRIPS_Item_26_Monthly_Run":{
+        "job_name": "EDW_TRIPS_Item_26_Monthly_Run_Scheduler",
+        "schedule": "0 7 2 * *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+    "EDW_Dim_Day_Hierarchy_Yearly_Run":{
+        "job_name": "EDW_Dim_Day_Hierarchy_Yearly_Run_Scheduler",
+        "schedule": "0 5 1 11 *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+    "EDW_TRIPS_GIS_Exports":{
+        "job_name": "EDW_TRIPS_GIS_Exports",
+        "schedule": "0 7 5 * *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+    "EDW_TRIPS_Collections_Export":{
+        "job_name": "EDW_TRIPS_Collections_Export",
+        "schedule": "0 17 5 * *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    },
+	"EDW_TRIPS_Fact_Cpvt_Monthly_Summary_Load":{
+        "job_name": "EDW_TRIPS_Fact_Cpvt_Monthly_Summary_Scheduler",
+        "schedule": "0 17 1 * *",
+        "message_body": "{\"argument\": \"{\\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+    }
+}
+
+
+
+    
+

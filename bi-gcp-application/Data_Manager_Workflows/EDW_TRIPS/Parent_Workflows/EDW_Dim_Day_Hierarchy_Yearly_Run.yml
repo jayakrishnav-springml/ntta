@@ -1,0 +1,109 @@
+#This Workflow includes the Orchestration Steps for Package EDW_Dim_Day_Hierarchy_Yearly_Run
+#This parent workflows orchestrates execution of Dim_Day_Hierarchy_Full_Load from both EDW_TRIPS AND EDW_NAGIOS
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:EDW_Dim_Day_Hierarchy_Yearly_Run
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {}  # logging payload variable declaration
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_Day_Hierarchy_Full_Load"
+    #ProcessName: EDW_NAGIOS.Dim_Day_Hierarchy_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_Day_Hierarchy_Full_Load:
+        try:
+            steps: 
+              # Call the child workflow for loading dimension day hierarchy
+              - call_trips_dim_day_hierarchy:
+                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                  args:
+                      workflow_id: EDW_TRIPS_Dim_Day_Hierarchy_Full_Load 
+                      connector_params:
+                          timeout: 21600  # Set timeout to 6 hours
+                  result: execution_result
+              # Assign success result to execution results
+              - assign_trips_dim_day_hierarchy_result:
+                  assign:
+                      - execution_results.success["EDW_TRIPS_Dim_Day_Hierarchy_Full_Load"]: ${execution_result}
+                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_Day_Hierarchy_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["result"]: ${execution_result}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture log time
+              # Log the success result
+              - log_trips_dim_day_hierarchy_result:
+                  call: sys.log
+                  args:
+                      json: ${payload}
+                      severity: "INFO"
+        except:
+            as: e
+            steps:
+              # Assign failure result to execution results
+              - assign_trips_dim_day_hierarchy_error:
+                  assign:
+                      - execution_results.failure["EDW_TRIPS_Dim_Day_Hierarchy_Full_Load"]: ${e}
+                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_Day_Hierarchy_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["error"]:  ${json.encode_to_string(e)}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture error time
+              # Log the failure result
+              - log_trips_dim_day_hierarchy_error:
+                  call: sys.log 
+                  args:
+                      json: ${payload}
+                      severity: "CRITICAL"
+
+    # Step to call child workflow with id "EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load"
+    # ProcessName: EDW_NAGIOS.Dim_Day_Hierarchy_Nagios_Full_Load()
+    # Run Mode: Sequential
+    - EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load:
+        try:
+            steps: 
+              # Call the child workflow for loading dimension day hierarchy
+              - call_nagios_dim_day_hierarchy:
+                  call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                  args:
+                      workflow_id: EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load 
+                      connector_params:
+                          timeout: 21600  # Set timeout to 6 hours
+                  result: execution_result
+              # Assign success result to execution results
+              - assign_nagios_dim_day_hierarchy_result:
+                  assign:
+                      - execution_results.success["EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load"]: ${execution_result}
+                      - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["result"]: ${execution_result}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture log time
+              # Log the success result
+              - log_nagios_dim_day_hierarchy_result:
+                  call: sys.log
+                  args:
+                      json: ${payload}
+                      severity: "INFO"
+        except:
+            as: e
+            steps:
+              # Assign failure result to execution results
+              - assign_nagios_dim_day_hierarchy_error:
+                  assign:
+                      - execution_results.failure["EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load"]: ${e}
+                      - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                      - payload["error"]:  ${json.encode_to_string(e)}
+                      - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # Capture error time
+              # Log the failure result
+              - log_nagios_dim_day_hierarchy_error:
+                  call: sys.log 
+                  args:
+                      json: ${payload}
+                      severity: "CRITICAL"
+
+    - return_execution_results:
+        return: ${execution_results}

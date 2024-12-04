@@ -1,0 +1,18 @@
+{
+    "project_id": "prj-ntta-ops-bi-test-svc-01",
+    "gcs_bucket_name": "prj-ntta-ops-bi-test-landing-data",
+    "gcs_archive_bucket_name": "prj-ntta-ops-bi-test-archive-data",
+    "full_load_dataset_names": [
+        "LND_TBOS","LND_TBOS_STAGE_FULL"
+    ],
+    "full_load_dataset_flag": "Y",
+    "partial_load_list": {},
+    "partial_load_flag": "N",
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_loading",
+        "labels": {}
+    },
+    "bq_dataset_name": "LND_TBOS_SUPPORT",
+    "bq_table_name": "Data_Loading_Statistics"
+}

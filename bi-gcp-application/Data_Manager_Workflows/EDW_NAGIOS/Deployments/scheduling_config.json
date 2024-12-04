@@ -1,0 +1,15 @@
+{
+    "EDW_NAGIOS_Daily_Run":{
+        "job_name": "EDW_NAGIOS_Daily_Run_Scheduler",
+        "schedule": "0 7 * * *",
+        "message_body": "{\"argument\": \"{\\\"batchname\\\":\\\"NAGIOS\\\", \\\"fullday_changedata_flag\\\":\\\"N\\\" , \\\"callLogLevel\\\":\\\"LOG_ALL_CALLS\\\"}\"}",
+        "location": "us-central1" ,
+        "time_zone": "America/Chicago"
+
+    }
+}
+
+
+
+    
+

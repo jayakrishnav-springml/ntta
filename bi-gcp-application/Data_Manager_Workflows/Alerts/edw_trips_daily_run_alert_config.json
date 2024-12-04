@@ -1,0 +1,33 @@
+{
+  "displayName": "Alerting Policy For EDW TRIPS Daily Run",
+  "documentation": {
+    "content": "The execution of workflow  **${log.extracted_label.parent_workflow_id}** within the project **${project}** has been completed. The details and results are as follows: \n\n- Dim Table                :  ${log.extracted_label.dim_tables_result}\n- Fact Tables       : ${log.extracted_label.fact_tables_result}   \n- Bubble Report : ${log.extracted_label.bubble_report_result}\n- Item 90 Report :${log.extracted_label.item_90_report_result}",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "Workflow Completion Condition Check",
+      "conditionMatchedLog": {
+        "filter": "(resource.labels.service=\"workflowexecutions.googleapis.com\" OR resource.labels.service=\"workflows.googleapis.com\") OR resource.type=\"workflows.googleapis.com/Workflow\" severity>=DEFAULT AND jsonPayload.log_source=\"workflows\" AND jsonPayload.alert_source=\"edw_trips_daily_run\" ",
+        "labelExtractors": {
+          "item_90_report_result": "EXTRACT(jsonPayload.email_alert_payload.item_90_report)",
+          "bubble_report_result": "EXTRACT(jsonPayload.email_alert_payload.bubble_report)", 
+          "fact_tables_result": "EXTRACT(jsonPayload.email_alert_payload.fact_tables)",
+          "log_source": "EXTRACT(jsonPayload.log_source)",
+          "dim_tables_result": "EXTRACT(jsonPayload.email_alert_payload.dim_tables)",
+          "parent_workflow_id": "EXTRACT(jsonPayload.parent_workflow_id)"
+        }
+      }
+    }
+  ],
+  "combiner": "OR",
+  "alertStrategy": {
+    "notificationRateLimit": {
+      "period": "300s"
+    },
+    "autoClose": "1800s"
+  },
+  "notificationChannels": [
+    
+  ]
+}

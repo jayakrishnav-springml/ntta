@@ -1,0 +1,842 @@
+#This Workflow includes the Orchestration Steps for Package EDW_TRIPS_Fact_Daily_Run - EDW_TRIPS: Fact_Daily_Run
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:EDW_TRIPS_Fact_Daily_Run
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {}  # logging payload variable declaration
+
+    - Run_Steps_in_Parallel_1:   
+        #Call children workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results, payload]
+            branches:
+                # Call Process 8038 - EDW_TRIPS.Fact_PaymentPlan_Full_Load()
+                - EDW_TRIPS_Fact_PaymentPlan_Full_Load:
+                    steps:
+                        - start_fact_paymentplan_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_paymentplan_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_PaymentPlan_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8038_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_PaymentPlan_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_PaymentPlan_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8038_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8038_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_PaymentPlan_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_PaymentPlan_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8038_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"  
+                # Call Process 8500 - EDW_TRIPS.Fact_CustomerPaymentDetail_Full_Load()
+                - EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load:
+                    steps:
+                        - start_fact_customerpaymentdetail_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_customerpaymentdetail_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8500_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8500_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8500_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerPaymentDetail_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8500_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+                # Call Process 8522 - EDW_TRIPS_Fact.LanePerformanceDailySummary_Full_Load()
+                - EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load:
+                    steps:
+                        - start_fact_laneperformancedailysummary_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_laneperformancedailysummary_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8522_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8522_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8522_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_LanePerformanceDailySummary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8522_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+                # Call Process 8524 - EDW_TRIPS.Fact_MisClass_Load()
+                - EDW_TRIPS_Fact_MisClass_Load:
+                    steps:
+                        - start_fact_misclass_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_misclass_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_MisClass_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8524_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_MisClass_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_MisClass_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8524_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8524_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_MisClass_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_MisClass_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8524_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+                
+                # Call Process 8543 - EDW_TRIPS.Fact_VRB_Full_Load()
+                - EDW_TRIPS_Fact_VRB_Full_Load:
+                    steps:
+                        - start_fact_vrb_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_vrb_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_VRB_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8543_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_VRB_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_VRB_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8543_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8543_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_VRB_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_VRB_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8543_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+                # Call Process 8544 - EDW_TRIPS.Fact_HV_FailuretopayCitation_Full_Load()
+                - EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load:
+                    steps:
+                        - start_fact_hv_failuretopaycitation_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_hv_failuretopaycitation_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8544_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8544_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8544_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_HV_FailuretopayCitation_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8544_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+                
+                # Call Process 8545 - EDW_TRIPS.Fact_VehicleBan_Full_Load()
+                - EDW_TRIPS_Fact_VehicleBan_Full_Load:
+                    steps:
+                        - start_fact_vehicleban_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_vehicleban_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_VehicleBan_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8545_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_VehicleBan_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_VehicleBan_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8545_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8545_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_VehicleBan_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_VehicleBan_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8545_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+                           
+
+    - Run_Steps_in_Parallel_2:   
+        #Call children workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results, payload]
+            branches:
+                # Call Process 8665 - EDW_TRIPS.Fact_CustomerDailyBalance_Load()
+                - EDW_TRIPS_Fact_CustomerDailyBalance_Load:
+                    steps:
+                        - start_fact_customerdailybalance_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_customerdailybalance_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_CustomerDailyBalance_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8665_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_CustomerDailyBalance_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerDailyBalance_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8665_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8665_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_CustomerDailyBalance_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerDailyBalance_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8665_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"  
+
+                # Call Process 8511 - EDW_TRIPS.Fact_Violation_Load()
+                - EDW_TRIPS_Fact_Violation_Load:
+                    steps:
+                        - start_fact_violation_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_violation_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_Violation_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8511_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_Violation_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_Violation_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8511_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8511_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_Violation_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_Violation_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8511_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+
+                # Call Process 8510 - EDW_TRIPS.Fact_TollTransaction_Load()
+                - EDW_TRIPS_Fact_TollTransaction_Load:
+                    steps:
+                        - start_fact_tolltransaction_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_tolltransaction_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_TollTransaction_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8510_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_TollTransaction_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_TollTransaction_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8510_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8510_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_TollTransaction_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_TollTransaction_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8510_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+
+                # Call Process 8513 - EDW_TRIPS.Fact_Transaction_Load()
+                - EDW_TRIPS_Fact_Transaction_Load:
+                    steps:
+                        - start_fact_transaction_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_transaction_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_Transaction_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8513_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_Transaction_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_Transaction_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8513_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8513_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_Transaction_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_Transaction_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8513_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+                
+                
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load"
+    #ProcessId: 8518
+    #ProcessName: EDW_TRIPS.Fact_TollTransactionYearlySummary_Full_Load()
+    #Run Mode: Sequential
+
+    - EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load:
+        try:
+            steps: 
+                - call_fact_tolltransactionyearlysummary_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load    
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8518_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                - log_8518_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"                        
+        except:
+            as: e
+            steps:
+                - assign_8518_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_TollTransactionYearlySummary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                - log_8518_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"             
+            
+    #Step to call child workflow with id "EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load"
+    #ProcessId: 8514
+    #ProcessName: EDW_TRIPS.Fact_TollTransaction_Adj_Full_Load()
+    #Run Mode: Sequential
+
+    - EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load:
+        try:
+            steps: 
+                - call_fact_tolltransaction_adj_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load    
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8514_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                - log_8514_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"                        
+        except:
+            as: e
+            steps:
+                - assign_8514_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_TollTransaction_Adj_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                - log_8514_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+  
+      
+
+    - Run_Steps_in_Parallel_3:   
+        #Call children workflows in parallel with help of branches
+        parallel:   
+            shared: [execution_results, payload]
+            branches:
+                # Call Process 8507 - EDW_TRIPS.Fact_PaymentDetail_Full_Load()
+                - EDW_TRIPS_Fact_PaymentDetail_Full_Load:
+                    steps:
+                        - start_fact_paymentdetail_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_paymentdetail_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_PaymentDetail_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8507_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_PaymentDetail_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_PaymentDetail_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8507_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8507_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_PaymentDetail_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_PaymentDetail_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8507_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"  
+
+                # Call Process 8505 - EDW_TRIPS.Fact_InvoiceDetail_Full_Load()
+                - EDW_TRIPS_Fact_InvoiceDetail_Full_Load:
+                    steps:
+                        - start_fact_invoicedetail_full_load:
+                            try:
+                                steps:
+                                    # Call child workflow using workflow connector
+                                    - call_fact_invoicedetail_full_load:
+                                        call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                                        args:
+                                            workflow_id: EDW_TRIPS_Fact_InvoiceDetail_Full_Load 
+                                            connector_params:
+                                                timeout: 3600 
+                                        result: wf_execution_result
+                                    # Assign result from child workflow to variable payload
+                                    - assign_8505_result:
+                                        assign:
+                                            - execution_results.success["EDW_TRIPS_Fact_InvoiceDetail_Full_Load"]: ${wf_execution_result}
+                                            - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_InvoiceDetail_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["result"]: ${wf_execution_result}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log payload to google cloud logging 
+                                    - log_8505_result:
+                                        call: sys.log
+                                        args:
+                                            json: ${payload}
+                                            severity: "INFO" 
+                            except:
+                                as: e
+                                steps:
+                                    # assign error from child workflow to variable payload
+                                    - assign_8505_error:
+                                        assign:
+                                            - execution_results.failure["EDW_TRIPS_Fact_InvoiceDetail_Full_Load"]: ${e}
+                                            - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_InvoiceDetail_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                            - payload["error"]:  ${json.encode_to_string(e)}
+                                            - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    # Log error payload to google cloud logging 
+                                    - log_8505_error:
+                                        call: sys.log 
+                                        args:
+                                            json: ${payload}
+                                            severity: "CRITICAL"
+       
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load"
+    #ProcessId: 8509
+    #ProcessName: EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load:
+        try:
+            steps: 
+                - call_fact_invoiceagingsnapshot_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load   
+                        connector_params:
+                                timeout: 3600  
+                    result: execution_result
+                - assign_8509_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                - log_8509_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"   
+        except:
+            as: e
+            steps:
+                - assign_8509_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_InvoiceAgingSnapshot_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                - log_8509_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_CustomerTagDetail_Load"
+    #ProcessName: EDW_TRIPS_Fact_CustomerTagDetail_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_CustomerTagDetail_Load:
+        try:
+            steps: 
+                - call_fact_customertagdetail_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_CustomerTagDetail_Load   
+                        connector_params:
+                                timeout: 3600  
+                    result: execution_result
+                - assign_customertagdetail_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_CustomerTagDetail_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerTagDetail_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                - log_customertagdetail_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"   
+        except:
+            as: e
+            steps:
+                - assign_customertagdetail_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_CustomerTagDetail_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_CustomerTagDetail_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                - log_customertagdetail_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+    
+    #Step to call child workflow with id "EDW_TRIPS_Fact_OCR_Full_Load"
+    #ProcessId: 8509
+    #ProcessName: EDW_TRIPS_Fact_OCR_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_OCR_Full_Load:
+        try:
+            steps: 
+                - call_fact_ocr_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_OCR_Full_Load   
+                        connector_params:
+                                timeout: 3600  
+                    result: execution_result
+                - assign_ocr_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_OCR_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_OCR_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                - log_ocr_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"   
+        except:
+            as: e
+            steps:
+                - assign_ocr_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_OCR_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Fact_OCR_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                - log_ocr_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+
+    #Step to call child workflow with id "EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load"
+    #ProcessId: 8509
+    #ProcessName: EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load
+    #Run Mode: Sequential
+    - EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load:
+        try:
+            steps: 
+                - call_fact_tolltransaction_monthly_summary_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load   
+                        connector_params:
+                                timeout: 3600  
+                    result: execution_result
+                - assign_tolltransaction_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                - log_tolltransaction_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"   
+        except:
+            as: e
+            steps:
+                - assign_tolltransaction_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_FaEDW_TRIPS_Fact_TollTransaction_Monthly_Summary_Full_Loadct_InvoiceAgingSnapshot_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                - log_tolltransaction_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+   
+    - return_execution_results:
+        return: ${execution_results}    
+
+

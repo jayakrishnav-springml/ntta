@@ -1,0 +1,93 @@
+# Workflow for LND_TBOS_CreditCardMonitoring
+# Process Name - LND_TBOS_CreditCardMonitoring
+# Calls a cloud function named - creditcardmonitoring-import
+
+# labels
+# package_id - 
+# workflow:parent
+# callout:gcf
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+            - workflow_id: ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+            - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+            - bucket_name: "BUCKET_NAME"
+            - prefix_folder : ${"Imports/CreditCardMonitoring"}
+            - dest_folder : ${"Archive/CreditCardMonitoring/"}
+            - stage_dataset_id : ${"LND_SHARED_DATA"}
+            - main_dataset_id : ${"EDW_SHARED_DATA"}
+            - location : ${sys.get_env("GOOGLE_CLOUD_LOCATION")}
+            - execution_results: {} # results from each execution
+            - execution_results.success: {} # successful executions saved under 'success' key
+            - execution_results.failure: {} # failed executions saved under 'failure' key
+            - payload: {} # logging payload variable declaration
+            # Initialising email results as Failed
+            - email_alert_payload: {"creditcardmonitoring-import":"Failed"}
+    - LND_TBOS_CreditCardMonitoring:
+        try:
+          steps: 
+            - call_CreditCardMonitoring_cloud_function:
+                call: http.post  #Calling Google Cloud Function Endpoint using http.post 
+                args:
+                  url: ${"https://"+location+"-"+project_id+".cloudfunctions.net/creditcardmonitoring-import"}
+                  timeout: 1800
+                  body:
+                    "project_id": ${project_id}
+                    "bucket_name": ${bucket_name}
+                    "prefix_folder": ${prefix_folder}
+                    "dest_folder": ${dest_folder}
+                    "stage_dataset_id": ${stage_dataset_id}
+                    "main_dataset_id": ${main_dataset_id}
+                  auth:
+                    type: OIDC
+                    audience: ${"https://"+location+"-"+project_id+".cloudfunctions.net/creditcardmonitoring-import"}
+                result: execution_result
+            - assign_creditcardmonitoring_result:
+                assign:
+                    - execution_results.success["LND_TBOS_CreditCardmonitoring"]: ${execution_result}
+                    - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["result"]: ${execution_result}
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            - log_CCM_result:
+                call: sys.log
+                args:
+                    json: ${payload}
+                    severity: "INFO" 
+        except:
+          as: e
+          steps:
+            - assign_connection_error:
+                assign:
+                  - execution_results.failure["LND_TBOS_CreditCardmonitoring"]: ${e}
+                  - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                  - payload["error"]: ${json.encode_to_string(e)} 
+                  - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            - log_gcf_execution_error:
+                call: sys.log 
+                args:
+                    json: ${payload}
+                    severity: "CRITICAL" 
+            - raise_query_error:
+                raise: ${e}  
+    # Step to log success email notification.
+    - check_creditcardmonitoring_execution_result:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - assign_creditcardmonitoring_execution_result:
+                    assign:
+                        - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_results}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                        - email_alert_payload["creditcardmonitoring"]: "Successful"
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${workflow_id}','alert_source':'lnd_tbos_creditcardmonitoring_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+
+    - return_execution_results:
+        return: ${execution_results}

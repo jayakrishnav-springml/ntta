@@ -1,0 +1,30 @@
+{
+  "displayName": "Alerting Policy For LND TBOS Bankruptcy Run",
+  "documentation": {
+    "content": "The execution of workflow  **${log.extracted_label.parent_workflow_id}** within the project **${project}** has been successfully completed. The details and results are as follows: \n\n- Bankruptcy              :  ${log.extracted_label.bankruptcy_result}",
+    "mimeType": "text/markdown"
+  },
+  "conditions": [
+    {
+      "displayName": "Workflow Completion Condition Check",
+      "conditionMatchedLog": {
+        "filter": "(resource.labels.service=\"workflowexecutions.googleapis.com\" OR resource.labels.service=\"workflows.googleapis.com\") OR resource.type=\"workflows.googleapis.com/Workflow\" severity>=DEFAULT AND jsonPayload.log_source=\"workflows\" AND jsonPayload.alert_source=\"lnd_tbos_bankruptcy_run\" ",
+        "labelExtractors": {
+          "bankruptcy_result": "EXTRACT(jsonPayload.email_alert_payload.bankruptcy)",
+          "log_source": "EXTRACT(jsonPayload.log_source)",
+          "parent_workflow_id": "EXTRACT(jsonPayload.parent_workflow_id)"
+        }
+      }
+    }
+  ],
+  "combiner": "OR",
+  "alertStrategy": {
+    "notificationRateLimit": {
+      "period": "300s"
+    },
+    "autoClose": "1800s"
+  },
+  "notificationChannels": [
+    
+  ]
+}

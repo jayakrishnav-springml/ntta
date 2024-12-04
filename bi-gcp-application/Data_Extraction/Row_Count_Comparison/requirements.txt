@@ -1,0 +1,8 @@
+google-cloud-bigquery
+setuptools
+pandas
+db-dtypes
+pyodbc
+logging
+google-cloud-secret-manager
+google.cloud.logging

@@ -1,0 +1,13 @@
+{"LND_TBOS_SUPPORT_CDC_Invoker":{
+    "labels":"workflow=child,callout=sql",
+    "description":"Child Workflow for LND_TBOS_SUPPORT_CDC_Invoker, \nProcess Name - LND_TBOS_SUPPORT.CDC_Invoker(batchname,fullday_changedata_flag)"},
+"PROCESS_CDC_BATCH_LOAD_TABLE":{
+    "labels":"workflow=child,callout=sql",
+    "description":"Child workflow for Process - LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE  "},
+"LND_NAGIOS_SUPPORT_CDC_Invoker":{
+    "labels":"workflow=child,callout=sql",
+    "description":"Child Workflow for Process - LND_NAGIOS_SUPPORT.CDC_Invoker(batchname,fullday_changedata_flag)"},
+"LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE":{
+    "labels":"workflow=child,callout=sql",
+    "description":"Child workflow for Process - LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE  "}
+}

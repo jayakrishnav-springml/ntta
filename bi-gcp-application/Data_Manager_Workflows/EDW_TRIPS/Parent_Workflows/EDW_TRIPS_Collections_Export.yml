@@ -1,0 +1,97 @@
+# Child Workflow for EDW_TRIPS_Collections_Export
+# Process Name - EDW_TRIPS_Collections_Export
+# Calls a cloud function named - collections-exports
+
+
+# labels
+# workflow:parent
+# callout:gcf
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+            - workflow_id: ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+            - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+            - bucket_name: "BUCKET_NAME"
+            - table_Cmi : ${"Seconday_Collection_Agency_File_Cmi"}
+            - table_Swc : ${"Seconday_Collection_Agency_File_Swc"}
+            - destination_folder_path : ${"Exports/Collections"}
+            - export_dataset_id : "FILES_EXPORT"
+            - table_Lespam : ${"Primary_Collection_Agency_File_Lespam"}
+            - table_Cpa : ${"Primary_Collection_Agency_File_Cpa"}
+            - location : ${sys.get_env("GOOGLE_CLOUD_LOCATION")}
+            - execution_results: {} # results from each execution
+            - execution_results.success: {} # successful executions saved under 'success' key
+            - execution_results.failure: {} # failed executions saved under 'failure' key
+            - payload: {} # logging payload variable declaration
+            # Initialising email results as Failed
+            - email_alert_payload: {"collections":"Failed"}
+    - EDW_TRIPS_Collections_Export:
+        try:
+          steps: 
+            - call_collections_cloud_function:
+                call: http.post  #Calling Google Cloud Function Endpoint using http.post 
+                args:
+                  url: ${"https://"+location+"-"+project_id+".cloudfunctions.net/collections-export"}
+                  timeout: "GCF_TIMEOUT"
+                  body:
+                    "project_id": ${project_id}
+                    "bucket_name": ${bucket_name}
+                    "export_dataset_id": ${export_dataset_id}
+                    "table_Cmi": ${table_Cmi}
+                    "table_Swc": ${table_Swc}
+                    "table_Lespam": ${table_Lespam}
+                    "table_Cpa" : ${table_Cpa}
+                    "destination_folder_path": ${destination_folder_path}
+                  auth:
+                    type: OIDC
+                    audience: ${"https://"+location+"-"+project_id+".cloudfunctions.net/collections-export"}
+                result: execution_result
+            - assign_collections_result:
+                assign:
+                    - execution_results.success["EDW_TRIPS_Collections_Export"]: ${execution_result}
+                    - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                    - payload["result"]: ${execution_result}
+                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            - log_collections_result:
+                call: sys.log
+                args:
+                    json: ${payload}
+                    severity: "INFO" 
+        except:
+          as: e
+          steps:
+            - assign_connection_error:
+                assign:
+                  - execution_results.failure["EDW_TRIPS_Collections_Export"]: ${e}
+                  - payload: { 'status':'Failed', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                  - payload["error"]: ${json.encode_to_string(e)} 
+                  - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+            - log_gcf_execution_error:
+                call: sys.log 
+                args:
+                    json: ${payload}
+                    severity: "CRITICAL" 
+            - raise_query_error:
+                raise: ${e}  
+    # Step to log success email notification.
+    - check_collections_execution_result:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - assign_collections_execution_result:
+                    assign:
+                        - payload: { 'status':'Success', 'child_workflow_id': '${workflow_id}', 'parent_workflow_id': '${workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_results}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                        - email_alert_payload["collections"]: "Successful"
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${workflow_id}','alert_source':'edw_trips_collections_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+
+    - return_execution_results:
+        return: ${execution_results}

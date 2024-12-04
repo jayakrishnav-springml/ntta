@@ -1,0 +1,866 @@
+#This Workflow includes the Orchestration Steps to load Dim tables as Package Dim_Daily_run - EDW_TRIPS: Daily Run
+
+#labels
+#workflow:parent
+#callout:childworkflows
+#packageid:9001
+
+main:
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {}  # logging payload variable declaration
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load"
+    #ProcessName: EDW_TRIPS.Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load:        
+        try:
+            steps:
+                - call_dim_ref_lookuptypecodes_hierarchy_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load   
+                        connector_params:
+                            timeout: 3600 
+                    result: execution_result
+                - assign_8018_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8018_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"                         
+        except:
+            as: e
+            steps:
+                - assign_8018_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_Ref_LookupTypeCodes_Hierarchy_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8018_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load"
+    #ProcessId: 8024
+    #ProcessName: EDW_TRIPS.Plaza_Lane_GIS_Data_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load:        
+        try:
+            steps:
+                - call_plaza_lane_gis_data_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load 
+                        connector_params:
+                                timeout: 3600   
+                    result: execution_result
+                - assign_8024_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8024_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8024_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Plaza_Lane_GIS_Data_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8024_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+    
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_AppTxnType_Full_Load"
+    #ProcessId: 8010
+    #ProcessName: EDW_TRIPS.Plaza_Lane_GIS_Data_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_AppTxnType_Full_Load:        
+        try:
+            steps:
+                - call_dim_apptxntype_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_AppTxnType_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8010_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_AppTxnType_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_AppTxnType_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8010_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8010_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_AppTxnType_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_AppTxnType_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8010_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    
+    #Step to call child workflow with id "EDW_TRIPS_Dim_BusinessProcesses_Full_Load"
+    #ProcessId: 8011
+    #ProcessName: EDW_TRIPS.Dim_BusinessProcesses_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_BusinessProcesses_Full_Load:        
+        try:
+            steps:
+                - call_dim_businessprocesses_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_BusinessProcesses_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8011_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_BusinessProcesses_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_BusinessProcesses_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8011_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8011_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_BusinessProcesses_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_BusinessProcesses_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8011_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_Channel_Full_Load"
+    #ProcessId: 8012
+    #ProcessName: EDW_TRIPS.Dim_Channel_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_Channel_Full_Load:        
+        try:
+            steps: 
+                - call_dim_channel_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_Channel_Full_Load  
+                        connector_params:
+                                timeout: 3600  
+                    result: execution_result
+                - assign_8012_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_Channel_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_Channel_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8012_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8012_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_Channel_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_Channel_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8012_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_ChartOfAccounts_Full_Load"
+    #ProcessId: 8013
+    #ProcessName: EDW_TRIPS.Dim_ChartOfAccounts_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_ChartOfAccounts_Full_Load:        
+        try:
+            steps: 
+                - call_dim_chartofaccounts_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_ChartOfAccounts_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8013_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_ChartOfAccounts_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_ChartOfAccounts_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8013_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8013_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_ChartOfAccounts_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_ChartOfAccounts_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8013_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_Customer_Full_Load"
+    #ProcessId: 8014
+    #ProcessName: EDW_TRIPS.Dim_Customer_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_Customer_Full_Load:        
+        try:
+            steps:
+                - call_dim_customer_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_Customer_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8014_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_Customer_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_Customer_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8014_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8014_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_Customer_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_Customer_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8014_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_GL_TxnType_Full_Load"
+    #ProcessId: 8015
+    #ProcessName: EDW_TRIPS.Dim_GL_TxnType_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_GL_TxnType_Full_Load:        
+        try:
+            steps:
+                - call_dim_gl_txntype_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_GL_TxnType_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8015_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_GL_TxnType_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_GL_TxnType_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8015_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8015_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_GL_TxnType_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_GL_TxnType_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8015_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_InvoiceStage_Full_Load"
+    #ProcessId: 8016
+    #ProcessName: EDW_TRIPS.Dim_InvoiceStage_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_InvoiceStage_Full_Load:        
+        try:
+            steps:
+                - call_dim_invoicestage_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_InvoiceStage_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8016_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_InvoiceStage_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_InvoiceStage_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8016_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8016_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_InvoiceStage_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_InvoiceStage_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8016_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load"
+    #ProcessId: 8017
+    #ProcessName: EDW_TRIPS.Dim_Lane_Hierarchy_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load:        
+        try:
+            steps: 
+                - call_dim_lane_hierarchy_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8017_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8017_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_8017_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_Lane_Hierarchy_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8017_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_CitationStage_Full_Load"
+    #ProcessId: 8020
+    #ProcessName: EDW_TRIPS.Dim_CitationStage_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_CitationStage_Full_Load:        
+        try:
+            steps:
+                - call_dim_citationstage_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_CitationStage_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8020_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_CitationStage_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_CitationStage_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8020_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8020_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_CitationStage_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_CitationStage_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8020_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_PlateType_Load"
+    #ProcessId: 8021
+    #ProcessName: EDW_TRIPS.Dim_PlateType_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_PlateType_Load:        
+        try:
+            steps:
+                - call_dim_platetype_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_PlateType_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8021_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_PlateType_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_PlateType_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8021_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8021_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_PlateType_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_PlateType_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8021_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_POSLocation_Full_Load"
+    #ProcessId: 8025
+    #ProcessName: EDW_TRIPS.Dim_POSLocation_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_POSLocation_Full_Load:        
+        try:
+            steps:
+                - call_dim_poslocation_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_POSLocation_Full_Load  
+                        connector_params:
+                                timeout: 3600  
+                    result: execution_result
+                - assign_8025_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_POSLocation_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_POSLocation_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8025_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_8025_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_POSLocation_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_POSLocation_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8025_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_VehicleTag_Load_Full"
+    #ProcessId: 8026
+    #ProcessName: EDW_TRIPS.Dim_VehicleTag_Load() - Full
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_VehicleTag_Load_Full:        
+        try:
+            steps:
+                - call_dim_vehicletag_load_full:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_VehicleTag_Load_Full   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8026_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_VehicleTag_Load_Full"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_VehicleTag_Load_Full', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8026_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8026_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_VehicleTag_Load_Full"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_VehicleTag_Load_Full', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8026_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_CustomerTag_Load_Full"
+    #ProcessId: 8028
+    #ProcessName: EDW_TRIPS.Dim_CustomerTag_Load() - Full
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_CustomerTag_Load_Full:        
+        try:
+            steps:
+                - call_dim_customertag_load_full:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_CustomerTag_Load_Full   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8028_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_CustomerTag_Load_Full"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_CustomerTag_Load_Full', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8028_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8028_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_CustomerTag_Load_Full"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_CustomerTag_Load_Full', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8028_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_Vehicle_Load_Full"
+    #ProcessId: 8030
+    #ProcessName: EDW_TRIPS.Dim_Vehicle_Load() - Full
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_Vehicle_Load_Full:        
+        try:
+            steps:
+                - call_dim_vehicle_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_Vehicle_Load_Full   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8030_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_Vehicle_Load_Full"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_Vehicle_Load_Full', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8030_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8030_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_Vehicle_Load_Full"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_Vehicle_Load_Full', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8030_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_ReasonCode_Incr_Load"
+    #ProcessId: 8032
+    #ProcessName: EDW_TRIPS.Dim_ReasonCode_Incr_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_ReasonCode_Incr_Load:        
+        try:
+            steps:
+                - call_dim_reasoncode_incr_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_ReasonCode_Incr_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8032_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_ReasonCode_Incr_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_ReasonCode_Incr_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8032_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8032_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_ReasonCode_Incr_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_ReasonCode_Incr_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8032_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_HabitualViolator_Full_Load"
+    #ProcessId: 8039
+    #ProcessName: EDW_TRIPS_Dim_HabitualViolator_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_HabitualViolator_Full_Load:        
+        try:
+            steps:
+                - call_dim_habitualviolator_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_HabitualViolator_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8039_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_HabitualViolator_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_HabitualViolator_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8039_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO"
+        except:
+            as: e
+            steps:
+                - assign_8039_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_HabitualViolator_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_HabitualViolator_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8039_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+                                    
+    #Step to call child workflow with id "EDW_TRIPS_Dim_TERStatus_Full_Load"
+    #ProcessId: 8040
+    #ProcessName: EDW_TRIPS.Dim_TERStatus_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_TERStatus_Full_Load:        
+        try:
+            steps:
+                - call_dim_terstatus_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_TERStatus_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_8040_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_TERStatus_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_TERStatus_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8040_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_8040_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_TERStatus_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_TERStatus_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_8040_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+    #Step to call child workflow with id "EDW_TRIPS_Dim_ZipCode_Full_Load"
+    #ProcessName: EDW_TRIPS.Dim_ZipCode_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_ZipCode_Full_Load:        
+        try:
+            steps:
+                - call_zipcode_full_load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_ZipCode_Full_Load   
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_zipcode_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_ZipCode_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_ZipCode_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_zipcode_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_zipcode_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_ZipCode_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_ZipCode_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_zipcode_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+                        
+    #Step to call child workflow with id "EDW_TRIPS_Dim_PmCaseType_Full_Load"
+    #ProcessName: EDW_TRIPS_Dim_PmCaseType_Full_Load()
+    #Run Mode: Sequential
+    - EDW_TRIPS_Dim_PmCaseType_Full_Load:        
+        try:
+            steps:
+                - call_PmCaseType_Full_Load:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_Dim_PmCaseType_Full_Load  
+                        connector_params:
+                                timeout: 3600 
+                    result: execution_result
+                - assign_PmCaseType_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_Dim_PmCaseType_Full_Load"]: ${execution_result}
+                        - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_Dim_PmCaseType_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["result"]: ${execution_result}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_PmCaseType_result:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "INFO" 
+        except:
+            as: e
+            steps:
+                - assign_PmCaseType_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_Dim_PmCaseType_Full_Load"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'EDW_TRIPS_Dim_PmCaseType_Full_Load', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_PmCaseType_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+
+
+    - return_execution_results:
+        return: ${execution_results}

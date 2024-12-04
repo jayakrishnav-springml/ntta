@@ -1,0 +1,136 @@
+{
+  "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+  "connection_details": {
+    "driver": "ODBC Driver 18 for SQL Server",
+    "server": "nprodtboslstr06",
+    "database": "TBOS",
+    "trusted_connection": "yes",
+    "encrypt": "no",
+    "username": "",
+    "password_secret_id": "",
+    "secret_version": ""
+  },
+  "gcs_bucket_name": "prj-ntta-ops-bi-devt-stage-data",
+  "database_type": "SQLServer",
+  "source_database": "TBOS",
+  "project_id": "prj-ntta-ops-bi-devt-svc-01",
+  "chunk_file_size_gb": 1.0,
+  "compression_type": "gzip",
+  "parquet_file_page_size_bytes": 1048576,
+  "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\priority_tables1",
+  "log_folder_path": "E:\\bcp_logs\\priority_tables",
+  "max_process_count": 1,
+  "file_type": ".csv",
+  "bq_dataset_map": {
+    "TBOS": {
+      "TollPlus": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "TollPlus_"
+      },
+      "dbo": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "dbo_"
+      },
+      "Finance": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "Finance_"
+      },
+      "History": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "History_"
+      },
+      "IOP": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "IOP_"
+      },
+      "Rbac": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "Rbac_"
+      },
+      "TER": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "TER_"
+      },
+      "TranProcessing": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "TranProcessing_"
+      },
+      "CaseManager": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "CaseManager_"
+      },
+      "Court": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "Court_"
+      },
+      "Inventory": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "Inventory_"
+      },
+      "Notifications": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "Notifications_"
+      },
+      "TSA": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "TSA_"
+      },
+      "Utility": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": ""
+      },
+      "Reporting": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "Reporting_"
+      },
+      "docmgr": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "docmgr_"
+      }
+  },
+    "IPS": {
+      "EIP": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "EIP_"
+      },
+      "MIR": {
+          "bq_dataset": "LND_TBOS_STAGE_FULL",
+          "table_name_prefix": "MIR_"
+      }
+  },
+    "EDW_TRIPS": {
+      "dbo": {
+        "bq_dataset": "EDW_TRIPS_APS",
+        "table_name_prefix": ""
+      },
+      "Stage":{
+        "bq_dataset": "EDW_TRIPS_STAGE",
+        "table_name_prefix": ""
+      },
+      "Ref": {
+        "bq_dataset": "EDW_TRIPS_SUPPORT",
+        "table_name_prefix": ""
+      },
+      "Utility": {
+        "bq_dataset": "EDW_TRIPS_SUPPORT",
+        "table_name_prefix": ""
+      }
+    }
+  },
+  "log": {
+    "log_level": "INFO",
+    "log_name": "data_transfer_log",
+    "labels": {}
+  },
+  "tables": [
+        {
+          "table_name": "BOS_IOP_OutboundTransactions",
+          "schema_name": "IOP",
+          "id_field": "",
+          "row_chunk_size": "2000000",
+          "chunk_flag": "True",
+          "query": "select BOSIOPTransactionID, IOPID, TransactionTypeID, CASE when TagType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TagType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TagType, TransactionDate, CASE when AgencyID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AgencyID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AgencyID, EntryPlaza, EntryLane, CASE when TagStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TagStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TagStatus, CASE when LicenceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicenceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicenceNumber, CASE when LicenseState is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicenseState, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicenseState, ExitPlaza, ExitLane, CASE when TransactionStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TransactionStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TransactionStatus, ReconcilitionFileID, TollAmount, AcceptedAmount, IsCorrected, DiscountAmount, TpTripID, CASE when TagSerialNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TagSerialNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TagSerialNumber, CASE when VehicleClass is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VehicleClass, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VehicleClass, CASE when TripMethod is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TripMethod, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TripMethod, PostedDate, ReSubmitCount, TranFileID, CASE when FacilityCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FacilityCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FacilityCode, CASE when PlazaCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PlazaCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PlazaCode, CASE when LaneCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LaneCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LaneCode, EntryTripDateTime, ExitTripDateTime, CASE when PlateType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PlateType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PlateType, CASE when FacilityDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FacilityDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FacilityDesc, CASE when EntryPlazaDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(EntryPlazaDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as EntryPlazaDesc, CASE when ExitPlazaDesc is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ExitPlazaDesc, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ExitPlazaDesc, EntryTripDateTimeWithTimezone, ExitTripDateTimeWithTimezone, CASE when LicensePlateCountry is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LicensePlateCountry, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LicensePlateCountry, ViolationSerialNumber, VesTimestamp, TagAgencyID, CASE when ReSubmitReasonCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ReSubmitReasonCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ReSubmitReasonCode, CASE when CorrectionReasonCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CorrectionReasonCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CorrectionReasonCode, TransactionFlatFee, TransactionPercentFee, SourceOfEntry, CorrectionCount, SourcePKID, CASE when RecordCode is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RecordCode, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RecordCode, CASE when AccountAgencyID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(AccountAgencyID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as AccountAgencyID, AdjustmentDateTime, CASE when PostingDisposition is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PostingDisposition, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PostingDisposition, CASE when PostingDispositionReason is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PostingDispositionReason, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PostingDispositionReason, NULL as AdjustmentResponsePayLoad, HomeAgencyRefID, CASE when Spare1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Spare1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Spare1, CASE when Spare2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Spare2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Spare2, CASE when Spare3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Spare3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Spare3, CASE when Spare4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Spare4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Spare4, CASE when Spare5 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Spare5, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Spare5, CASE when OtherCorrectionDescription is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OtherCorrectionDescription, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OtherCorrectionDescription, CreatedDate, CASE when CreatedUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CreatedUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CreatedUser, UpdatedDate, CASE when UpdatedUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(UpdatedUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as UpdatedUser, GETDATE() AS LND_UpdateDate, 'I' AS LND_UpdateType, NULL AS SRC_ChangeDate from IOP.BOS_IOP_OutboundTransactions WITH (NOLOCK) where CAST(CreatedDate as DATE) in ('2024-05-27')",
+          "gcs_upload_flag": "FALSE"
+      }
+    ]
+  }

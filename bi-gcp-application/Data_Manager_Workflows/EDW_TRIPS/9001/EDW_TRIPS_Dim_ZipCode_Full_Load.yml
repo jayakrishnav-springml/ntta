@@ -1,0 +1,77 @@
+# Package_id : 9001
+# Process_Name : EDW_TRIPS.Dim_ZipCode_Full_Load
+# Stored Procedure name : EDW_TRIPS.Dim_ZipCode_Full_Load
+
+# labels
+# workflow:child
+# callout:sql
+
+main:
+    steps:
+    - init:
+        assign:
+          - project_id: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+    
+
+    - Dim_ZipCode_Full_Load:
+        try:
+            call: googleapis.bigquery.v2.jobs.query
+            args:
+                projectId: ${project_id}
+                body:
+                    useLegacySql: false
+                    useQueryCache: false 
+                    query: ${"CALL `EDW_TRIPS`.Dim_ZipCode_Full_Load();"}
+            result: query_result
+        except:
+            as: e
+            steps:
+                - raise_query_error:
+                    raise: ${e}  
+    - Set_Job_Id:
+        assign:
+          - sp_job_id : ${query_result.jobReference.jobId}
+          - location : ${query_result.jobReference.location}
+
+    - Get_Job_Info:
+        try:
+            call: googleapis.bigquery.v2.jobs.get
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: job_info   #Storing result into variable job_info
+        except:
+            as: e
+            steps:
+                - raise_job_error:
+                    raise: ${e}  
+
+    - Check_Job_State:
+        switch:
+          - condition: ${job_info.status.state != "DONE"}
+            steps: 
+              - wait_30_s:
+                  call: sys.sleep # Polling through sleep
+                  args:
+                    seconds: 30
+                  next: Get_Job_Info
+
+    - Get_Sp_Job_Result:
+        try:
+            call: googleapis.bigquery.v2.jobs.getQueryResults
+            args:
+                projectId: ${project_id}
+                jobId: ${sp_job_id}
+                location: ${location}
+            result: sp_result
+        except:
+            as: e
+            steps:
+                - raise_sp_error:
+                    raise: ${e}
+
+    - returnOutput:
+        return: '${sp_result}'   
+            
+

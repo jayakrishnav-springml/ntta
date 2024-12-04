@@ -1,0 +1,146 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=EDW_TRIPS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "EDW_TRIPS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadMediumRC",
+        "password_secret_id": "APS2_MEDUIM_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-stage-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_TRIPS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\edw_trips",
+    "log_folder_path": "E:\\bcp_logs\\edw_trips",
+    "max_process_count": 5,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE_APS",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "CollectionsInvoiceTotalPayments",
+            "schema_name": "dbo",
+            "id_field": "ViolatorId",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorId, CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, ZCInvoiceDate, CASE when CurrentInvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CurrentInvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CurrentInvoiceStatus, Tolls, Fees, InvoiceAmount, CASE when [Primary_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Primary_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Primary_Collection_Agency], [Created_at_Primary_Collection_agency], [No_of_Times_Sent_to_Primary], CASE when [Seconday_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Seconday_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Seconday_Collection_Agency], [Created_at_Secondary_Collection_agency], [No_of_Times_Sent_to_Secondary], PaymentPlanID, CASE when Locationname is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(Locationname, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as Locationname, CASE when ChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ChannelName, Paymentdate, InvoicePaid, TollPaid, FeePaid, AdjustmentAmount, VTollAmount, VtollPostedDate from dbo.CollectionsInvoiceTotalPayments",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Primary_Collection_Agency_File_LESPAM",
+            "schema_name": "dbo",
+            "id_field": "ViolatorId",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorId, CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, ZCInvoiceDate, CASE when CurrentInvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CurrentInvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CurrentInvoiceStatus, Tolls, Fees, InvoiceAmount, CASE when [Primary_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Primary_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Primary_Collection_Agency], [No_of_Times_Sent_to_Primary], [Created_at_Primary_Collection_agency], CASE when [Seconday_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Seconday_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Seconday_Collection_Agency], [No_of_Times_Sent_to_Secondary], [Created_at_Secondary_Collection_agency], PaymentPlanId, CASE when LOCATIONNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LOCATIONNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LOCATIONNAME, CASE when ChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ChannelName, Paymentdate, InvoicePaid, TollPaid, FeePaid, Adjustmentamount, VTOLLAMOUNT, VtollPostedDate from dbo.Primary_Collection_Agency_File_LESPAM",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Primary_Collection_Agency_File_CPA",
+            "schema_name": "dbo",
+            "id_field": "ViolatorId",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorId, CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, ZCInvoiceDate, CASE when CurrentInvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CurrentInvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CurrentInvoiceStatus, Tolls, Fees, InvoiceAmount, CASE when [Primary_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Primary_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Primary_Collection_Agency], [No_of_Times_Sent_to_Primary], [Created_at_Primary_Collection_agency], CASE when [Seconday_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Seconday_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Seconday_Collection_Agency], [No_of_Times_Sent_to_Secondary], [Created_at_Secondary_Collection_agency], PaymentPlanId, CASE when LOCATIONNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LOCATIONNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LOCATIONNAME, CASE when ChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ChannelName, Paymentdate, InvoicePaid, TollPaid, FeePaid, Adjustmentamount, VTOLLAMOUNT, VtollPostedDate from dbo.Primary_Collection_Agency_File_CPA",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Seconday_Collection_Agency_File_CMI",
+            "schema_name": "dbo",
+            "id_field": "ViolatorId",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorId, CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, ZCInvoiceDate, CASE when CurrentInvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CurrentInvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CurrentInvoiceStatus, Tolls, Fees, InvoiceAmount, CASE when [Primary_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Primary_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Primary_Collection_Agency], [No_of_Times_Sent_to_Primary], [Created_at_Primary_Collection_agency], CASE when [Seconday_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Seconday_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Seconday_Collection_Agency], [No_of_Times_Sent_to_Secondary], [Created_at_Secondary_Collection_agency], PaymentPlanId, CASE when LOCATIONNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LOCATIONNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LOCATIONNAME, CASE when ChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ChannelName, Paymentdate, InvoicePaid, TollPaid, FeePaid, Adjustmentamount, VTOLLAMOUNT, VtollPostedDate from dbo.Seconday_Collection_Agency_File_CMI",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Seconday_Collection_Agency_File_SWC",
+            "schema_name": "dbo",
+            "id_field": "ViolatorId",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select ViolatorId, CASE when InvoiceNumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(InvoiceNumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as InvoiceNumber, ZCInvoiceDate, CASE when CurrentInvoiceStatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CurrentInvoiceStatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CurrentInvoiceStatus, Tolls, Fees, InvoiceAmount, CASE when [Primary_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Primary_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Primary_Collection_Agency], [No_of_Times_Sent_to_Primary], [Created_at_Primary_Collection_agency], CASE when [Seconday_Collection_Agency] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([Seconday_Collection_Agency], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [Seconday_Collection_Agency], [No_of_Times_Sent_to_Secondary], [Created_at_Secondary_Collection_agency], PaymentPlanId, CASE when LOCATIONNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LOCATIONNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LOCATIONNAME, CASE when ChannelName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ChannelName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ChannelName, Paymentdate, InvoicePaid, TollPaid, FeePaid, Adjustmentamount, VTOLLAMOUNT, VtollPostedDate from dbo.Seconday_Collection_Agency_File_SWC",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

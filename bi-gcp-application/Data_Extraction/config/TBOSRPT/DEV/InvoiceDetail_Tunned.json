@@ -1,0 +1,158 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=nprodtboslstr02;Database=TBOSRPT;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+      "driver": "ODBC Driver 18 for SQL Server",
+      "server": "nprodtboslstr02",
+      "database": "TBOSRPT",
+      "trusted_connection": "yes",
+      "encrypt": "no",
+      "username": "",
+      "password_secret_id": "",
+      "secret_version": ""
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-stage-data",
+    "database_type": "SQLServer",
+    "source_database": "TBOSRPT",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\DEV\\InvoiceDetail_Tunned",
+    "log_folder_path": "E:\\bcp_logs\\DEV\\InvoiceDetail_Tunned",
+    "max_process_count": 1,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+      "TBOS": {
+        "TollPlus": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "TollPlus_"
+        },
+        "dbo": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "dbo_"
+        },
+        "Finance": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "Finance_"
+        },
+        "History": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "History_"
+        },
+        "IOP": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "IOP_"
+        },
+        "Rbac": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "Rbac_"
+        },
+        "TER": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "TER_"
+        },
+        "DMV": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "DMV_"
+        },
+        "Parking": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "Parking_"
+        },
+        "TranProcessing": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "TranProcessing_"
+        },
+        "CaseManager": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "CaseManager_"
+        },
+        "Court": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "Court_"
+        },
+        "Inventory": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "Inventory_"
+        },
+        "Notifications": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "Notifications_"
+        },
+        "TSA": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "TSA_"
+        },
+        "Utility": {
+            "bq_dataset": "LND_TBOS_SUPPORT",
+            "table_name_prefix": ""
+        },
+        "Reporting": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "Reporting_"
+        },
+        "docmgr": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "docmgr_"
+        },
+        "EIP": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "EIP_"
+        },
+        "MIR": {
+            "bq_dataset": "LND_TBOS_STAGE_FULL",
+            "table_name_prefix": "MIR_"
+        }
+    },
+	"IPS": {
+            "EIP": {
+                "bq_dataset": "LND_TBOS_STAGE_FULL",
+                "table_name_prefix": "EIP_"
+            },
+            "MIR": {
+                "bq_dataset": "LND_TBOS_STAGE_FULL",
+                "table_name_prefix": "MIR_"
+            }
+        },
+	"TBOSRPT":{
+		"Reporting":{
+			"bq_dataset": "LND_TBOS",
+            "table_name_prefix": "Reporting_"
+		}
+	},
+      "EDW_TRIPS": {
+        "dbo": {
+          "bq_dataset": "EDW_TRIPS_APS",
+          "table_name_prefix": ""
+        },
+        "Stage":{
+          "bq_dataset": "EDW_TRIPS_STAGE",
+          "table_name_prefix": ""
+        },
+        "Ref": {
+          "bq_dataset": "EDW_TRIPS_SUPPORT",
+          "table_name_prefix": ""
+        },
+        "Utility": {
+          "bq_dataset": "EDW_TRIPS_SUPPORT",
+          "table_name_prefix": ""
+        }
+      }
+    },
+    "log": {
+      "log_level": "INFO",
+      "log_name": "data_transfer_log",
+      "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "InvoiceDetail_Tunned",
+            "schema_name": "Reporting",
+            "id_field": "InvoiceID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select invoiceid, CASE when invoicenumber is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(invoicenumber, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as invoicenumber, lineitemid, agencyid, roadway, CASE when type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as type, CASE when category is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(category, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as category, CASE when invoiceescalationlevel is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(invoiceescalationlevel, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as invoiceescalationlevel, CASE when invoicestatus is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(invoicestatus, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as invoicestatus, CASE when txntype is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(txntype, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as txntype, txndate, posteddate, invoicedate, paiddate, postedamount, paidamount, outstandingamount, citationid, tptripid, tripstatus, receivableindication, customerid, GETDATE() AS LND_UpdateDate, 'I' AS LND_UpdateType, NULL AS SRC_ChangeDate from TBOSRPT.Reporting.InvoiceDetail_Tunned WITH (NOLOCK)",
+            "gcs_upload_flag": "FALSE"
+        } 
+      ]
+    }

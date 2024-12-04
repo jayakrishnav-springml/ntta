@@ -1,0 +1,218 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.8.26,17001",
+        "database": "LND_TBOS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS2_DEV_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-landing-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_TBOS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\Archival_tables\\support",
+    "log_folder_path": "E:\\bcp_logs\\Archival_tables\\support",
+    "max_process_count": 8,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "DocMgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "DocMgr_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TER_"
+            },
+            "DMV": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "DMV_"
+            },
+            "Parking": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Parking_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "TSA_"
+            },            
+            "Utility": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "docmgr_"
+            },
+            "EIP": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "EIP_"
+            },
+            "MIR": {
+                "bq_dataset": "LND_TBOS_ARCHIVE_IDS",
+                "table_name_prefix": "MIR_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "BI_ArchiveStage",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [BI_ArchiveStageID], CASE when [BI_ArchiveStage] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([BI_ArchiveStage], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [BI_ArchiveStage], CASE when [BI_ArchiveStageDesc] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([BI_ArchiveStageDesc], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [BI_ArchiveStageDesc], CASE when [BI_ArchiveType] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([BI_ArchiveType], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [BI_ArchiveType], CreatedDate from dbo.BI_ArchiveStage",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BI_ArchiveTracker",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ArchiveTrackerID, ArchiveBatchDate, CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [UniqueID_ColumnName] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([UniqueID_ColumnName], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [UniqueID_ColumnName], CASE when ArchiveType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ArchiveType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ArchiveType, CASE when LoadType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LoadType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LoadType, [BI_ArchiveSignalDate], [BI_ArchiveStartDate], [BI_ArchiveFinishDate], CASE when [BI_ArchiveDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([BI_ArchiveDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [BI_ArchiveDuration], [BI_ArchiveStageID], [SRC_FirstID_Archived], [SRC_LastID_Archived], [SRC_RowCount_Archived], [LND_FirstID_Archived], [LND_LastID_Archived], [LND_RowCount_Archived], [SRC_LND_RowCount_Diff], [IDS_LoadStartDate], [IDS_LoadFinishDate], CASE when [IDS_LoadDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([IDS_LoadDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [IDS_LoadDuration], FlagUpdateStartDate, FlagUpdateFinishDate, CASE when FlagUpdateDuration is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(FlagUpdateDuration, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as FlagUpdateDuration, FlagUpdateRowCount, [SRC_UPD_RowCount_Diff], [IDS_TransferStartDate], [IDS_TransferFinishDate], CASE when [IDS_TransferDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([IDS_TransferDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [IDS_TransferDuration], [IDS_TransferRowCount], [IDS_TransferRowCount_Diff], ReversalBatchCount, [First_ArchiveReversalDate], [Last_ArchiveReversalDate], [LND_FirstID_Reversed], [LND_LastID_Reversed], [IDS_RowCount_Reversed], ArchiveFlagRowCount, [Final_RowCount_Archived], [LND_Reversal_RowCount_Diff], [SRC_Reversal_RowCount], [SRC_LND_Reversal_RowCount_Diff], [BI_ArchiveReversalStageID], [Last_ReversalLoadDate], LND_UpdateDate from dbo.BI_ArchiveTracker",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRIPS_ArchiveStage",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [TRIPS_ArchiveStageID], CASE when [TRIPS_ArchiveStage] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([TRIPS_ArchiveStage], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [TRIPS_ArchiveStage], CASE when [TRIPS_ArchiveStageDesc] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([TRIPS_ArchiveStageDesc], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [TRIPS_ArchiveStageDesc], CASE when [TRIPS_ArchiveType] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([TRIPS_ArchiveType], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [TRIPS_ArchiveType], CreatedDate from dbo.TRIPS_ArchiveStage",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "BI_ArchiveTracker_BKUP",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ArchiveTrackerID, ArchiveBatchDate, CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [UniqueID_ColumnName] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([UniqueID_ColumnName], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [UniqueID_ColumnName], CASE when ArchiveType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ArchiveType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ArchiveType, CASE when LoadType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LoadType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LoadType, [BI_ArchiveSignalDate], [BI_ArchiveStartDate], [BI_ArchiveFinishDate], CASE when [BI_ArchiveDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([BI_ArchiveDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [BI_ArchiveDuration], [BI_ArchiveStageID], [SRC_FirstID_Archived], [SRC_LastID_Archived], [SRC_RowCount_Archived], [LND_FirstID_Archived], [LND_LastID_Archived], [LND_RowCount_Archived], [SRC_LND_RowCount_Diff], [IDS_LoadStartDate], [IDS_LoadFinishDate], CASE when [IDS_LoadDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([IDS_LoadDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [IDS_LoadDuration], FlagUpdateStartDate, FlagUpdateFinishDate, CASE when FlagUpdateDuration is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(FlagUpdateDuration, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as FlagUpdateDuration, FlagUpdateRowCount, [SRC_UPD_RowCount_Diff], [IDS_TransferStartDate], [IDS_TransferFinishDate], CASE when [IDS_TransferDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([IDS_TransferDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [IDS_TransferDuration], [IDS_TransferRowCount], [IDS_TransferRowCount_Diff], ReversalBatchCount, [First_ArchiveReversalDate], [Last_ArchiveReversalDate], [LND_FirstID_Reversed], [LND_LastID_Reversed], [IDS_RowCount_Reversed], ArchiveFlagRowCount, [Final_RowCount_Archived], [LND_Reversal_RowCount_Diff], [SRC_Reversal_RowCount], [SRC_LND_Reversal_RowCount_Diff], [BI_ArchiveReversalStageID], [Last_ReversalLoadDate], [LND_UpdateDate], LND_BackupDate from dbo.BI_ArchiveTracker_BKUP",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRIPS_ArchiveTracker",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ArchiveTrackerID, ArchiveBatchDate, CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [UniqueID_ColumnName] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([UniqueID_ColumnName], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [UniqueID_ColumnName], CASE when ArchiveType is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ArchiveType, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ArchiveType, [TRIPS_ArchiveStageID], ArchiveStartDate, ArchiveStageFinishDate, CASE when ArchiveDuration is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ArchiveDuration, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ArchiveDuration, [BI_ArchiveSignalDate], [BI_ArchiveStartDate], [BI_ArchiveFinishDate], CASE when [BI_ArchiveDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([BI_ArchiveDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [BI_ArchiveDuration], [TRIPS_StopDate], [TRIPS_StartDate], [FirstID_Archived], [LastID_Archived], [RowCount_Archived], [FirstID_BeforeArchive], [LastID_BeforeArchive], [RowCount_BeforeArchive], [FirstID_AfterArchive], [LastID_AfterArchive], [RowCount_AfterArchive], [IDs_LoadStartDate], [IDs_LoadFinishDate], CASE when [IDs_LoadDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([IDs_LoadDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [IDs_LoadDuration], [NEW_LoadStartDate], [NEW_LoadFinishDate], CASE when [NEW_LoadDuration] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([NEW_LoadDuration], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [NEW_LoadDuration], TableRenameDate, CopyDataStartDate, CopyDataFinishDate, CASE when CopyDataDuration is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CopyDataDuration, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CopyDataDuration, DeleteStartDate, DeleteFinishDate, CASE when DeleteDuration is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DeleteDuration, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DeleteDuration, [TableSize_BeforeArchive_GB], TableSize_AfterArchive_GB from dbo.TRIPS_ArchiveTracker",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ArchiveDeleteRowCount",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select [LND_UpdateDate], CASE when DataBaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DataBaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DataBaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CDCFlag, ArchiveFlag, HardDeleteTableFlag, ArchiveMasterListFlag, CASE when [LND_UpdateType] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([LND_UpdateType], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [LND_UpdateType], [Row_Count], RowCountDate from Utility.ArchiveDeleteRowCount",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ArchiveMasterTableList",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, ArchiveMasterListDate from Utility.ArchiveMasterTableList",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TRIPS_ArchivePlan",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when ArchiveCategory is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ArchiveCategory, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ArchiveCategory, CASE when ArchivePolicy is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ArchivePolicy, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ArchivePolicy, ArchivePlanDate, LND_UpdateDate from Utility.TRIPS_ArchivePlan",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "SourceTableDataProfile",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when DatabaseName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DatabaseName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DatabaseName, CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TableName, CASE when [TableName_ARCH] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([TableName_ARCH], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [TableName_ARCH], CASE when [TableName_IDS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE([TableName_IDS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as [TableName_IDS], [Row_Count], [Used_GB], [Unused_GB], [Total_GB], LND_UpdateDate from utility.SourceTableDataProfile",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

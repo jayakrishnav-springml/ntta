@@ -1,0 +1,36 @@
+{   
+    "EDW_NAGIOS_Dim_Fact_Run":{
+        "labels":"workflow=parent,process_id=5001,callout=childworkflows",
+        "description":"Child workflow for Process 5001, \nProcess Name - EDW_NAGIOS_Dim_Fact_Run"
+    },
+    "EDW_NAGIOS_Dim_Host_Service_Load":{
+        "labels":"workflow=child,process_id=4000,callout=sql",
+        "description":"Child workflow for Process 4000, \nProcess Name - EDW_NAGIOS_Dim_Host_Service_Load"
+    },
+    "EDW_NAGIOS_Dim_Host_Service_Metric_Load":{
+        "labels":"workflow=child,process_id=4002,callout=sql",
+        "description":"Child workflow for Process 4002, \nProcess Name - EDW_NAGIOS_Dim_Host_Service_Metric_Load"
+    },
+    "EDW_NAGIOS_Fact_Host_Service_Event_Load":{
+        "labels":"workflow=child,process_id=4004,callout=sql",
+        "description":"Child workflow for Process 4004, \nProcess Name - EDW_NAGIOS_Fact_Host_Service_Event_Load"
+    },
+    "EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load":{
+        "labels":"workflow=child,process_id=4006,callout=sql",
+        "description":"Child workflow for Process 4006, \nProcess Name - EDW_NAGIOS_Fact_Host_Service_Event_Metric_Load"
+    },
+    "EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load":{
+        "labels":"workflow=child,process_id=4008,callout=sql",
+        "description":"Child workflow for Process 4008, \nProcess Name - EDW_NAGIOS_Fact_Host_Service_Event_Summary_Load"
+    },
+    "EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load":{
+        "labels":"workflow=child,process_id=4010,callout=sql",
+        "description":"Child workflow for Process 4010, \nProcess Name - EDW_NAGIOS_Fact_Host_Service_Event_Metric_Summary_Load"
+    } ,
+    "EDW_NAGIOS_Dim_Day_Hierarchy_Nagios_Full_Load":{
+        "labels":"workflow=child,callout=sql",
+        "description":"Child workflow for Process EDW_NAGIOS.Dim_Day_Hierarchy_Nagios_Full_Load()"
+    }
+           
+
+}

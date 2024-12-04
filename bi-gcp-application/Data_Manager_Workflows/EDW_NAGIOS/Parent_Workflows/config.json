@@ -1,0 +1,7 @@
+{
+    "EDW_NAGIOS_Daily_Run":{
+        "labels":"workflow=parent,callout=parentworkflows",
+        "description":"This Workflow includes the Orchestration Steps for Package EDW_NAGIOS_Daily_Run"
+    }
+}
+    

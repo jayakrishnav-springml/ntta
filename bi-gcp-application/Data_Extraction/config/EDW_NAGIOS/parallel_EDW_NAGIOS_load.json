@@ -1,0 +1,355 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.7.45,17001",
+        "database": "EDW_NAGIOS",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS3_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-nagios-data",
+    "database_type": "SQLServer",
+    "source_database": "EDW_NAGIOS",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\edw_nagios",
+    "log_folder_path": "E:\\bcp_logs\\edw_nagios",
+    "max_process_count": 15,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_RITE": {
+            "dbo": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "stage": {
+                "bq_dataset": "EDW_RITE_STAGE",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_TER": {
+            "dbo": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_TER": {
+            "dbo": {
+                "bq_dataset": "LND_TER",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_DMV": {
+            "dbo": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": ""
+            },
+            "DMVLD": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_HOST": {
+            "dbo": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TSA_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TXNOWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "HAS_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_ICRS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": ""
+            },
+            "ICRS_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_IOP": {
+            "dbo": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": ""
+            },
+            "IOP_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_TS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": ""
+            },
+            "TAG_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TIM_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "OLR": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_VPS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": ""
+            },
+            "VP_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "HV_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_NAGIOS": {
+            "dbo": {
+                "bq_dataset": "EDW_NAGIOS",
+                "table_name_prefix": ""
+            },
+            "Old": {
+                "bq_dataset": "EDW_NAGIOS",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_NAGIOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_NAGIOS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Temp": {
+                "bq_dataset": "EDW_NAGIOS_DELETE",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_NAGIOS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_NAGIOS": {
+            "dbo": {
+                "bq_dataset": "LND_NAGIOS",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "LND_NAGIOS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "LoadProcessControl",
+            "schema_name": "Utility",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when TableName is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TableName, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TableName, LastUpdatedDate, EDW_UpdateDate from Utility.LoadProcessControl",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_Host_Service",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select Nagios_Object_ID, CASE when Object_Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Object_Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Object_Type, CASE when Host_Facility is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host_Facility, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host_Facility, CASE when Host_Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host_Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host_Type, CASE when Host is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host, CASE when Service is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Service, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Service, CASE when Host_Plaza is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host_Plaza, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host_Plaza, Plaza_Latitude, Plaza_Longitude, Is_Active, Is_Deleted, LND_UpdateDate, EDW_UpdateDate from dbo.Dim_Host_Service",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Dim_Host_Service_Metric",
+            "schema_name": "dbo",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select Host_Service_Metric_ID, Nagios_Object_ID, CASE when Object_Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Object_Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Object_Type, CASE when Host_Facility is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host_Facility, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host_Facility, CASE when Host_Plaza is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host_Plaza, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host_Plaza, CASE when Host_Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host_Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host_Type, CASE when Host is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Host, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Host, CASE when Service is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Service, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Service, Plaza_Latitude, Plaza_Longitude, Is_Active, CASE when Metric_Name is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Metric_Name, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Metric_Name, Metric_Suffix, CASE when Metric_Target_Type is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Metric_Target_Type, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Metric_Target_Type, CASE when Metric_Target is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Metric_Target, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Metric_Target, LND_UpdateDate, EDW_UpdateDate from dbo.Dim_Host_Service_Metric",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_Host_Service_Event",
+            "schema_name": "dbo",
+            "id_field": "Nagios_Object_ID",
+            "row_chunk_size": "1000",
+            "chunk_flag": "True",
+            "query": "select Host_Service_Event_ID, Nagios_Object_ID, Event_Date, Event_Day_ID, Event_Time_ID, Host_Service_State_ID, Metric_Count, LND_UpdateDate, EDW_UpdateDate from dbo.Fact_Host_Service_Event",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_Host_Service_Event_Metric",
+            "schema_name": "dbo",
+            "id_field": "Host_Service_Metric_ID",
+            "row_chunk_size": "500",
+            "chunk_flag": "True",
+            "query": "select Host_Service_Event_ID, Host_Service_Metric_ID, Event_Day_ID, Event_Time_ID, Metric_State_ID, Event_Date, Metric_Index, Metric_Value, CASE when Metric_Unit is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Metric_Unit, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Metric_Unit, Warning_Value, Critical_Value, Min_Value, Max_Value, Percent_Warning, Percent_Critical, Percent_Max, LND_UpdateDate, EDW_UpdateDate from dbo.Fact_Host_Service_Event_Metric",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_Host_Service_Event_Summary",
+            "schema_name": "dbo",
+            "id_field": "Event_Summary_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select Event_Summary_ID, Event_Day_ID, Nagios_Object_ID, Host_Service_State_ID, Event_Count, LND_UpdateDate, EDW_UpdateDate from dbo.Fact_Host_Service_Event_Summary",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Fact_Host_Service_Event_Metric_Summary",
+            "schema_name": "dbo",
+            "id_field": "Event_Metric_Summary_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select Event_Metric_Summary_ID, Event_Day_ID, Host_Service_Metric_ID, Metric_State_ID, CASE when Metric_Unit is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Metric_Unit, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Metric_Unit, Total_Metric_Value, Metric_Value_Count, LND_UpdateDate, EDW_UpdateDate from dbo.Fact_Host_Service_Event_Metric_Summary",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "Lane_Camera_Mapping",
+            "schema_name": "Ref",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when Controller is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Controller, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Controller, Metric_Suffix, CASE when Camera is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(Camera, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as Camera, EDW_UpdateDate, CASE when MSTR_UpdateUser is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MSTR_UpdateUser, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MSTR_UpdateUser, MSTR_UpdateDate from Ref.Lane_Camera_Mapping",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

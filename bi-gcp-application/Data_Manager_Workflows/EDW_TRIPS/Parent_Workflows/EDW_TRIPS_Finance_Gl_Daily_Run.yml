@@ -1,0 +1,194 @@
+#This Workflow includes the Orchestration Steps for EDW_TRIPS_FINANCE_GL_DAILY_RUN
+
+#labels
+#workflow:parent
+#callout:calling parent workflows using subworkflows (child workflows)
+#package_id: EDW_TRIPS_FINANCE_GL_DAILY_RUN
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          - parent_workflow_id : ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          - execution_results: {} # results from each execution
+          - execution_results.success: {} # successful executions saved under 'success' key
+          - execution_results.failure: {} # failed executions saved under 'failure' key
+          - payload: {} # logging payload variable declaration
+          - cdc_start_time: ${time.format(sys.now(),"America/Chicago")}
+          # Initialising email results as Failed
+          - email_alert_payload: {"finance_gl":"Failed"}
+
+
+
+    #Step to call child workflows with id "LND_TBOS_SUPPORT_CDC_Invoker"
+    #ProcessName: LND_TBOS_SUPPORT_CDC_Invoker
+    #Run Mode: Sequential
+
+    - LND_TBOS_SUPPORT_CDC_Invoker:
+        try:
+            steps: 
+                - call_cdc_invoker:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: LND_TBOS_SUPPORT_CDC_Invoker
+                        argument:
+                          fullday_changedata_flag: ${default(map.get(args,"fullday_changedata_flag"),"N")}
+                          batchname: ${default(map.get(args,"batchname"),"TRIPS_Finance_GL")} 
+                          cutoff_date: ${default(map.get(args,"cutoff_date"),NULL)}                   
+                        connector_params:
+                            timeout: 3600 
+                    result: execution_result
+                - assign_cdc_invoker_result:
+                    assign:
+                        - execution_results.success["LND_TBOS_SUPPORT_CDC_Invoker"]: ${execution_result}                   
+        except:
+            as: e
+            steps:
+                - assign_cdc_invoker_error:
+                    assign:
+                        - execution_results.failure["LND_TBOS_SUPPORT_CDC_Invoker"]: ${e}
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_TBOS_SUPPORT_CDC_Invoker', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_cdc_invoker_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+
+
+    - assign_cdc_end_time: 
+        assign:
+          - cdc_end_time:  ${time.format(sys.now(),"America/Chicago")}
+
+    #Step to call child workflows with id "LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"
+    #ProcessName: LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE
+    #Run Mode: Sequential
+
+
+    - LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE:
+        try:
+            steps: 
+                - call_process_cdc_batch_load_table:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE
+                        argument:
+                          start_time: ${text.substring(cdc_start_time,0,len(cdc_start_time)-6)}
+                          end_time: ${text.substring(cdc_end_time,0,len(cdc_end_time)-6)}
+                        connector_params:
+                            timeout: 3600 
+                    result: execution_result
+                - assign_query_result:
+                    assign:
+                        - execution_results.success["LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result} 
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'CDC' }
+                        - payload["failed_tables"]: ${json.encode_to_string(keys(execution_result))} 
+                        - payload["failed_tables_count"]: ${len(execution_result)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+
+
+                - log_query_result:
+                    switch:
+                      - condition: ${len(execution_result)!=0}
+                        steps:
+                            - assign_cdc_result:
+                                assign:
+                                    - execution_results.failure["LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result} 
+                            - log_cdc_error_tables:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "CRITICAL" 
+                      - condition: ${len(execution_result)==0}
+                        steps:
+                            - assign_status:
+                                assign:
+                                    - execution_results.success["LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result} 
+                                    - payload["status"]: "Success" 
+                            - log_cdc_result:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "INFO" 
+                                    
+        except:
+            as: e
+            steps:
+                - assign_process_cdc_table_execution:
+                    assign:
+                        - execution_results.failure["LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${e} 
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_TBOS_PROCESS_CDC_BATCH_LOAD_TABLE', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                - log_process_cdc_table_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"  
+
+    #Step to call parent workflow with id "EDW_TRIPS_GL_Daily_Run"
+    #ProcessName: EDW_TRIPS.Dim_Daily_Run
+    #Run Mode: Sequential
+
+    - EDW_TRIPS_GL_Daily_Run:
+        try:
+            steps: 
+                - call_gl_daily_run:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_TRIPS_GL_Daily_Run  
+                        connector_params:
+                            timeout: 3600 
+                    result: execution_result
+                - assign_9005_result:
+                    assign:
+                        - execution_results.success["EDW_TRIPS_GL_Daily_Run"]: ${map.get(execution_result,"success")}        
+                - check_finance_execution_result:
+                    switch:
+                        - condition: ${len(execution_result.failure)==0}
+                          steps:
+                            - assign_gl_result:
+                                assign:
+                                    - payload: { 'status':'Success', 'child_workflow_id': 'EDW_TRIPS_GL_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                    - payload["result"]: ${execution_result}
+                                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - email_alert_payload["finance_gl"]: "Successful"
+                            - log_gl_result:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "INFO"
+                        - condition: true
+                          steps:
+                            - assign_facts_failed_result:
+                                assign:
+                                    - execution_results.failure["EDW_TRIPS_GL_Daily_Run"]: ${map.get(execution_result,"failure")}
+
+        except:
+            as: e
+            steps:
+                - assign_9005_error:
+                    assign:
+                        - execution_results.failure["EDW_TRIPS_GL_Daily_Run"]: ${e} 
+                        - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_TRIPS_GL_Daily_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)} 
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} 
+                - log_9005_error:
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL" 
+    - success_email_check:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${parent_workflow_id}','alert_source':'edw_trips_gl_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+
+    - return_execution_results:
+        return: ${execution_results}

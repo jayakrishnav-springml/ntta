@@ -1,0 +1,207 @@
+# This Workflow includes the Orchestration Steps for EDW_NAGIOS_Daily_Run
+# labels
+# workflow: parent
+# callout: calling parent workflows using subworkflows (child workflows)
+# package_id: LND_NAGIOS_CDC, EDW_NAGIOS_Dim_Fact_Run
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          # Assign the parent workflow ID from the environment variable
+          - parent_workflow_id: ${sys.get_env("GOOGLE_CLOUD_WORKFLOW_ID")}
+          # Initialize the execution results dictionary
+          - execution_results: {}
+          # Initialize the success results dictionary within the execution results
+          - execution_results.success: {}
+          # Initialize the failure results dictionary within the execution results
+          - execution_results.failure: {}
+          # Initialize the logging payload variable
+          - payload: {}
+          # Initialize the CDC start time
+          - cdc_start_time: ${time.format(sys.now(),"America/Chicago")} # capture start time
+          - email_alert_payload: {"nagios":"Failed"}
+
+    # Step to call parent workflow with id "LND_NAGIOS_SUPPORT_CDC_Invoker"
+    # ProcessName: LND_NAGIOS_SUPPORT_CDC_Invoker
+    # Run Mode: Sequential
+    - LND_NAGIOS_SUPPORT_CDC_Invoker:
+        try:
+            steps:
+                # Step to call the child workflow LND_NAGIOS_SUPPORT_CDC_Invoker
+                - call_nagios_cdc_invoker:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: LND_NAGIOS_SUPPORT_CDC_Invoker
+                        argument:
+                          # Get the full day change data flag from args or default to "N"
+                          fullday_changedata_flag: ${default(map.get(args,"fullday_changedata_flag"),"N")}
+                          # Get the batch name from args or default to "NAGIOS"
+                          batchname: ${default(map.get(args,"batchname"),"NAGIOS")}
+                          # Get the cutoff date from args or default to "NULL"
+                          cutoff_date: ${default(map.get(args,"cutoff_date"),NULL)}
+                        connector_params:
+                            timeout: 3600
+                    result: execution_result
+                # Step to assign the execution result for LND_NAGIOS_SUPPORT_CDC_Invoker
+                - assign_5000_result:
+                    assign:
+                        - execution_results.success["LND_NAGIOS_SUPPORT_CDC_Invoker"]: ${execution_result}
+        except:
+            as: e
+            steps:
+                # Step to assign the error result for LND_NAGIOS_SUPPORT_CDC_Invoker
+                - assign_5000_error:
+                    assign:
+                        - execution_results.failure["LND_NAGIOS_SUPPORT_CDC_Invoker"]: ${e}
+                        - payload: { 'status': 'Failed', 'child_workflow_id': 'LND_NAGIOS_SUPPORT_CDC_Invoker', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                # Step to log the error result
+                - log_5000_error:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+
+    - assign_cdc_end_time: 
+        assign:
+          - cdc_end_time:  ${time.format(sys.now(),"America/Chicago")} # capture end time
+
+    # Step to call child workflows with id "LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE"
+    # ProcessName: LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE - The process log table of CDC is queried and 
+    # the failed tables list are logged to trigger google cloud alerts
+    # Run Mode: Sequential
+
+    - LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE:
+        try:
+            steps: 
+                - call_process_cdc_batch_load_table: # Call workflow to load CDC batch
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE
+                        argument:
+                          start_time: ${text.substring(cdc_start_time,0,10)}  # stripping time from timestamp 
+                          end_time: ${text.substring(cdc_end_time,0,len(cdc_end_time)-6)}  # Removing  Z-05:00 from timestamp 
+                        connector_params:
+                            timeout: 3600
+                    result: execution_result
+                - assign_query_result:
+                    assign:
+                        - execution_results.success["LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result}  # store result
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'CDC' }
+                        - payload["failed_tables"]: ${json.encode_to_string(keys(execution_result))}  # log failed tables
+                        - payload["failed_tables_count"]: ${len(execution_result)} # count of failed tables
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # capture log time
+
+                - log_query_result: # Log query result based on failure count
+                    switch:
+                      - condition: ${len(execution_result)!=0}
+                        steps:
+                            - assign_cdc_result:
+                                assign:
+                                    - execution_results.failure["LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result} 
+                            - log_cdc_error_tables: # log critical error if failures
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "CRITICAL" 
+                      - condition: ${len(execution_result)==0}
+                        steps:
+                            - assign_status: # assign success status if no failures
+                                assign:
+                                    - execution_results.success["LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${execution_result} 
+                                    - payload["status"]: "Success"  
+                            - log_cdc_result: # log info if success
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "INFO" 
+                                    
+        except:
+            as: e
+            steps:
+                - assign_process_cdc_table_execution:
+                    assign:
+                        - execution_results.failure["LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE"]: ${e} # store error
+                        - payload: { 'status':'Failed', 'child_workflow_id': 'LND_NAGIOS_PROCESS_CDC_BATCH_LOAD_TABLE', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")} # capture error time
+                - log_process_cdc_table_error: # Log the error
+                    call: sys.log 
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+
+
+
+    # Step to call parent workflow with id "EDW_NAGIOS_Dim_Fact_Run"
+    # ProcessName: EDW_NAGIOS_Dim_Fact_Run
+    # Run Mode: Sequential
+    - EDW_NAGIOS_Dim_Fact_Run:
+        try:
+            steps:
+                # Step to call the child workflow EDW_NAGIOS_Dim_Fact_Run
+                - call_nagios_dim_fact_run:
+                    call: googleapis.workflowexecutions.v1.projects.locations.workflows.executions.run
+                    args:
+                        workflow_id: EDW_NAGIOS_Dim_Fact_Run
+                        connector_params:
+                            timeout: 3600
+                    result: execution_result
+                # Step to assign the execution result for EDW_NAGIOS_Dim_Fact_Run
+                - assign_5001_result:
+                    assign:
+                        
+                        - execution_results.success["EDW_NAGIOS_Dim_Fact_Run"]: ${map.get(execution_result,"success")} 
+                - check_5001_execution_result:
+                    switch:
+                        - condition: ${len(execution_result.failure)==0}
+                          steps:
+                            - assign_dim_fact_result:
+                                assign:
+                                    - payload: { 'status':'Success', 'child_workflow_id': 'EDW_NAGIOS_Dim_Fact_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                                    - payload["result"]: ${execution_result}
+                                    - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                                    - email_alert_payload["nagios"]: "Successful"
+                            - log_5001_result:
+                                call: sys.log
+                                args:
+                                    json: ${payload}
+                                    severity: "INFO"
+                        - condition: true
+                          steps:
+                            - assign_5001_failed_result:
+                                assign:
+                                    - execution_results.failure["EDW_NAGIOS_Dim_Fact_Run"]: ${map.get(execution_result,"failure")}
+        except:
+            as: e
+            steps:
+                # Step to assign the error result for EDW_NAGIOS_Dim_Fact_Run
+                - assign_5001_error:
+                    assign:
+                        - execution_results.failure["EDW_NAGIOS_Dim_Fact_Run"]: ${e} 
+                        - payload: { 'status': 'Failed', 'child_workflow_id': 'EDW_NAGIOS_Dim_Fact_Run', 'parent_workflow_id': '${parent_workflow_id}', 'log_source':'workflows' }
+                        - payload["error"]:  ${json.encode_to_string(e)}
+                        - payload["timestamp"]: ${time.format(sys.now(),"America/Chicago")}
+                # Step to log the error result
+                - log_5001_error:
+                    call: sys.log
+                    args:
+                        json: ${payload}
+                        severity: "CRITICAL"
+
+    - success_email_check:
+        switch:
+            - condition: ${len(execution_results.failure)==0}
+              steps:
+                - log_alert_summary:
+                    call: sys.log
+                    args:
+                        json: {'log_source':'workflows' ,'parent_workflow_id': '${parent_workflow_id}','alert_source':'edw_nagios_run','email_alert_payload': '${email_alert_payload}' }
+                        severity: "INFO"
+
+    # Step to return the execution results
+    - return_execution_results:
+        return: ${execution_results}

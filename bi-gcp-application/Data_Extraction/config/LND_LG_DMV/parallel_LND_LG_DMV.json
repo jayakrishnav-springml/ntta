@@ -1,0 +1,641 @@
+{
+    "connection_string": "Driver=ODBC Driver 18 for SQL Server;Server=10.40.9.26,17001;Database=LND_TBOS;Trusted_Connection=yes;Encrypt=no;",
+    "connection_details": {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "10.40.9.26,17001",
+        "database": "LND_LG_DMV",
+        "trusted_connection": "yes",
+        "encrypt": "no",
+        "username": "LoadSmallRC",
+        "password_secret_id": "APS_DEV_SMALL_USERID_KEY",
+        "secret_version": "1"
+    },
+    "gcs_bucket_name": "prj-ntta-ops-bi-devt-raw-data",
+    "database_type": "SQLServer",
+    "source_database": "LND_LG_DMV",
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "chunk_file_size_gb": 1.0,
+    "compression_type": "gzip",
+    "parquet_file_page_size_bytes": 1048576,
+    "output_folder": "D:\\gcp-data-transfer-csv\\Parallel_Data_Extraction\\lnd_lg_dmv",
+    "log_folder_path": "E:\\bcp_logs\\lnd_lg_dmv",
+    "max_process_count": 2,
+    "file_type": ".csv",
+    "bq_dataset_map": {
+        "LND_TBOS": {
+            "TollPlus": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TollPlus_"
+            },
+            "dbo": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "dbo_"
+            },
+            "Finance": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Finance_"
+            },
+            "History": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "History_"
+            },
+            "IOP": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "IOP_"
+            },
+            "Rbac": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Rbac_"
+            },
+            "TER": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TER_"
+            },
+            "TranProcessing": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TranProcessing_"
+            },
+            "CaseManager": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "CaseManager_"
+            },
+            "Court": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Court_"
+            },
+            "Inventory": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Inventory_"
+            },
+            "Notifications": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Notifications_"
+            },
+            "TSA": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "TSA_"
+            },
+            "Utility": {
+                "bq_dataset": "LND_TBOS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Reporting": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "Reporting_"
+            },
+            "docmgr": {
+                "bq_dataset": "LND_TBOS",
+                "table_name_prefix": "docmgr_"
+            }
+        },
+        "EDW_TRIPS": {
+            "dbo": {
+                "bq_dataset": "EDW_TRIPS_APS",
+                "table_name_prefix": ""
+            },
+            "Stage": {
+                "bq_dataset": "EDW_TRIPS_STAGE",
+                "table_name_prefix": ""
+            },
+            "Ref": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            },
+            "Utility": {
+                "bq_dataset": "EDW_TRIPS_SUPPORT",
+                "table_name_prefix": ""
+            }
+        },
+        "EDW_RITE": {
+            "dbo": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": ""
+            },
+            "land": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_"
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "land_perm_"
+            },
+            "stage": {
+                "bq_dataset": "EDW_RITE",
+                "table_name_prefix": "stage_"
+            }
+        },
+        "EDW_TER": {
+            "dbo": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": ""
+            },
+            "land_perm": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "land_perm_"
+            },
+            "dto": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "dto_"
+            },
+            "stage": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "stage_"
+            },
+            "land": {
+                "bq_dataset": "EDW_TER",
+                "table_name_prefix": "land_"
+            }
+        },
+        "LND_TER": {
+            "dbo": {
+                "bq_dataset": "LND_TER",
+                "table_name_prefix": ""
+            }
+        },
+        "LND_LG_DMV": {
+            "dbo": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": ""
+            },
+            "DMVLD": {
+                "bq_dataset": "LND_LG_DMV",
+                "table_name_prefix": "DMVLD_"
+            }
+        },
+        "LND_LG_HOST": {
+            "dbo": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": ""
+            },
+            "TSA_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "TSA_OWNER_"
+            },
+            "TXNOWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "TXNOWNER_"
+            },
+            "HAS_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "HAS_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_HOST",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_ICRS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": ""
+            },
+            "ICRS_OWNER": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": "ICRS_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_ICRS",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_IOP": {
+            "dbo": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": ""
+            },
+            "IOP_OWNER": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": "IOP_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_IOP",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_TS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": ""
+            },
+            "TAG_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "TAG_OWNER_"
+            },
+            "TIM_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "TIM_OWNER_"
+            },
+            "OLR": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "OLR_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_TS",
+                "table_name_prefix": "FPL_OWNER_"
+            }
+        },
+        "LND_LG_VPS": {
+            "dbo": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": ""
+            },
+            "VP_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "VP_OWNER_"
+            },
+            "FPL_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "FPL_OWNER_"
+            },
+            "HV_OWNER": {
+                "bq_dataset": "LND_LG_VPS",
+                "table_name_prefix": "HV_OWNER_"
+            }
+        }
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "data_transfer_log",
+        "labels": {}
+    },
+    "tables": [
+        {
+            "table_name": "AGENCIES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], CASE when NAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NAME, [INFO_LEVEL], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.AGENCIES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FILE_SOURCE_STATE_XREF",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [STATE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([STATE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [STATE_CODE], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.FILE_SOURCE_STATE_XREF",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "AGENCY_FILE_SRC_XREF",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.AGENCY_FILE_SRC_XREF",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FILE_SOURCES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, CASE when [BASE_TABLE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BASE_TABLE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BASE_TABLE], CASE when [BASE_COLUMN] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BASE_COLUMN], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BASE_COLUMN], CASE when [EXT_TABLE_REF] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXT_TABLE_REF], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXT_TABLE_REF], CASE when FREQUENCY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FREQUENCY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FREQUENCY, [DAY_NUMBER], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.FILE_SOURCES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "INFO_LEVELS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, CASE when [BASE_TABLE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BASE_TABLE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BASE_TABLE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.INFO_LEVELS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "MAIL_GROUPS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select MAIL_GROUP_ID, CASE when [GROUP_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([GROUP_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [GROUP_NAME], CASE when [GROUP_EMAIL_ADDRESS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([GROUP_EMAIL_ADDRESS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [GROUP_EMAIL_ADDRESS], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when ACTIVE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ACTIVE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ACTIVE, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.MAIL_GROUPS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VLTR_NOT_IN_DMV_STATUS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [STATUS_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([STATUS_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [STATUS_ID], CASE when [STATUS_DESCR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([STATUS_DESCR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [STATUS_DESCR], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VLTR_NOT_IN_DMV_STATUS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "MAIL_EVENTS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select MAIL_EVENT_ID, CASE when [EVENT_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EVENT_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EVENT_NAME], CASE when [EVENT_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EVENT_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EVENT_TYPE], CASE when FREQUENCY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(FREQUENCY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as FREQUENCY, [LAST_EXECUTED], CASE when [FUNCTION_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FUNCTION_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FUNCTION_NAME], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when ACTIVE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ACTIVE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ACTIVE, CASE when [MAIL_FORMAT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MAIL_FORMAT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MAIL_FORMAT], CASE when [DEFAULT_FROM] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DEFAULT_FROM], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DEFAULT_FROM], CASE when [DEFAULT_TO] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DEFAULT_TO], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DEFAULT_TO], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.MAIL_EVENTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "MAIL_GROUP_EVENTS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select MAIL_EVENT_ID, [MAIL_GROUP_ID], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when ACTIVE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ACTIVE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ACTIVE, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.MAIL_GROUP_EVENTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "OWNER_TYPES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when OWNER_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(OWNER_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as OWNER_TYPE, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.OWNER_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "EXCLUDED_PLATES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when PLATE_NUMBER is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLATE_NUMBER, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLATE_NUMBER, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.EXCLUDED_PLATES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FILE_STATUS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.FILE_STATUS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VALIDATION_RULES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [VALIDATION_STMT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VALIDATION_STMT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VALIDATION_STMT], CASE when [DEST_REC_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DEST_REC_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DEST_REC_STATUS], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VALIDATION_RULES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "STATES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when STATE_CODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATE_CODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATE_CODE, CASE when [STATE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([STATE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [STATE_NAME], CASE when [COUNTRY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([COUNTRY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [COUNTRY_CODE], [STATE_ORDER], CASE when [DEFAULT_VALUE_FLAG] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DEFAULT_VALUE_FLAG], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DEFAULT_VALUE_FLAG], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.STATES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "REC_STATUS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, CASE when [REPORT_IN_SUMMARY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REPORT_IN_SUMMARY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REPORT_IN_SUMMARY], CASE when [REPORT_IN_DETAIL] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([REPORT_IN_DETAIL], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [REPORT_IN_DETAIL], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.REC_STATUS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "FILE_LAYOUTS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [SRC_COL_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SRC_COL_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SRC_COL_NAME], [SRC_COL_SIZE], [SRC_COL_START_POS], CASE when [DEST_COL_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DEST_COL_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DEST_COL_NAME], [DEST_COL_SIZE], CASE when [DEST_COL_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DEST_COL_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DEST_COL_TYPE], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [DEST_COL_FORMAT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DEST_COL_FORMAT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DEST_COL_FORMAT], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.FILE_LAYOUTS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DMV_SUMMARIES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, [DMVCD_ID], CASE when WEEK is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(WEEK, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as WEEK, [N_RECORDS], [MIN_DREC_ID], [MAX_DREC_ID], CASE when [PH1_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PH1_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PH1_STATUS], [PH1_START], [PH1_END], CASE when [PH2_STATUS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PH2_STATUS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PH2_STATUS], [PH2_PERCENT], [PH2_START], [PH2_END], [DATE_CREATED], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.DMV_SUMMARIES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DMV_CDS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select DMVCD_ID, CASE when [FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FILE_NAME], CASE when [FILE_DIR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FILE_DIR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FILE_DIR], [FILE_SIZE_BYTES], [FILE_LINE_COUNT], [CURRENT_LINE], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CASE when [EXTERNAL_TABLE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXTERNAL_TABLE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXTERNAL_TABLE_NAME], CASE when [ERR_MESAGE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ERR_MESAGE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ERR_MESAGE], CASE when [EXTERNAL_DIRECTORY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXTERNAL_DIRECTORY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXTERNAL_DIRECTORY], [LOAD_START_TIME], [LOAD_END_TIME], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.DMV_CDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PS_TXN",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, PARENTID, COLLID, [CREATION_DATE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.PS_TXN",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VEHICLE_TYPES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ID, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VEHICLE_TYPES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DMV_FILES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [DIR_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DIR_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DIR_NAME], CASE when [FILE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FILE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FILE_NAME], CASE when [EXTERNAL_TABLE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXTERNAL_TABLE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXTERNAL_TABLE_NAME], [FILE_LINE_COUNT], [CURRENT_LINE], [FILE_YEAR], [FILE_NUMBER], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, [LOAD_START_DATE], [LOAD_END_DATE], [PARSE_START_DATE], [PARSE_END_DATE], [ERROR_COUNT], [LOADED_COUNT], [PARSED_COUNT], [DUPLICATE_COUNT], [EXCLUDED_COUNT], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.DMV_FILES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VPS_VLTR_MATCHES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VPS_VLTRMTCH_ID, CASE when DOCNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DOCNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DOCNO, [DREC_ID], CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], [VIOLATOR_ID], [OWNR_ID], [VEHI_ID], CASE when [PROCESS_FLAG] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PROCESS_FLAG], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PROCESS_FLAG], [CREATED_DATE], [MODIFIED_DATE], CASE when [UNPROCESS_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([UNPROCESS_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [UNPROCESS_REASON], CASE when [RECORD_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([RECORD_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [RECORD_TYPE], CASE when [FIRST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FIRST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FIRST_NAME], CASE when [LAST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_NAME], [OWNER_BEGIN_DATE], [OWNER_END_DATE], CASE when [MAKE_ABBREV] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MAKE_ABBREV], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MAKE_ABBREV], CASE when [MODEL_ABBREV] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODEL_ABBREV], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODEL_ABBREV], CASE when [VEHICLE_YEAR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VEHICLE_YEAR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VEHICLE_YEAR], CASE when ADDRESS1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADDRESS1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADDRESS1, CASE when ADDRESS2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADDRESS2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADDRESS2, CASE when CITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITY, CASE when STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATE, CASE when [ZIP_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ZIP_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ZIP_CODE], CASE when PLUS4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLUS4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLUS4, VLTRNOTINDMVID, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VPS_VLTR_MATCHES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "MAKES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ID, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.MAKES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "MODELS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when ID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ID, CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.MODELS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VIOLATORS_NOT_IN_DMV",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, [VIOLATOR_ID], CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], CASE when [VIOLATOR_FNAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_FNAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_FNAME], CASE when [VIOLATOR_LNAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_LNAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_LNAME], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CASE when NOTES is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(NOTES, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as NOTES, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VIOLATORS_NOT_IN_DMV",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DMV_VIOLATORS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select VIOLATOR_ID, CASE when [VIOLATOR_FNAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_FNAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_FNAME], CASE when [VIOLATOR_LNAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_LNAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_LNAME], CASE when [VIOLATOR_FNAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_FNAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_FNAME2], CASE when [VIOLATOR_LNAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_LNAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_LNAME2], CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], CASE when [LIC_PLATE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_STATE], CASE when [PHONE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PHONE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PHONE_NBR], CASE when [EMAIL_ADDR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EMAIL_ADDR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EMAIL_ADDR], CASE when [DRIVER_LIC_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DRIVER_LIC_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DRIVER_LIC_NBR], CASE when [DRIVER_LIC_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DRIVER_LIC_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DRIVER_LIC_STATE], CASE when [SPANISH_ONLY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SPANISH_ONLY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SPANISH_ONLY], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [USAGE_BEGIN_DATE], [USAGE_END_DATE], CASE when [VIOLATOR_COMMENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_COMMENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_COMMENT], [COMMENT_DATE], CASE when [VIOLATOR_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_TYPE], CASE when RACE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(RACE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as RACE, CASE when GENDER is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(GENDER, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as GENDER, DOB, [BOUNCE_COUNT], [VIOLATION_COUNT], [EXCUSAL_COUNT], [NO_DL_LAST_DATE], [NO_DL_RESUBMITS], CASE when [DISCOUNTED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DISCOUNTED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DISCOUNTED_BY], [DISCOUNTED_DATE], CASE when [IS_DISCOUNTED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_DISCOUNTED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_DISCOUNTED], CASE when [IS_VEA] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_VEA], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_VEA], CASE when [VEHICLE_MAKE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VEHICLE_MAKE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VEHICLE_MAKE], CASE when [VEHICLE_MODEL] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VEHICLE_MODEL], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VEHICLE_MODEL], CASE when [VEHICLE_BODY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VEHICLE_BODY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VEHICLE_BODY], CASE when [VEHICLE_YEAR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VEHICLE_YEAR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VEHICLE_YEAR], CASE when [VEHICLE_COLOR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VEHICLE_COLOR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VEHICLE_COLOR], [DPS_VIOLATOR_NAME], CASE when DOCNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DOCNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DOCNO, [OWNR_ID], [VEHI_ID], CASE when [CONTRACT_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CONTRACT_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CONTRACT_ID], [FLEET_FILE_ID], CASE when VIN is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIN, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIN, CASE when [VIOLATOR_SOURCE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIOLATOR_SOURCE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIOLATOR_SOURCE], CASE when [VLTR_CREATION_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VLTR_CREATION_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VLTR_CREATION_REASON], [DMV_ID], CASE when [BEGIN_DATE_MOD_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BEGIN_DATE_MOD_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BEGIN_DATE_MOD_BY], CASE when [END_DATE_MOD_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([END_DATE_MOD_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [END_DATE_MOD_BY], CASE when [IS_BEGIN_UPD_BY_SYS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_BEGIN_UPD_BY_SYS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_BEGIN_UPD_BY_SYS], CASE when [IS_END_UPD_BY_SYS] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_END_UPD_BY_SYS], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_END_UPD_BY_SYS], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.DMV_VIOLATORS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VPS_VEHICLES",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, [VEHI_ID], CASE when REVIEW is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REVIEW, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as REVIEW, [DATE_CREATED], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VPS_VEHICLES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VPS_VIOLATORS",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], CASE when REVIEW is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REVIEW, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as REVIEW, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VPS_VIOLATORS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PLATE_AGENCY_XREFcfe114c334ff4c9b91c3b961cafe8972",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], [DMV_ID], [INFO_LEVEL], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [USAGE_UPDATED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([USAGE_UPDATED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [USAGE_UPDATED], CASE when [ADDR_UPDATED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ADDR_UPDATED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ADDR_UPDATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.PLATE_AGENCY_XREFcfe114c334ff4c9b91c3b961cafe8972",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PLATE_AGENCY_XREF",
+            "schema_name": "DMVLD",
+            "id_field": "",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [AGENCY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([AGENCY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [AGENCY_CODE], [DMV_ID], [INFO_LEVEL], CASE when [IS_ACTIVE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_ACTIVE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_ACTIVE], CASE when [USAGE_UPDATED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([USAGE_UPDATED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [USAGE_UPDATED], CASE when [ADDR_UPDATED] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ADDR_UPDATED], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ADDR_UPDATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.PLATE_AGENCY_XREF",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VO_RENEWAL_ADDR_XREF",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, [VEHI_ID], [OWNR_ID], [RCPT_OWNR_ID], [ADDR_ID], [ADDR_START], [ADDR_END], CASE when [IS_CURRENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_CURRENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_CURRENT], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [SOURCE_ID], [END_SOURCE_ID], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [END_SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([END_SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [END_SOURCE_CODE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VO_RENEWAL_ADDR_XREF",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "OWNERS",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [OWNER_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OWNER_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OWNER_TYPE], CASE when [FULL_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FULL_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FULL_NAME], CASE when [FIRST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FIRST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FIRST_NAME], CASE when [MIDDLE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MIDDLE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MIDDLE_NAME], CASE when [LAST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_NAME], CASE when [FIRST_NAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FIRST_NAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FIRST_NAME2], CASE when [MIDDLE_NAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MIDDLE_NAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MIDDLE_NAME2], CASE when [LAST_NAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_NAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_NAME2], [SOURCE_ID], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.OWNERS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "OWNERS_JN",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when JN_OPERATION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(JN_OPERATION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as JN_OPERATION, CASE when [JN_ORACLE_USER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([JN_ORACLE_USER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [JN_ORACLE_USER], [JN_DATETIME], CASE when [JN_NOTES] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([JN_NOTES], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [JN_NOTES], CASE when [JN_APPLN] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([JN_APPLN], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [JN_APPLN], [JN_SESSION], ID, CASE when [OWNER_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([OWNER_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [OWNER_TYPE], CASE when [FULL_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FULL_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FULL_NAME], CASE when [FIRST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FIRST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FIRST_NAME], CASE when [MIDDLE_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MIDDLE_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MIDDLE_NAME], CASE when [LAST_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_NAME], [DREC_ID], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [FIRST_NAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FIRST_NAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FIRST_NAME2], CASE when [MIDDLE_NAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MIDDLE_NAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MIDDLE_NAME2], CASE when [LAST_NAME2] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LAST_NAME2], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LAST_NAME2], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.OWNERS_JN",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VEHICLES",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when VIN is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIN, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIN, CASE when [BODY_TYPE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([BODY_TYPE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [BODY_TYPE], CASE when CLASS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CLASS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CLASS, CASE when YEAR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(YEAR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as YEAR, CASE when [MODL_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODL_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODL_ID], [SOURCE_ID], CASE when [VETY_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VETY_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VETY_ID], CASE when [MAKE_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MAKE_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MAKE_ID], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [VIN_ON_FILE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIN_ON_FILE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIN_ON_FILE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VEHICLES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ADDRESSES",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when STREET is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STREET, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STREET, CASE when CITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITY, CASE when STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATE, CASE when ZIP is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP, CASE when PLUS4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLUS4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLUS4, [SOURCE_ID], [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [COUNTRY_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([COUNTRY_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [COUNTRY_CODE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.ADDRESSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VEHICLE_PLATES",
+            "schema_name": "DMVLD",
+            "id_field": "OWNR_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select CASE when PLATE_NUMBER is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLATE_NUMBER, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLATE_NUMBER, [START_DATE], [END_DATE], [OWNR_ID], [VEHI_ID], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [DREC_ID], CASE when [VPS_MATCH] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VPS_MATCH], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VPS_MATCH], [VIOLATOR_ID], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VEHICLE_PLATES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "OWNER_ADDRESSES",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, [OWNR_ID], CASE when [PLATE_NUMBER] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PLATE_NUMBER], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PLATE_NUMBER], [VEHI_ID], CASE when STREET is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STREET, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STREET, CASE when CITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITY, CASE when ZIP is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIP, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIP, CASE when PLUS4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(PLUS4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as PLUS4, CASE when [ADDR_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ADDR_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ADDR_STATE], [ADDR_START], [ADDR_END], CASE when [ADDR_COMMENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([ADDR_COMMENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [ADDR_COMMENT], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, [DREC_ID], [DATE_CREATED], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], CASE when TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as TYPE, [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.OWNER_ADDRESSES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "TITLES",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when DOCNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DOCNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DOCNO, [VEHI_ID], [OWNR_ID], [TITLE_ISSUE_DATE], CASE when [IS_CURRENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_CURRENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_CURRENT], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [SOURCE_ID], [END_SOURCE_ID], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [END_SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([END_SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [END_SOURCE_CODE], CASE when [DOCNO_ON_FILE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DOCNO_ON_FILE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DOCNO_ON_FILE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.TITLES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "PLATES",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, CASE when [LIC_PLATE_NBR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_NBR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_NBR], CASE when [LIC_PLATE_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([LIC_PLATE_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [LIC_PLATE_STATE], [TITLE_ID], CASE when [IS_CURRENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_CURRENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_CURRENT], [START_DATE], [END_DATE], [DATE_CREATED], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_MODIFIED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [SOURCE_ID], [END_SOURCE_ID], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [END_SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([END_SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [END_SOURCE_CODE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.PLATES",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "DMV_RECORDS",
+            "schema_name": "DMVLD",
+            "id_field": "DREC_ID",
+            "row_chunk_size": "5000000",
+            "chunk_flag": "True",
+            "query": "select [DREC_ID], [RAW_ID], CASE when DOCNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DOCNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DOCNO, CASE when REGPLTNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGPLTNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGPLTNO, CASE when REGEXPYR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGEXPYR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGEXPYR, CASE when REGEXPMO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGEXPMO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGEXPMO, [REG_EXP_DATE], CASE when VIN is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VIN, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VIN, CASE when OWNRSHPEVIDCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRSHPEVIDCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRSHPEVIDCD, CASE when BNDEDTTLCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(BNDEDTTLCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as BNDEDTTLCD, CASE when DOCTYPECD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DOCTYPECD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DOCTYPECD, CASE when TTLISSUEDATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLISSUEDATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLISSUEDATE, CASE when TTLPROCSCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLPROCSCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLPROCSCD, CASE when PREVOWNRNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVOWNRNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVOWNRNAME, CASE when PREVOWNRCITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVOWNRCITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVOWNRCITY, CASE when PREVOWNRSTATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVOWNRSTATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVOWNRSTATE, CASE when VEHBDYTYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHBDYTYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHBDYTYPE, CASE when VEHCLASSCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHCLASSCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHCLASSCD, CASE when VEHMK is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHMK, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHMK, CASE when VEHMODLYR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHMODLYR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHMODLYR, CASE when VEHMODL is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHMODL, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHMODL, CASE when VEHTON is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHTON, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHTON, CASE when REPLICAVEHMK is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REPLICAVEHMK, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REPLICAVEHMK, CASE when REPLICAVEHMODELYR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REPLICAVEHMODELYR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REPLICAVEHMODELYR, CASE when TRLRTYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TRLRTYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TRLRTYPE, CASE when VEHBDYVIN is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHBDYVIN, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHBDYVIN, CASE when VEHLNGTH is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHLNGTH, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHLNGTH, CASE when VEHODMTRBRND is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHODMTRBRND, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHODMTRBRND, CASE when VEHODMTRREADNG is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHODMTRREADNG, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHODMTRREADNG, CASE when VEHSALESPRICE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHSALESPRICE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHSALESPRICE, CASE when VEHSOLDDATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHSOLDDATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHSOLDDATE, [SOLD_DATE], CASE when VEHEMPTYWT is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHEMPTYWT, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHEMPTYWT, CASE when VEHGROSSWT is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHGROSSWT, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHGROSSWT, CASE when ADDLLIENRECRDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(ADDLLIENRECRDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as ADDLLIENRECRDINDI, CASE when AGNCYLOANDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(AGNCYLOANDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as AGNCYLOANDINDI, CASE when DIESELINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DIESELINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DIESELINDI, CASE when DOTSTNDRDSINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DOTSTNDRDSINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DOTSTNDRDSINDI, CASE when DPSSTLNINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DPSSTLNINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DPSSTLNINDI, CASE when EXMPTINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(EXMPTINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as EXMPTINDI, CASE when FXDWTINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(FXDWTINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as FXDWTINDI, CASE when FLOODDMGEINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(FLOODDMGEINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as FLOODDMGEINDI, CASE when GOVTOWNDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(GOVTOWNDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as GOVTOWNDINDI, CASE when TTLHOTCKINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLHOTCKINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLHOTCKINDI, CASE when INSPECTNWAINVEDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(INSPECTNWAINVEDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as INSPECTNWAINVEDINDI, CASE when JNKINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(JNKINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as JNKINDI, CASE when PRMTREQRDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PRMTREQRDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PRMTREQRDINDI, CASE when PRIORCCOISSUEINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PRIORCCOISSUEINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PRIORCCOISSUEINDI, CASE when RECONDCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RECONDCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RECONDCD, CASE when RECONTINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RECONTINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RECONTINDI, CASE when SURVSHPRIGHTSINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SURVSHPRIGHTSINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SURVSHPRIGHTSINDI, CASE when TTLREVKINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLREVKINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLREVKINDI, CASE when VINERRINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VINERRINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VINERRINDI, CASE when OTHERSTATECNTRY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OTHERSTATECNTRY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OTHERSTATECNTRY, CASE when SURRTTLDATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SURRTTLDATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SURRTTLDATE, CASE when LEGALRESTRNTNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LEGALRESTRNTNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LEGALRESTRNTNO, CASE when CCOISSUEDATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(CCOISSUEDATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as CCOISSUEDATE, CASE when TTLVEHLOCST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLVEHLOCST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLVEHLOCST, CASE when TTLVEHLOCCITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLVEHLOCCITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLVEHLOCCITY, CASE when TTLVEHLOCSTATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLVEHLOCSTATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLVEHLOCSTATE, CASE when TTLVEHLOCZPCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLVEHLOCZPCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLVEHLOCZPCD, CASE when TTLVEHLOCZPCDP4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TTLVEHLOCZPCDP4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TTLVEHLOCZPCDP4, CASE when REGSTKRNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGSTKRNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGSTKRNO, CASE when TRANSCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(TRANSCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as TRANSCD, CASE when RESCOMPTCNTYNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RESCOMPTCNTYNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RESCOMPTCNTYNO, CASE when REGEFFDATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGEFFDATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGEFFDATE, [REG_EFF_DATE], CASE when RECPNTNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RECPNTNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RECPNTNAME, CASE when RENWLMAILNGST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RENWLMAILNGST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RENWLMAILNGST, CASE when RENWLMAILNGCITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RENWLMAILNGCITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RENWLMAILNGCITY, CASE when RENWLMAILNGSTATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RENWLMAILNGSTATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RENWLMAILNGSTATE, CASE when RENWLMAILNGZPCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RENWLMAILNGZPCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RENWLMAILNGZPCD, CASE when RENWLMAILNGZPCDP4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RENWLMAILNGZPCDP4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RENWLMAILNGZPCDP4, CASE when RENWLMAILRTRNINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(RENWLMAILRTRNINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as RENWLMAILRTRNINDI, CASE when DPSSAFTYSUSPINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(DPSSAFTYSUSPINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as DPSSAFTYSUSPINDI, CASE when HVYVEHUSETAXINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(HVYVEHUSETAXINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as HVYVEHUSETAXINDI, CASE when REGINVLDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGINVLDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGINVLDINDI, CASE when REGHOTCKINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGHOTCKINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGHOTCKINDI, CASE when PLTSSEIZDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PLTSSEIZDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PLTSSEIZDINDI, CASE when STKRSEIZDINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(STKRSEIZDINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as STKRSEIZDINDI, CASE when REGCLASSCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(REGCLASSCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as REGCLASSCD, CASE when SALVSTATECNTRY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(SALVSTATECNTRY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as SALVSTATECNTRY, CASE when PREVPLTNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVPLTNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVPLTNO, CASE when PREVEXPMO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVEXPMO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVEXPMO, CASE when PREVEXPYR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVEXPYR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVEXPYR, CASE when OWNRID is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRID, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRID, CASE when OWNRTTLNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRTTLNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRTTLNAME, CASE when OWNRST is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRST, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRST, CASE when OWNRCITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRCITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRCITY, CASE when OWNRSTATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRSTATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRSTATE, CASE when OWNRZPCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRZPCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRZPCD, CASE when OWNRZPCDP4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRZPCDP4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRZPCDP4, CASE when OWNRCNTRY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(OWNRCNTRY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as OWNRCNTRY, CASE when PRIVACYOPTCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PRIVACYOPTCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PRIVACYOPTCD, CASE when NO_OF_LIENS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(NO_OF_LIENS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as NO_OF_LIENS, CASE when LIENHLDRNO_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNO_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNO_1, CASE when LIENDATE_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENDATE_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENDATE_1, CASE when LIENHLDRNAME1_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNAME1_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNAME1_1, CASE when LIENHLDRNAME2_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNAME2_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNAME2_1, CASE when LIENHLDRST1_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRST1_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRST1_1, CASE when LIENHLDRST2_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRST2_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRST2_1, CASE when LIENHLDRCITY_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRCITY_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRCITY_1, CASE when LIENHLDRSTATE_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRSTATE_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRSTATE_1, CASE when LIENHLDRZPCD_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRZPCD_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRZPCD_1, CASE when LIENHLDRZPCDP4_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRZPCDP4_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRZPCDP4_1, CASE when LIENHLDRCNTRY_1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRCNTRY_1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRCNTRY_1, CASE when LIENHLDRNO_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNO_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNO_2, CASE when LIENDATE_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENDATE_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENDATE_2, CASE when LIENHLDRNAME1_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNAME1_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNAME1_2, CASE when LIENHLDRNAME2_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNAME2_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNAME2_2, CASE when LIENHLDRST1_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRST1_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRST1_2, CASE when LIENHLDRST2_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRST2_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRST2_2, CASE when LIENHLDRCITY_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRCITY_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRCITY_2, CASE when LIENHLDRSTATE_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRSTATE_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRSTATE_2, CASE when LIENHLDRZPCD_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRZPCD_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRZPCD_2, CASE when LIENHLDRZPCDP4_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRZPCDP4_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRZPCDP4_2, CASE when LIENHLDRCNTRY_2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRCNTRY_2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRCNTRY_2, CASE when LIENHLDRNO_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNO_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNO_3, CASE when LIENDATE_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENDATE_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENDATE_3, CASE when LIENHLDRNAME1_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNAME1_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNAME1_3, CASE when LIENHLDRNAME2_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRNAME2_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRNAME2_3, CASE when LIENHLDRST1_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRST1_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRST1_3, CASE when LIENHLDRST2_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRST2_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRST2_3, CASE when LIENHLDRCITY_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRCITY_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRCITY_3, CASE when LIENHLDRSTATE_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRSTATE_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRSTATE_3, CASE when LIENHLDRZPCD_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRZPCD_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRZPCD_3, CASE when LIENHLDRZPCDP4_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRZPCDP4_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRZPCDP4_3, CASE when LIENHLDRCNTRY_3 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LIENHLDRCNTRY_3, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LIENHLDRCNTRY_3, [CREATED_DATE], CASE when STATUS_OLD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(STATUS_OLD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as STATUS_OLD, PREVEXPDATE, [TTL_ISSUE_DATE], [FILE_ID], [RECORD_NUMBER], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as STATUS, CASE when LEMONLAWINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LEMONLAWINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LEMONLAWINDI, CASE when VEHMJRCOLORCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHMJRCOLORCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHMJRCOLORCD, CASE when VEHMNRCOLORCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(VEHMNRCOLORCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as VEHMNRCOLORCD, [DATE_PROCESSED], CASE when EXPORTINDI is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(EXPORTINDI, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as EXPORTINDI, CASE when PREVTTLNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVTTLNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVTTLNO, CASE when PREVVIN is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVVIN, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVVIN, CASE when PREVTTLJURIS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVTTLJURIS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVTTLJURIS, CASE when PREVTTLISSUEDATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(PREVTTLISSUEDATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as PREVTTLISSUEDATE, [PREVTTL_ISSUE_DATE], CASE when INITTTLTRANSCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(INITTTLTRANSCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as INITTTLTRANSCD, CASE when NMVTISHOLDDATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(NMVTISHOLDDATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as NMVTISHOLDDATE, [NMVTISHOLD_DATE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'),CHAR(168),''), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.DMV_RECORDS",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "VO_ADDR_XREF",
+            "schema_name": "DMVLD",
+            "id_field": "ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select ID, [VEHI_ID], [OWNR_ID], [ADDR_ID], [ADDR_START], [ADDR_END], CASE when [IS_CURRENT] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([IS_CURRENT], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [IS_CURRENT], CASE when [CREATED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CREATED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CREATED_BY], [DATE_CREATED], CASE when [MODIFIED_BY] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([MODIFIED_BY], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [MODIFIED_BY], [DATE_MODIFIED], [SOURCE_ID], [END_SOURCE_ID], CASE when [SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [SOURCE_CODE], CASE when [END_SOURCE_CODE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([END_SOURCE_CODE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [END_SOURCE_CODE], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.VO_ADDR_XREF",
+            "gcs_upload_flag": "FALSE"
+        },
+        {
+            "table_name": "ETAG_RECORDS",
+            "schema_name": "DMVLD",
+            "id_field": "EREC_ID",
+            "row_chunk_size": "2000000",
+            "chunk_flag": "True",
+            "query": "select EREC_ID, RECNO, CASE when [CONTROL_ITEM_ID] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CONTROL_ITEM_ID], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CONTROL_ITEM_ID], CASE when [CONTROL_ITEM_STATE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([CONTROL_ITEM_STATE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [CONTROL_ITEM_STATE], CASE when [EFFECTIVE_DATESTR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EFFECTIVE_DATESTR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EFFECTIVE_DATESTR], CASE when [EXPIRATION_DATESTR] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([EXPIRATION_DATESTR], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [EXPIRATION_DATESTR], [EFFECTIVE_DATE], [EXPIRATION_DATE], CASE when [USAGE_REASON] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([USAGE_REASON], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [USAGE_REASON], CASE when DESCRIPTION is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DESCRIPTION, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DESCRIPTION, CASE when VIN is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(VIN, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as VIN, CASE when DOCNO is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(DOCNO, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as DOCNO, CASE when MAKE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MAKE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MAKE, CASE when MODEL is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(MODEL, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as MODEL, CASE when BODYSTYLE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(BODYSTYLE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as BODYSTYLE, CASE when COLOR is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COLOR, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COLOR, YEAR, CASE when [PREV_DOCNO] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([PREV_DOCNO], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [PREV_DOCNO], CASE when [FULL_NAME] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([FULL_NAME], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [FULL_NAME], CASE when ADDRESS1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADDRESS1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADDRESS1, CASE when ADDRESS2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ADDRESS2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ADDRESS2, CASE when CITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(CITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as CITY, CASE when STATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATE, CASE when ZIPCODE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIPCODE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIPCODE, CASE when ZIPCODE4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(ZIPCODE4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as ZIPCODE4, CASE when COUNTRY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(COUNTRY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as COUNTRY, CASE when LIENHLDRNAME is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIENHLDRNAME, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIENHLDRNAME, CASE when LIENHLDRST1 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIENHLDRST1, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIENHLDRST1, CASE when LIENHLDRST2 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIENHLDRST2, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIENHLDRST2, CASE when LIENHLDRCITY is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIENHLDRCITY, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIENHLDRCITY, CASE when LIENHLDRSTATE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIENHLDRSTATE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIENHLDRSTATE, CASE when LIENHLDRZPCD is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIENHLDRZPCD, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIENHLDRZPCD, CASE when LIENHLDRZPCDP4 is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LIENHLDRZPCDP4, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LIENHLDRZPCDP4, [FILE_ID], CASE when [VIN_ON_FILE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([VIN_ON_FILE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [VIN_ON_FILE], CASE when [DOCNO_ON_FILE] is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE([DOCNO_ON_FILE], CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as [DOCNO_ON_FILE], CASE when STATUS is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(STATUS, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as STATUS, [DATE_CREATED], [DATE_PROCESSED], [LAST_UPDATE_DATE], CASE when LAST_UPDATE_TYPE is NULL then NULL else CONCAT(CHAR(34), REPLACE(REPLACE(REPLACE(LAST_UPDATE_TYPE, CHAR(34), '\"\"'), CHAR(147), '\"\"'), CHAR(148),'\"\"'), CHAR(34)) end as LAST_UPDATE_TYPE from DMVLD.ETAG_RECORDS",
+            "gcs_upload_flag": "FALSE"
+        }
+    ]
+}

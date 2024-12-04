@@ -1,0 +1,9 @@
+{
+    "project_id":"prj-ntta-ops-bi-test-svc-01",
+    "bucket_name":"prj-ntta-ops-bi-test-shared-data",
+    "prefix_folder": "Imports/ChargeBack",
+    "dest_folder" : "Archive/ChargeBack/",
+    "main_dataset_id":"LND_TBOS",
+    "stage_dataset_id":"LND_TBOS_STAGE_FULL",
+    "bad_dataset_id" :"LND_TBOS"
+}

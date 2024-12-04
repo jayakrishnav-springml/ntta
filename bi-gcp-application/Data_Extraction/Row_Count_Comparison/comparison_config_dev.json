@@ -1,0 +1,36 @@
+{
+    "project_id": "prj-ntta-ops-bi-devt-svc-01",
+    "date_range":30,
+    "tables_list_info":{
+        "dataset_name":"LND_TBOS_SUPPORT",
+        "table_name":"Landing_Vs_Source_Comparison_Config",
+        "comparisonrunflag":"Y"
+    },
+    "destination_table_info":{
+        "destination_dataset":"LND_TBOS_SUPPORT",
+        "comparison_result_table":"Landing_VS_Source_Comparison",
+        "bq_level2_check_result_table":"Landing_DailyRowCount",
+        "source_level2_check_result_table":"Source_DailyRowCount"
+    },
+    "log": {
+        "log_level": "INFO",
+        "log_name": "src_vs_bq_row_comparison",
+        "labels": {}
+    },
+    "connection_details": [{
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "nprodtboslstr03",
+        "database": "IPS",
+        "trusted_connection": "yes",
+        "encrypt": "no"
+    },
+    {
+        "driver": "ODBC Driver 18 for SQL Server",
+        "server": "nprodtboslstr06",
+        "database": "TBOS",
+        "trusted_connection": "yes",
+        "encrypt": "no"
+    }
+]
+    
+}
